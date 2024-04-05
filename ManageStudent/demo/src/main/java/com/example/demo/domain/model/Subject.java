@@ -1,0 +1,42 @@
+package com.example.demo.domain.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@Entity
+@Table(name = "subjects")
+public class Subject {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false)
+  private Long id;
+
+  @Column(name = "id_semester")
+  private Long idSemester;
+  @Column(name = "subject_name")
+  private String subjectName;
+  @Column(name = "subject_code")
+  private String subjectCode;
+
+  @Column(name = "number_of_credits")
+  private Integer numberOfCredits;
+
+  @Column(name = "create_user")
+  private String createUser;
+  @Column(name = "create_datetime")
+  private LocalDateTime createDatetime;
+  @Column(name = "update_user")
+  private String updateUser;
+  @Column(name = "update_datetime")
+  private LocalDateTime updateDatetime;
+
+}
