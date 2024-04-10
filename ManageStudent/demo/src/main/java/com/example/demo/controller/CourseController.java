@@ -1,18 +1,18 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.model.Course;
 import com.example.demo.service.CourseService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import static com.example.demo.common.Const.RETURN_CODE_ERROR;
 
 @RestController
 @RequestMapping("/courses")
-public class CourseController {
+@Slf4j
+public class CourseController extends CommonController {
   private final CourseService courseService;
 
   public CourseController(CourseService courseService) {
@@ -20,7 +20,12 @@ public class CourseController {
   }
 
   @GetMapping()
-  public List<Course> getAllCourse() {
-    return courseService.getAllCourse();
+  public ResponseEntity<?> getAllCourse() {
+    try {
+      return toSuccessResult(courseService.getAllCourse());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
   }
 }

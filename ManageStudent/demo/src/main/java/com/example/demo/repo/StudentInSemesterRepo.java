@@ -2,6 +2,7 @@ package com.example.demo.repo;
 
 import com.example.demo.domain.model.StudentInSemester;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -53,5 +54,9 @@ public interface StudentInSemesterRepo extends JpaRepository<StudentInSemester, 
 
   @Query("select s from StudentInSemester s where s.semesterId = ?1")
   StudentInSemester findBySemesterId();
+
+  @Modifying
+  @Query(value = "delete from student_semester where semester_id = :idSemester and student_id = :idStudent", nativeQuery = true)
+  void deleteStudentIdAndSemesterId(Long idSemester, Long idStudent);
 
 }

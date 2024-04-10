@@ -23,8 +23,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy : ANT_PATH_MATCHER
-
-
-
+upload:
+  file:
+    path : D:\Learning\DoAnTotNghiep\ManageStudent
 
 
