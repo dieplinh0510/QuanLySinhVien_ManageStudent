@@ -1,0 +1,103 @@
+// Define color
+$color-title: #5932EA;
+$bg-app-sidebar: #53577E;
+$bg-app-sidebar-active: #3B3F5C;
+
+@font-face {
+  font-family: 'customfront';
+  src: url('../../../assets/fonts/SeoulHangang CEB Regular.ttf') format('truetype');
+}
+
+p, h1, h2, h3, h4, h5, h6, span, a, button, input, label, div, li, ul, ol, textarea, select {
+  font-family: 'customfront', serif;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #4f0088;
+  display: flex;
+  flex-direction: row;
+}
+
+.app-sidebar {
+  width: 18.75%;
+  height: 100vh;
+  background-color: $bg-app-sidebar;
+  overflow: hidden;
+
+  .container {
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    //padding-top: 10px;
+    color: white;
+    line-height: 20px;
+
+    &:hover {
+      color: #ababab;
+    }
+  }
+
+  .item-sidebar {
+    //display: flex;
+    //align-items: center;
+    .active {
+      background-color: $bg-app-sidebar-active;
+    }
+  }
+
+  .link-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    margin: 0;
+  }
+
+  img {
+    width: 20px;
+    margin-right: 10px;
+  }
+
+  hr {
+    background-color: white;
+    height: 2px;
+    margin: 0;
+  }
+}
+
+.main-content {
+  width: 81.25%;
+  height: 100%;
+  background-color: white;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 30px;
+}
+
+.app-header {
+  width: 100%;
+  height: 100px;
+  background-color: red;
+}
+
+.app-footer {
+  width: 100%;
+  height: 50px;
+  background-color: yellow;
+}
+
+input.input-txt {
+  height: 37.6px;
+  border: 1px solid rgb(245, 245, 245);
+  background-color: rgb(245, 245, 245);
+  padding: 0 10px;
+
+  &:focus {
+    outline: none;
+  }
+}

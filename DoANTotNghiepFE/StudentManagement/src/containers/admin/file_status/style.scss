@@ -1,0 +1,42 @@
+.file-status-page {
+  height: 100vh;
+
+  .file-status-box {
+    th, td, tr {
+      margin: 0 auto;
+      padding: 0;
+      text-align: center;
+      line-height: 40px;
+    }
+
+    .success-message {
+      color: #10793A;
+      background-color: #BEFCCC;
+      border-radius: 6px;
+      width: 100px;
+      height: 30px;
+      line-height: 30px;
+      margin: 4px 25px;
+    }
+
+    .error-message {
+      color: #FF0000;
+      background-color: #FBD9D9;
+      border-radius: 6px;
+      width: 100px;
+      height: 30px;
+      line-height: 30px;
+      margin: 4px 25px;
+    }
+
+    .inprocess-message {
+      color: #B13E3E;
+      background-color: #FCDEC8;
+      border-radius: 6px;
+      width: 100px;
+      height: 30px;
+      line-height: 30px;
+      margin: 4px 25px;
+    }
+  }
+}

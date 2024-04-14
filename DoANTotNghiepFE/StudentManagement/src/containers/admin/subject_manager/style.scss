@@ -1,0 +1,33 @@
+.subject-manager-page {
+  height: 100vh;
+
+  .subject-input-box {
+    width: 40%;
+    margin-top: 20px;
+    display: flex;
+
+    p {
+      line-height: 40px;
+      padding-right: 30px;
+    }
+  }
+
+  .title-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+  }
+
+  .table-container {
+    width: 100%;
+
+    th, td, tr {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      line-height: 40px;
+    }
+  }
+
+}
