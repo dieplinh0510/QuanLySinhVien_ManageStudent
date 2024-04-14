@@ -23,6 +23,8 @@ public class User {
   @Column(name = "password")
   private String password;
 
+  @Column(name = "id_role")
+  private Long idRole;
   @Column(name = "teacher_name")
   private String teacherName;
   @Column(name = "teacher_code")

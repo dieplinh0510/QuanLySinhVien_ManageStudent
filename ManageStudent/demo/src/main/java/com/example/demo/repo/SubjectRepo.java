@@ -19,4 +19,7 @@ public interface SubjectRepo extends JpaRepository<Subject, Long> {
       "\tcis.id_subject = s.id\n" +
       "where s.id_semester = :idSemester and sics.id_student = :idStudent", nativeQuery = true)
   List<Subject> getIdSubjectBySemesterAndStudent(Long idSemester, Long idStudent);
+
+  @Query(value = "select * from subjects s where s.subject_code = :subjectCode", nativeQuery = true)
+  Subject getSubjectBySubjectCode(String subjectCode);
 }

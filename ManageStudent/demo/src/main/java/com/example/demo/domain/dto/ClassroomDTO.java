@@ -7,11 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ClassroomSubjectDTO {
-  private String teacher;
+public class ClassroomDTO {
   private String classroomCode;
   private String subjectName;
-  private String quantityStudent;
-  private Long idUser;
+  private Long quantityStudent;
+  private String teacherName;
 
 }

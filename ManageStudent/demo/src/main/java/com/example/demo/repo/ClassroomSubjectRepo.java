@@ -10,8 +10,10 @@ import java.util.List;
 
 @Repository
 public interface ClassroomSubjectRepo extends JpaRepository<ClassroomSubject, Long> {
-  @Query(value = "select * from classroom_in_subjects where id_classroom = :idClassroom and id_subject = :idSubject", nativeQuery = true)
-  List<ClassroomSubject> getByIdClassroomAnhIdSubject(Long idClassroom, Long idSubject);
+  @Query(value = "select * from classroom_in_subjects where id_subject = :idSubject", nativeQuery = true)
+  List<ClassroomSubject> getByIdSubject(Long idSubject);
 
+  @Query(value = "select * from classroom_in_subjects where classroom_code = :classroomCode", nativeQuery = true)
+  ClassroomSubject getClassroomSubjectByClassroomCode(String classroomCode);
 
 }

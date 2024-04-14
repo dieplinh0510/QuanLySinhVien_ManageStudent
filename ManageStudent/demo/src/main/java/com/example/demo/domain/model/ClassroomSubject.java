@@ -27,7 +27,7 @@ public class ClassroomSubject {
   private String classroomCode;
 
   @Column(name = "id_user")
-  private String teacher;
+  private Long idUser;
   @Column(name = "create_user")
   private String createUser;
   @Column(name = "create_datetime")
