@@ -27,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   public AuthenticationResponse login(AuthenticationPayload payload) {
-    User user = userRepo.getUserByUsername(payload.getUsername()).get(0);
+    User user = userRepo.getUserByUsername(payload.getUsername());
     if (ObjectUtils.isEmpty(user)) {
       return null;
     }

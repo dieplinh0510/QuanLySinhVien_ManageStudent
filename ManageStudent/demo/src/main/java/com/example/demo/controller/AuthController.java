@@ -26,7 +26,7 @@ public class AuthController extends CommonController{
     this.authService = authService;
   }
 
-  @PostMapping("/auth/login")
+  @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody @Valid AuthenticationPayload payload) {
     AuthenticationResponse response = authService.login(payload);
     if (ObjectUtils.isEmpty(response)) {
