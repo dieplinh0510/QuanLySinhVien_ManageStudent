@@ -13,7 +13,7 @@ import java.util.List;
 public interface StudentService {
   StudentPointDTO getStudentByStudentCode(String studentCode);
   List<StudentPointDTO> getStudentByClassroom(Long courseId, Long classroomId);
-  List<StudentPointDTO> getStudentByPoint(Double pointOne, Double pointTwo);
+  List<StudentPointDTO> getStudentByPoint(Double pointStart, Double pointEnd);
   List<DetailStudentDTO> getSubjectInStudent(String studentCode);
   List<StudentSemesterDTO> getAccumulatedPointByStudentCode(String studentCode);
   Student createStudent(StudentPointDTO studentPointDTO);

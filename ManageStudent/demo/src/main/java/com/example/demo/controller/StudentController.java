@@ -1,8 +1,14 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.dto.AuthenticationResponse;
 import com.example.demo.domain.dto.StudentPointDTO;
 import com.example.demo.domain.dto.StudentPointInClassroomDTO;
 import com.example.demo.service.StudentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +26,14 @@ public class StudentController extends CommonController {
     this.studentService = studentService;
   }
 
+  @Operation(summary = "API lấy sinh viên by mã snh viên")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping()
   public ResponseEntity<?> getStudentByStudentCode(@RequestParam(name = "studentCode") String studentCode) {
     try {
@@ -30,6 +44,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API lấy sinh vin by lớp và khóa học")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping("/classroom")
   public ResponseEntity<?> getStudentByClassroom(@RequestParam(name = "courseId") Long courseId,
                                                  @RequestParam(name = "classroomId") Long classroomId) {
@@ -41,17 +63,33 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API lấy sinh viên by điểm tích lũy")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping("/point")
-  public ResponseEntity<?> getStudentByPoint(@RequestParam(name = "pointOne") Double pointOne,
-                                             @RequestParam(name = "pointTwo") Double pointTwo) {
+  public ResponseEntity<?> getStudentByPoint(@RequestParam(name = "pointStart") Double pointStart,
+                                             @RequestParam(name = "pointEnd") Double pointEnd) {
     try {
-      return toSuccessResult(studentService.getStudentByPoint(pointOne, pointTwo));
+      return toSuccessResult(studentService.getStudentByPoint(pointStart, pointEnd));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
     }
   }
 
+  @Operation(summary = "API lấy tất cả môn học của sinh viên màn xem thông tin chi tiết sinh viên")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping("/detail/subject")
   public ResponseEntity<?> getSubjectInStudent(@RequestParam(name = "studentCode") String studentCode) {
     try {
@@ -62,6 +100,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API lấy điểm tích lũy của sinh vin theo kỳ học")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping("/semester/accumulated_point")
   public ResponseEntity<?> getAccumulatedPointByStudentCode(@RequestParam(name = "studentCode") String studentCode) {
     try {
@@ -72,6 +118,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API tạo sinh viên")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @PostMapping()
   public ResponseEntity<?> createStudent(@RequestBody StudentPointDTO studentPointDTO) {
     try {
@@ -82,6 +136,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API sửa thông tin sinh viên")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @PutMapping()
   public ResponseEntity<?> changeStudent(@RequestBody StudentPointDTO studentPointDTO) {
     try {
@@ -92,6 +154,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API xóa sinh viên")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @DeleteMapping()
   public ResponseEntity<?> deleteStudent(@RequestParam(name = "studentCode") String studentCode) {
     try {
@@ -102,6 +172,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API lấy tất cả sinh viên, điểm trong lớp học màn nhập điểm")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping("/view-point-class")
   public ResponseEntity<?> viewPointInClassroom(@RequestParam(name = "classroomCode") String classroomCode){
     try {
@@ -112,6 +190,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API sửa điểm sinh viên trong lớp học màn nhập điểm")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @PutMapping("/change-point-class")
   public ResponseEntity<?> changePointClass(@RequestBody StudentPointInClassroomDTO studentPointInClassroomDTO){
     try {
@@ -122,6 +208,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API xóa sinh viên trong màn nhập điểm")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @DeleteMapping("/delete-point-class")
   public ResponseEntity<?> deleteStudentInClass(@RequestParam(value = "studentClassId") Long studentClassId){
     try {
@@ -133,6 +227,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API lấy các field để mapping trong màn nhập điểm")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping("/get-column/point")
   public ResponseEntity<?> getColumnForInputPoint(){
     try {
@@ -143,6 +245,14 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API lấy các field để mapping trong màn theem sinh viên")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping("/get-column")
   public ResponseEntity<?> getColumnForInput(){
     try {

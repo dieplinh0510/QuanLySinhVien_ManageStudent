@@ -28,12 +28,12 @@ public interface StudentInSemesterRepo extends JpaRepository<StudentInSemester, 
       "\t\t\tsum(ss.accumulated_points)/count(ss.accumulated_points) \n" +
       "\t\tfrom\n" +
       "\t\t\n" +
-      "\t\t\tstudent_semester ss2) >= :pointOne\n" +
+      "\t\t\tstudent_semester ss2) >= :pointStart\n" +
       "\t\tand (\n" +
       "\t\tselect\n" +
       "\t\t\tsum(ss.accumulated_points)/count(ss.accumulated_points) \n" +
       "\t\tfrom\n" +
-      "\t\t\tstudent_semester ss2) <= :pointTwo \n" +
+      "\t\t\tstudent_semester ss2) <= :pointEnd \n" +
       "\tgroup by ss.student_id\n" +
       "\torder by ss.student_id\n" +
       ")\n" +
@@ -49,7 +49,7 @@ public interface StudentInSemesterRepo extends JpaRepository<StudentInSemester, 
       "from student_semester ss inner join datas d \n" +
       "\ton ss.student_id = d.student_id\n" +
       "order by ss.student_id ", nativeQuery = true)
-  List<StudentInSemester> getStudentInSemesterByPoint(Double pointOne, Double pointTwo);
+  List<StudentInSemester> getStudentInSemesterByPoint(Double pointStart, Double pointEnd);
 
 
   @Query("select s from StudentInSemester s where s.semesterId = ?1")

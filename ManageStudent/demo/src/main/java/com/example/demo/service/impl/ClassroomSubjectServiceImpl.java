@@ -31,8 +31,8 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
   }
 
   @Override
-  public List<ClassroomSubjectDTO> getAllClassroomSubject() {
-    List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getAllClassroomSubjectDetail();
+  public List<ClassroomSubjectDTO> getAllClassroomSubject(Long subjectId) {
+    List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId);
     return list;
   }
 

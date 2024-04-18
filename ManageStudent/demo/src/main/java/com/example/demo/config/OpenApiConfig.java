@@ -1,37 +1,46 @@
 package com.example.demo.config;
 
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@EnableSwagger2
 public class OpenApiConfig {
 
-  @Bean
-  public Docket api() {
-    return new Docket(DocumentationType.SWAGGER_2).select()
-        .apis(RequestHandlerSelectors.basePackage("com.example.demo.controller"))
-        .paths(PathSelectors.regex("/.*"))
-        .build()
-        .apiInfo(apiEndPointsInfo());
-  }
+  private static final String API_KEY = "Bearer Token";
 
-  private ApiInfo apiEndPointsInfo() {
-    return new ApiInfoBuilder().title("Tumi server")
-        .description("Tumi server REST API")
-        .contact(new Contact("Huân", "...", "huannd0101@gmail.com"))
-        .license("Apache 2.0")
-        .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0.html")
-        .version("1.0.1")
-        .build();
+  @Bean
+  public OpenAPI customOpenAPI() {
+    OpenAPI openAPI = new OpenAPI().info(
+        new Info()
+            .title("Admin Service API")
+            .version("1.0")
+            .description("Documentation Admin Service API v1.0")
+    );
+
+
+    openAPI.components(
+        new Components()
+            .addSecuritySchemes(
+                API_KEY,
+                new SecurityScheme()
+                    .name("Authorization")
+                    .scheme("Bearer")
+                    .bearerFormat("JWT")
+                    .type(SecurityScheme.Type.APIKEY)
+                    .in(SecurityScheme.In.HEADER)
+            )
+    );
+    openAPI.addSecurityItem(new SecurityRequirement().addList(API_KEY));
+
+    return openAPI;
   }
 
 }

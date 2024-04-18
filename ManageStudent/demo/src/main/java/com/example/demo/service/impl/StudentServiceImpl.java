@@ -79,11 +79,11 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
-  public List<StudentPointDTO> getStudentByPoint(Double pointOne, Double pointTwo) {
-    Assert.notNull(pointOne, "Point is null");
-    Assert.notNull(pointTwo, "Point is null");
+  public List<StudentPointDTO> getStudentByPoint(Double pointStart, Double pointEnd) {
+    Assert.notNull(pointStart, "Point is null");
+    Assert.notNull(pointEnd, "Point is null");
     List<StudentPointDTO> studentPointDTOList = new ArrayList<>();
-    List<StudentInSemester> studentInSemesters = studentInSemesterRepo.getStudentInSemesterByPoint(pointOne, pointTwo);
+    List<StudentInSemester> studentInSemesters = studentInSemesterRepo.getStudentInSemesterByPoint(pointStart, pointEnd);
     for (StudentInSemester studentInSemester : studentInSemesters) {
       Student student = studentRepo.getById(studentInSemester.getStudentId());
       Classroom classroom = classroomRepo.getClassroomByClassroomId(student.getIdClass());

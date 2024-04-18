@@ -3,6 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.domain.dto.AuthenticationPayload;
 import com.example.demo.domain.dto.AuthenticationResponse;
 import com.example.demo.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +31,14 @@ public class AuthController extends CommonController{
     this.authService = authService;
   }
 
+  @Operation(summary = "API login")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody @Valid AuthenticationPayload payload) {
     AuthenticationResponse response = authService.login(payload);

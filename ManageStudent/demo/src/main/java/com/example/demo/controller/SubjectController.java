@@ -1,9 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.dto.AuthenticationResponse;
 import com.example.demo.domain.dto.ClassroomDTO;
 import com.example.demo.domain.dto.SubjectDTO;
 import com.example.demo.domain.model.Subject;
 import com.example.demo.service.SubjectService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +26,14 @@ public class SubjectController extends CommonController{
     this.subjectService = subjectService;
   }
 
+  @Operation(summary = "API lấy môn học by mã môn")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping("/detail")
   public ResponseEntity<?> getSubjectBySubjectCode(@RequestParam(value = "subjectCode") String subjectCode){
     try {
@@ -30,6 +44,14 @@ public class SubjectController extends CommonController{
     }
   }
 
+  @Operation(summary = "API lấy tất car môn học")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping()
   public ResponseEntity<?> getAllSubject(){
     try {
@@ -40,6 +62,14 @@ public class SubjectController extends CommonController{
     }
   }
 
+  @Operation(summary = "API lấy các lớp học trong môn học")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @GetMapping("/classrooms")
   public ResponseEntity<?> getClassroomBySubjectCode(@RequestParam(value = "subjectId") Long subjectId){
     try {
@@ -50,6 +80,14 @@ public class SubjectController extends CommonController{
     }
   }
 
+  @Operation(summary = "API tạo môn học")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @PostMapping()
   public ResponseEntity<?> createSubject(@RequestBody SubjectDTO subjectDTO){
     try {
@@ -60,6 +98,14 @@ public class SubjectController extends CommonController{
     }
   }
 
+  @Operation(summary = "API thay đổi thông tin moon học")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
   @PutMapping()
   public ResponseEntity<?> changeSubject(@RequestBody SubjectDTO subjectDTO, @RequestParam(value = "subjectId") Long subjectId){
     try {
@@ -69,4 +115,6 @@ public class SubjectController extends CommonController{
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
     }
   }
+
+  ///delete mon hoc
 }

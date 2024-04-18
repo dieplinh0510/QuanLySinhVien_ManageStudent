@@ -3,10 +3,10 @@ package com.example.demo.repo;
 import com.example.demo.domain.dto.ClassroomSubjectDTO;
 import org.springframework.stereotype.Repository;
 
-import javax.management.Query;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,7 +42,7 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
   }
 
   @Override
-  public List<ClassroomSubjectDTO> getAllClassroomSubjectDetail() {
+  public List<ClassroomSubjectDTO> getAllClassroomSubjectDetail(Long subjectId) {
     List<ClassroomSubjectDTO> list = new ArrayList<>();
     StringBuilder strQuery = new StringBuilder();
     strQuery.append("select\n" +
@@ -52,8 +52,10 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
         "inner join classroom_in_subjects cis on\n" +
         "\ts.id = cis.id_subject\n" +
         "inner join users u on\n" +
-        "\tcis.id_user = u.id");
-    List<Object[]> result = entityManager.createNativeQuery(strQuery.toString()).getResultList();
+        "\tcis.id_user = u.id where s.id = :subjectId");
+    Query query = entityManager.createNativeQuery(strQuery.toString());
+    query.setParameter("subjectId", subjectId);
+    List<Object[]> result = query.getResultList();
     if (result!=null){
       for (Object[] item: result) {
         ClassroomSubjectDTO classroomSubjectDTO = ClassroomSubjectDTO.builder()
