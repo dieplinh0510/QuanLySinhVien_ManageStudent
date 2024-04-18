@@ -28,6 +28,10 @@ public class ClassroomSubject {
 
   @Column(name = "id_user")
   private Long idUser;
+
+  @Column(name = "type")
+  private Integer type;
+
   @Column(name = "create_user")
   private String createUser;
   @Column(name = "create_datetime")

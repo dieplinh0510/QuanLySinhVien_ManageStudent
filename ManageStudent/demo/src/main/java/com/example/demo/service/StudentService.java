@@ -23,4 +23,5 @@ public interface StudentService {
   StudentPointInClassroomDTO changePointInClassroom(StudentPointInClassroomDTO studentPointInClassroomDTO);
   void deleteStudentInClass(Long studentClassId);
   HashMap<String, String> getColumnForInputPoint();
+  HashMap<String, String> getColumnForInput();
 }

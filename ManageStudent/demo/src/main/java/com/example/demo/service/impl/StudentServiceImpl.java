@@ -294,4 +294,15 @@ public class StudentServiceImpl implements StudentService {
     fields.put("testPointOne", "Điểm thi");
     return fields;
   }
+
+  @Override
+  public HashMap<String, String> getColumnForInput() {
+    HashMap<String, String> fields = new HashMap<>();
+    fields.put("studentCode", "Mã sinh viên");
+    fields.put("studentName", "Họ tên");
+    fields.put("id_course", "Khóa");
+    fields.put("id_class", "Lớp");
+    fields.put("student_image", "Ảnh");
+    return fields;
+  }
 }

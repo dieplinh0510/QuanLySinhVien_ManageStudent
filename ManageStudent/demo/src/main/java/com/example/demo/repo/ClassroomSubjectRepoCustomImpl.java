@@ -60,7 +60,7 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
             .teacher(item[0] != null ? item[0].toString() : null)
             .classroomCode(item[1] != null ? item[1].toString() : null)
             .subjectName(item[2] != null ? item[2].toString() : null)
-            .quantityStudent(item[3] != null ? item[3].toString() : null)
+            .quantityStudent(item[3] != null ? Long.parseLong(item[3].toString()) : null)
             .build();
         list.add(classroomSubjectDTO);
       }

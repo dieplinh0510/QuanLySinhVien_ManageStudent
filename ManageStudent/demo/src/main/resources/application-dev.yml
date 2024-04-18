@@ -1,6 +1,10 @@
 server:
   port: 8080
 
+jwt:
+  secret_key : tGmM2qNIej
+  time_expiration : 86400000
+
 
 spring:
   application:

@@ -11,7 +11,7 @@ public class ClassroomSubjectDTO {
   private String teacher;
   private String classroomCode;
   private String subjectName;
-  private String quantityStudent;
+  private Long quantityStudent;
   private Long idUser;
 
 }

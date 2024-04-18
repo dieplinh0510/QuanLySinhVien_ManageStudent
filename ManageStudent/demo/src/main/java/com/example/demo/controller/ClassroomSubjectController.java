@@ -47,4 +47,15 @@ public class ClassroomSubjectController extends CommonController{
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
     }
   }
+
+  @PutMapping()
+  ResponseEntity<?> changeInfoClassroomSubject(@RequestBody ClassroomSubjectDTO classroomSubjectDTO, @RequestParam(value = "classroomId") Long classroomId){
+    try {
+      return toSuccessResult(classroomSubjectService.changeInfoClassroomSubject(classroomSubjectDTO, classroomId));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
 }

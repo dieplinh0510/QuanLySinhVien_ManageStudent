@@ -133,10 +133,20 @@ public class StudentController extends CommonController {
     }
   }
 
-  @GetMapping("/get-column")
+  @GetMapping("/get-column/point")
   public ResponseEntity<?> getColumnForInputPoint(){
     try {
       return toSuccessResult(studentService.getColumnForInputPoint());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @GetMapping("/get-column")
+  public ResponseEntity<?> getColumnForInput(){
+    try {
+      return toSuccessResult(studentService.getColumnForInput());
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
