@@ -82,6 +82,30 @@ public class StudentController extends CommonController {
     }
   }
 
+
+  @Operation(summary = "API tìm kiếm sinh viên")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
+  @GetMapping("/search")
+  public ResponseEntity<?> searchStudent(@RequestParam(name = "studentCode", required = false) String studentCode,
+                                          @RequestParam(name = "courseId", required = false) Long courseId,
+                                          @RequestParam(name = "classroomId", required = false) Long classroomId,
+                                          @RequestParam(name = "pointStart", required = false) Double pointStart,
+                                          @RequestParam(name = "pointEnd", required = false) Double pointEnd) {
+    try {
+      return toSuccessResult(studentService.searchStudent(studentCode, courseId, classroomId, pointStart, pointEnd));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+
   @Operation(summary = "API lấy tất cả môn học của sinh viên màn xem thông tin chi tiết sinh viên")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Success",

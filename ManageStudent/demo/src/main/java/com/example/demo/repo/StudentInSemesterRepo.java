@@ -21,14 +21,48 @@ public interface StudentInSemesterRepo extends JpaRepository<StudentInSemester, 
       "\t\tss.student_id, \n" +
       "\t\tSUM(ss.accumulated_points)/count(ss.student_id) as trungbinh\n" +
       "\tfrom\n" +
-      "\t\tstudent_semester ss\n" +
+      "\t\tstudent_semester ss inner join students s on ss.student_id = s.id \n" +
       "\twhere\n" +
       "\t\t(\n" +
       "\t\tselect\n" +
       "\t\t\tsum(ss.accumulated_points)/count(ss.accumulated_points) \n" +
       "\t\tfrom\n" +
-      "\t\t\n" +
-      "\t\t\tstudent_semester ss2) >= :pointStart\n" +
+      "\t\t\t\t\tstudent_semester ss2) >= :pointStart\n" +
+      "\t\tand (\n" +
+      "\t\tselect\n" +
+      "\t\t\tsum(ss.accumulated_points)/count(ss.accumulated_points) \n" +
+      "\t\tfrom\n" +
+      "\t\t\tstudent_semester ss2) <= :pointEnd \n" +
+      "\t\tand s.id_class  = :classroomId\n" +
+      "\tgroup by ss.student_id\n" +
+      "\torder by ss.student_id\n" +
+      ")\n" +
+      "select \n" +
+      "\tss.id, \n" +
+      "\td.trungbinh as accumulated_points,\n" +
+      "\tss.create_datetime, \n" +
+      "\tss.create_user, \n" +
+      "\tss.semester_id, \n" +
+      "\tss.student_id, \n" +
+      "\tss.update_datetime, \n" +
+      "\tss.update_user \n" +
+      "from student_semester ss inner join datas d \n" +
+      "\ton ss.student_id = d.student_id\n" +
+      "order by ss.student_id ", nativeQuery = true)
+  List<StudentInSemester> getStudentInSemester(Double pointStart, Double pointEnd, Long classroomId);
+
+  @Query(value = "with datas as (\n" +
+      "\tselect\n" +
+      "\t\tss.student_id, \n" +
+      "\t\tSUM(ss.accumulated_points)/count(ss.student_id) as trungbinh\n" +
+      "\tfrom\n" +
+      "\t\tstudent_semester ss \n" +
+      "\twhere\n" +
+      "\t\t(\n" +
+      "\t\tselect\n" +
+      "\t\t\tsum(ss.accumulated_points)/count(ss.accumulated_points) \n" +
+      "\t\tfrom\n" +
+      "\t\t\t\t\tstudent_semester ss2) >= :pointStart\n" +
       "\t\tand (\n" +
       "\t\tselect\n" +
       "\t\t\tsum(ss.accumulated_points)/count(ss.accumulated_points) \n" +
@@ -50,7 +84,6 @@ public interface StudentInSemesterRepo extends JpaRepository<StudentInSemester, 
       "\ton ss.student_id = d.student_id\n" +
       "order by ss.student_id ", nativeQuery = true)
   List<StudentInSemester> getStudentInSemesterByPoint(Double pointStart, Double pointEnd);
-
 
   @Query("select s from StudentInSemester s where s.semesterId = ?1")
   StudentInSemester findBySemesterId();

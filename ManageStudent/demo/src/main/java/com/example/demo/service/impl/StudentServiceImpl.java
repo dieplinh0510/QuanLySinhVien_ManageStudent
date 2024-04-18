@@ -111,6 +111,139 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
+  public List<StudentPointDTO> searchStudent(String studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd) throws Exception {
+    List<StudentPointDTO> listStudentPoint = new ArrayList<>();
+    if (studentCode != null){
+      Student student = studentRepo.getStudentByStudentCode(studentCode);
+      Assert.notNull(student, "Student is null");
+      Classroom classroom = classroomRepo.getClassroomByClassroomId(student.getIdClass());
+      Course course = courseRepo.getCourseByCourseId(classroom.getIdCourse());
+      Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(student.getId());
+      Integer countPoint = studentInSemesterRepo.countAccumulatedPointsByStudentId(student.getId());
+      StudentPointDTO studentPoint = StudentPointDTO.builder()
+          .studentCode(student.getStudentCode())
+          .studentName(student.getStudentName())
+          .classroomName(classroom.getNameClass())
+          .courseName(course!=null ? course.getNameCourse() : null)
+          .accumulatedPoints(point!=null ? Math.ceil(point/countPoint * 100)/100 : null)
+          .build();
+      listStudentPoint.add(studentPoint);
+      return listStudentPoint;
+    } else if (studentCode == null && pointStart == null && pointEnd == null && courseId != null && classroomId != null){
+      List<Student> listStudent = studentRepo.getStudentByClassroomId(classroomId);
+      Classroom classroom = classroomRepo.getClassroomByClassroomId(classroomId);
+      Course course = courseRepo.getCourseByCourseId(courseId);
+      for (Student item: listStudent) {
+        Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(item.getId());
+        Integer count = studentInSemesterRepo.countAccumulatedPointsByStudentId(item.getId());
+        if (point == null){
+          StudentPointDTO studentPointDTO = StudentPointDTO.builder()
+              .studentCode(item.getStudentCode())
+              .accumulatedPoints(null)
+              .studentName(item.getStudentName())
+              .classroomName(classroom!=null ? classroom.getNameClass() : null)
+              .courseName(course!=null ? course.getNameCourse() : null)
+              .build();
+          listStudentPoint.add(studentPointDTO);
+        } else {
+          StudentPointDTO studentPointDTO = StudentPointDTO.builder()
+              .studentCode(item.getStudentCode())
+              .accumulatedPoints(Math.ceil(point/count * 100)/100)
+              .studentName(item.getStudentName())
+              .classroomName(classroom!=null ? classroom.getNameClass() : null)
+              .courseName(course!=null ? course.getNameCourse() : null)
+              .build();
+          listStudentPoint.add(studentPointDTO);
+        }
+
+
+      }
+      return listStudentPoint;
+    } else if (studentCode == null && pointStart != null && pointEnd != null && courseId != null && classroomId != null ) {
+      List<StudentInSemester> studentInSemesters = studentInSemesterRepo.getStudentInSemester(pointStart, pointEnd, classroomId);
+      for (StudentInSemester studentInSemester : studentInSemesters) {
+        Student student = studentRepo.getById(studentInSemester.getStudentId());
+        Classroom classroom = classroomRepo.getClassroomByClassroomId(student.getIdClass());
+        Course course = courseRepo.getCourseByCourseId(classroom.getIdCourse());
+        boolean check = false;
+        for (StudentPointDTO item : listStudentPoint) {
+          if (item.getStudentCode().equals(student.getStudentCode())) {
+            check = true;
+            break;
+          }
+        }
+        if (!check) {
+          Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(studentInSemester.getStudentId());
+          Integer count = studentInSemesterRepo.countAccumulatedPointsByStudentId(studentInSemester.getStudentId());
+          if (point == null){
+            StudentPointDTO studentPointDTO = StudentPointDTO.builder()
+                .studentCode(student.getStudentCode())
+                .classroomName(classroom.getNameClass())
+                .courseName(course != null ? course.getNameCourse() : null)
+                .studentName(student.getStudentName())
+                .accumulatedPoints(null)
+                .build();
+            listStudentPoint.add(studentPointDTO);
+          } else {
+            StudentPointDTO studentPointDTO = StudentPointDTO.builder()
+                .studentCode(student.getStudentCode())
+                .classroomName(classroom.getNameClass())
+                .courseName(course != null ? course.getNameCourse() : null)
+                .studentName(student.getStudentName())
+                .accumulatedPoints(Math.ceil(point/count * 100) / 100)
+                .build();
+            listStudentPoint.add(studentPointDTO);
+          }
+
+        }
+      }
+      return listStudentPoint;
+    } else if (studentCode == null && pointStart != null && pointEnd != null && courseId == null && classroomId == null) {
+      List<StudentInSemester> studentInSemesters = studentInSemesterRepo.getStudentInSemesterByPoint(pointStart, pointEnd);
+      for (StudentInSemester studentInSemester : studentInSemesters) {
+        Student student = studentRepo.getById(studentInSemester.getStudentId());
+        Classroom classroom = classroomRepo.getClassroomByClassroomId(student.getIdClass());
+        Course course = courseRepo.getCourseByCourseId(classroom.getIdCourse());
+        boolean check = false;
+        for (StudentPointDTO item : listStudentPoint) {
+          if (item.getStudentCode().equals(student.getStudentCode())) {
+            check = true;
+            break;
+          }
+        }
+        if (!check) {
+          Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(studentInSemester.getStudentId());
+          Integer count = studentInSemesterRepo.countAccumulatedPointsByStudentId(studentInSemester.getStudentId());
+          if (point == null){
+            StudentPointDTO studentPointDTO = StudentPointDTO.builder()
+                .studentCode(student.getStudentCode())
+                .classroomName(classroom.getNameClass())
+                .courseName(course != null ? course.getNameCourse() : null)
+                .studentName(student.getStudentName())
+                .accumulatedPoints(null)
+                .build();
+            listStudentPoint.add(studentPointDTO);
+          } else {
+            StudentPointDTO studentPointDTO = StudentPointDTO.builder()
+                .studentCode(student.getStudentCode())
+                .classroomName(classroom.getNameClass())
+                .courseName(course != null ? course.getNameCourse() : null)
+                .studentName(student.getStudentName())
+                .accumulatedPoints(Math.ceil(point/count * 100) / 100)
+                .build();
+            listStudentPoint.add(studentPointDTO);
+          }
+
+        }
+      }
+      return listStudentPoint;
+    } else {
+      throw new Exception("");
+    }
+
+  }
+
+  @Override
   public List<DetailStudentDTO> getSubjectInStudent(String studentCode) {
     Student student = studentRepo.getStudentByStudentCode(studentCode);
     List<StudentInClassroomSubject> studentSubject = studentInClassroomSubjectRepo.findByStudentId(student.getId());
@@ -175,7 +308,7 @@ public class StudentServiceImpl implements StudentService {
     Assert.notNull(studentPointDTO.getStudentCode(), "Student code is null");
     Assert.notNull(studentPointDTO.getStudentName(), "Student name is null");
     Assert.notNull(studentPointDTO.getIdClass(), "Class is null");
-    Assert.notNull(studentPointDTO.getIdCourse(), "Course is null");
+//    Assert.notNull(studentPointDTO.getIdCourse(), "Course is null");
     Assert.notNull(studentPointDTO.getStudentImage(), "Student Image is null");
     Student student = studentRepo.getStudentByStudentCode(studentPointDTO.getStudentCode());
     Assert.isNull(student, "Student already exits");
