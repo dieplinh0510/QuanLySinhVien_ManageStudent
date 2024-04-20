@@ -40,9 +40,8 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
   public ClassroomSubject createClassroomSubject(ClassroomSubjectDTO classroomSubjectDTO, Long subjectId) throws Exception {
     Assert.notNull(classroomSubjectDTO.getClassroomCode(), "Mã lớp chống");
     ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByClassroomCode(classroomSubjectDTO.getClassroomCode());
-    if (classroomSubject != null){
-      ClassroomSubject classroomSubject1 = new ClassroomSubject();
-      classroomSubject1.builder()
+    if (classroomSubject == null){
+      ClassroomSubject classroomSubject1 = ClassroomSubject.builder()
           .idSubject(subjectId)
           .classroomCode(classroomSubjectDTO.getClassroomCode())
           .idUser(classroomSubjectDTO.getIdUser())

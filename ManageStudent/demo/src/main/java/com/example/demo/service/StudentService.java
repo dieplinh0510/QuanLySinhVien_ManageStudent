@@ -17,7 +17,7 @@ public interface StudentService {
   List<StudentPointDTO> getStudentByClassroom(Long courseId, Long classroomId);
   List<StudentPointDTO> getStudentByPoint(Double pointStart, Double pointEnd);
   Page<StudentPointDTO> searchStudent(String studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd, Integer pageIndex, Integer pageSize) throws Exception;
-  List<DetailStudentDTO> getSubjectInStudent(String studentCode);
+  List<DetailStudentDTO> getSubjectInStudent(Long studentId);
   List<StudentSemesterDTO> getAccumulatedPointByStudentCode(String studentCode);
   Student createStudent(StudentPointDTO studentPointDTO);
   Student changeStudent(StudentPointDTO studentPointDTO);

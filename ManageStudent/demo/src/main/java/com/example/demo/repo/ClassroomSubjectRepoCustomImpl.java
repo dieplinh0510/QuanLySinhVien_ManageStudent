@@ -46,7 +46,7 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
     List<ClassroomSubjectDTO> list = new ArrayList<>();
     StringBuilder strQuery = new StringBuilder();
     strQuery.append("select\n" +
-        "\tu.teacher_name, classroom_code, s.subject_name, cis.quantity_student \n" +
+        "\tu.teacher_name, classroom_code, s.subject_name, cis.quantity_student, u.id \n" +
         "from\n" +
         "\tsubjects s\n" +
         "inner join classroom_in_subjects cis on\n" +
@@ -63,6 +63,7 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
             .classroomCode(item[1] != null ? item[1].toString() : null)
             .subjectName(item[2] != null ? item[2].toString() : null)
             .quantityStudent(item[3] != null ? Long.parseLong(item[3].toString()) : null)
+            .idUser(item[4] != null ? Long.parseLong(item[4].toString()) : null)
             .build();
         list.add(classroomSubjectDTO);
       }

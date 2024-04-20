@@ -179,8 +179,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<DetailStudentDTO> getSubjectInStudent (String studentCode){
-      Student student = studentRepo.getStudentByStudentCode(studentCode);
+    public List<DetailStudentDTO> getSubjectInStudent (Long studentId){
+      Student student = studentRepo.getById(studentId);
       List<StudentInClassroomSubject> studentSubject = studentInClassroomSubjectRepo.findByStudentId(student.getId());
       List<DetailStudentDTO> detailStudentDTOList = new ArrayList<>();
       for (StudentInClassroomSubject item : studentSubject) {

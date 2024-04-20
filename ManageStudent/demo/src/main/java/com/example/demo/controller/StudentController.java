@@ -136,9 +136,9 @@ public class StudentController extends CommonController {
           content = @Content)
   })
   @GetMapping("/detail/subject")
-  public ResponseEntity<?> getSubjectInStudent(@RequestParam(name = "studentCode") String studentCode) {
+  public ResponseEntity<?> getSubjectInStudent(@RequestParam(name = "studentId") Long studentId) {
     try {
-      return toSuccessResult(studentService.getSubjectInStudent(studentCode));
+      return toSuccessResult(studentService.getSubjectInStudent(studentId));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
