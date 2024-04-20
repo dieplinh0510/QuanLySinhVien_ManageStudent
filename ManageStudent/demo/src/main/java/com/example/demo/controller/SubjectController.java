@@ -88,8 +88,8 @@ public class SubjectController extends CommonController{
       @ApiResponse(responseCode = "400", description = "Invalid id username/password",
           content = @Content)
   })
-  @GetMapping("/detail/id")
-  public ResponseEntity<?> getSubjectBySubjectId(@RequestParam(value = "subjectId") Long subjectId){
+  @GetMapping("/detail/{subjectId}")
+  public ResponseEntity<?> getSubjectBySubjectId(@PathVariable Long subjectId){
     try {
       return toSuccessResult(subjectService.getSubjectBySubjectId(subjectId));
     } catch (Exception e) {
