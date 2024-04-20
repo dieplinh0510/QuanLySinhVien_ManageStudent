@@ -67,4 +67,28 @@ public class StudentRepoCustomImpl implements StudentRepoCustom{
     }
     return listResult;
   }
+
+  @Override
+  public StudentPointDTO getStudentByStudentId(Long studentId) {
+    List<StudentPointDTO> studentPointDTOList = new ArrayList<>();
+    StringBuilder strQuery = new StringBuilder();
+    strQuery.append("select s.id, s.student_code, s.student_name, c.name_class , c2.name_course  \n" +
+        "from  students s  join classroomes c on s.id_class = c.id \n" +
+        "join courses c2 on c.id_course = c2.id where s.id = :studentId");
+    Query query = entityManager.createNativeQuery(strQuery.toString());
+    query.setParameter("studentId", studentId);
+    List<Object[]> result = query.getResultList();
+    if (result!= null){
+      for (Object[] item: result) {
+        StudentPointDTO student = new StudentPointDTO();
+        student.setStudentId(Long.parseLong(item[0].toString()));
+        student.setStudentCode(item[1].toString());
+        student.setStudentName(item[2].toString());
+        student.setClassroomName(item[3].toString());
+        student.setCourseName(item[4].toString());
+        studentPointDTOList.add(student);
+      }
+    }
+    return studentPointDTOList.get(0);
+  }
 }

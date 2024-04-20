@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface StudentService {
   StudentPointDTO getStudentByStudentCode(String studentCode);
+  StudentPointDTO getStudentByStudentId(Long studentId) throws Exception;
   List<StudentPointDTO> getStudentByClassroom(Long courseId, Long classroomId);
   List<StudentPointDTO> getStudentByPoint(Double pointStart, Double pointEnd);
   Page<StudentPointDTO> searchStudent(String studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd, Integer pageIndex, Integer pageSize) throws Exception;

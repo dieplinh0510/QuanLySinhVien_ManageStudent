@@ -63,6 +63,15 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
+  public StudentPointDTO getStudentByStudentId(Long studentId) throws Exception {
+    StudentPointDTO studentPointDTO = studentRepoCustom.getStudentByStudentId(studentId);
+    if (studentPointDTO == null){
+      throw new Exception("Không có thông tin sinh viên");
+    }
+    return studentPointDTO;
+  }
+
+  @Override
   public List<StudentPointDTO> getStudentByClassroom(Long courseId, Long classroomId) {
     Assert.notNull(classroomId, "Classroom is null");
     Assert.notNull(courseId, "Course is null");
