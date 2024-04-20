@@ -30,6 +30,9 @@ public class StudentInClassroomSubject {
   private Double midtermPointOne;
   @Column(name = "test_point_one")
   private Double testPointOne;
+
+  @Column(name = "status")
+  private Integer status;
   @Column(name = "create_user")
   private String createUser;
   @Column(name = "create_datetime")

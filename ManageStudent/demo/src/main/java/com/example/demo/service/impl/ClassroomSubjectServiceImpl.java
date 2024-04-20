@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.domain.dto.ClassroomSubjectDTO;
 import com.example.demo.domain.model.ClassroomSubject;
+import com.example.demo.domain.model.StudentInClassroomSubject;
 import com.example.demo.repo.ClassroomSubjectRepo;
 import com.example.demo.repo.ClassroomSubjectRepoCustom;
 import com.example.demo.repo.StudentInClassroomSubjectRepo;
@@ -32,8 +33,17 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
 
   @Override
   public List<ClassroomSubjectDTO> getAllClassroomSubject(Long subjectId) {
-    List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId);
+    List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, null);
     return list;
+  }
+
+  @Override
+  public ClassroomSubjectDTO getClassroomByClassroomCode(String classroomCode) throws Exception {
+    ClassroomSubjectDTO classroom = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(null, classroomCode).get(0);
+    if (classroom == null){
+      throw new Exception("Không tìm thấy thông tin lớp học");
+    }
+    return classroom;
   }
 
   @Override
@@ -86,6 +96,27 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
       return classroomSubject;
     } else {
       throw new Exception("Lớp không tồn tại");
+    }
+  }
+
+  @Override
+  public StudentInClassroomSubject addStudentInClassroom(Long classroomId, Long subjectId, Long studentId) throws Exception {
+    Long result = studentInClassroomSubjectRepo.getStudentInStudentClass(studentId, subjectId);
+    if (result == null){
+        Long quantityStudentInClass = studentInClassroomSubjectRepo.getQuantityStudent(classroomId);
+        ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectById(classroomId);
+      if (quantityStudentInClass <= classroomSubject.getQuantityStudent()){
+        StudentInClassroomSubject studentInClassroomSubject = StudentInClassroomSubject.builder()
+                                                              .idClassroomInSubject(classroomId)
+                                                              .idStudent(studentId)
+                                                              .build();
+        studentInClassroomSubjectRepo.save(studentInClassroomSubject);
+        return studentInClassroomSubject;
+      } else {
+        throw new Exception("Lớp đã đầy.");
+      }
+    } else {
+      throw new Exception("Sinh viên đang học môn học này");
     }
   }
 

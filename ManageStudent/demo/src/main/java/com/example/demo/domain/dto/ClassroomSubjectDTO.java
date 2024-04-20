@@ -14,4 +14,6 @@ public class ClassroomSubjectDTO {
   private Long quantityStudent;
   private Long idUser;
 
+  private Long idClassroom;
+
 }

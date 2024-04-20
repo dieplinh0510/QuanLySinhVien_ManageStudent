@@ -60,7 +60,23 @@ public class ClassroomSubjectController extends CommonController{
     }
   }
 
-
+  @Operation(summary = "API search classroom trong môn học")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
+  @GetMapping("/detail/{classroomCode}")
+  ResponseEntity<?> getClassroomByClassroomCode(@PathVariable String classroomCode){
+    try {
+      return toSuccessResult(classroomSubjectService.getClassroomByClassroomCode(classroomCode));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
 
   @Operation(summary = "API tạo lớp học trong môn học")
   @ApiResponses(value = {
@@ -92,6 +108,26 @@ public class ClassroomSubjectController extends CommonController{
   ResponseEntity<?> changeInfoClassroomSubject(@RequestBody ClassroomSubjectDTO classroomSubjectDTO, @RequestParam(value = "classroomId") Long classroomId){
     try {
       return toSuccessResult(classroomSubjectService.changeInfoClassroomSubject(classroomSubjectDTO, classroomId));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @Operation(summary = "API thêm sinh viên vào lớp học")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
+  @PostMapping("/students")
+  ResponseEntity<?> addStudentInClassroom(@RequestParam(value = "classroomId") Long classroomId,
+                                          @RequestParam(value = "subjectId") Long subjectId,
+                                          @RequestParam(value = "studentId") Long studentId){
+    try {
+      return toSuccessResult(classroomSubjectService.addStudentInClassroom(classroomId, subjectId, studentId));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

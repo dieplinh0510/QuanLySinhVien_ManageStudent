@@ -33,4 +33,13 @@ public interface StudentInClassroomSubjectRepo extends JpaRepository<StudentInCl
 
   @Query(value = "select count(sics.id_student) from student_in_classroom_subjects sics where id_class_sbject = :idClass", nativeQuery = true)
   Long getQuantityStudentInClass(Long idClass);
+
+  @Query(value = "select sics.id \n" +
+      "from subjects s join classroom_in_subjects cis on s.id = cis.id_subject \n" +
+      "join student_in_classroom_subjects sics on cis.id = sics.id_class_sbject \n" +
+      "where sics.id_student = :studentId and s.id = :subjectId and sics.status = 1", nativeQuery = true)
+  Long getStudentInStudentClass(Long studentId, Long subjectId);
+
+  @Query(value = "select count(sics.id_student) from student_in_classroom_subjects sics where sics.id_class_sbject = :classroomId", nativeQuery = true)
+  Long getQuantityStudent(Long classroomId);
 }

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ClassroomSubjectRepoCustom {
   List<ClassroomSubjectDTO> getAllClassroomSubject();
-  List<ClassroomSubjectDTO> getAllClassroomSubjectDetail(Long subjectId);
+  List<ClassroomSubjectDTO> getAllClassroomSubjectDetail(Long subjectId, String classroomCode);
 }

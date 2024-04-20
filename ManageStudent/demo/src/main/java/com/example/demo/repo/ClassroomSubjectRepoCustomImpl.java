@@ -42,19 +42,32 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
   }
 
   @Override
-  public List<ClassroomSubjectDTO> getAllClassroomSubjectDetail(Long subjectId) {
+  public List<ClassroomSubjectDTO> getAllClassroomSubjectDetail(Long subjectId, String classroomCode) {
     List<ClassroomSubjectDTO> list = new ArrayList<>();
     StringBuilder strQuery = new StringBuilder();
     strQuery.append("select\n" +
-        "\tu.teacher_name, classroom_code, s.subject_name, cis.quantity_student, u.id \n" +
+        "\tu.teacher_name, classroom_code, s.subject_name, cis.quantity_student, u.id, cis.id as classroomId \n" +
         "from\n" +
         "\tsubjects s\n" +
         "inner join classroom_in_subjects cis on\n" +
         "\ts.id = cis.id_subject\n" +
         "inner join users u on\n" +
-        "\tcis.id_user = u.id where s.id = :subjectId");
+        "\tcis.id_user = u.id ");
+    if (subjectId != null){
+      strQuery.append(" where s.id = :subjectId");
+    }
+
+    if (classroomCode != null){
+      strQuery.append(" where cis.classroom_code = :classroomCode");
+    }
     Query query = entityManager.createNativeQuery(strQuery.toString());
-    query.setParameter("subjectId", subjectId);
+    if (subjectId != null){
+      query.setParameter("subjectId", subjectId);
+    }
+
+    if (classroomCode != null){
+      query.setParameter("classroomCode", classroomCode);
+    }
     List<Object[]> result = query.getResultList();
     if (result!=null){
       for (Object[] item: result) {
@@ -64,6 +77,7 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
             .subjectName(item[2] != null ? item[2].toString() : null)
             .quantityStudent(item[3] != null ? Long.parseLong(item[3].toString()) : null)
             .idUser(item[4] != null ? Long.parseLong(item[4].toString()) : null)
+            .idClassroom(item[5] != null ? Long.parseLong(item[5].toString()) : null)
             .build();
         list.add(classroomSubjectDTO);
       }
