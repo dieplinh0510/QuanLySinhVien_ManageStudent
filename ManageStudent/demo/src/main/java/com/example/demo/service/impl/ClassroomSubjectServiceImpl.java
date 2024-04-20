@@ -38,8 +38,8 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
   }
 
   @Override
-  public ClassroomSubjectDTO getClassroomByClassroomCode(String classroomCode) throws Exception {
-    ClassroomSubjectDTO classroom = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(null, classroomCode).get(0);
+  public ClassroomSubjectDTO getClassroomByClassroomCode(Long subjectId, String classroomCode) throws Exception {
+    ClassroomSubjectDTO classroom = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, classroomCode).get(0);
     if (classroom == null){
       throw new Exception("Không tìm thấy thông tin lớp học");
     }

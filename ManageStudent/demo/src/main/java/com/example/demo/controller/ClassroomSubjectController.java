@@ -68,10 +68,12 @@ public class ClassroomSubjectController extends CommonController{
       @ApiResponse(responseCode = "400", description = "Invalid id username/password",
           content = @Content)
   })
-  @GetMapping("/detail/{classroomCode}")
-  ResponseEntity<?> getClassroomByClassroomCode(@PathVariable String classroomCode){
+  @GetMapping("/detail/{subjectId}/{classroomCode}")
+  ResponseEntity<?> getClassroomByClassroomCode(
+      @PathVariable Long subjectId,
+      @PathVariable String classroomCode){
     try {
-      return toSuccessResult(classroomSubjectService.getClassroomByClassroomCode(classroomCode));
+      return toSuccessResult(classroomSubjectService.getClassroomByClassroomCode(subjectId,classroomCode));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

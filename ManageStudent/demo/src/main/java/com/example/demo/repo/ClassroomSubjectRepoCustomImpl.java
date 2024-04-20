@@ -57,8 +57,8 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
       strQuery.append(" where s.id = :subjectId");
     }
 
-    if (classroomCode != null){
-      strQuery.append(" where cis.classroom_code = :classroomCode");
+    if (classroomCode != null && subjectId != null ){
+      strQuery.append("  and cis.classroom_code = :classroomCode");
     }
     Query query = entityManager.createNativeQuery(strQuery.toString());
     if (subjectId != null){
