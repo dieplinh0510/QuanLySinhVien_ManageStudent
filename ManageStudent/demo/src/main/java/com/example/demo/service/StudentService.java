@@ -6,6 +6,7 @@ import com.example.demo.domain.dto.StudentPointInClassroomDTO;
 import com.example.demo.domain.dto.StudentSemesterDTO;
 import com.example.demo.domain.model.Student;
 import com.example.demo.domain.model.StudentInClassroomSubject;
+import org.springframework.data.domain.Page;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ public interface StudentService {
   StudentPointDTO getStudentByStudentCode(String studentCode);
   List<StudentPointDTO> getStudentByClassroom(Long courseId, Long classroomId);
   List<StudentPointDTO> getStudentByPoint(Double pointStart, Double pointEnd);
-  List<StudentPointDTO> searchStudent(String studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd) throws Exception;
+  Page<StudentPointDTO> searchStudent(String studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd, Integer pageIndex, Integer pageSize) throws Exception;
   List<DetailStudentDTO> getSubjectInStudent(String studentCode);
   List<StudentSemesterDTO> getAccumulatedPointByStudentCode(String studentCode);
   Student createStudent(StudentPointDTO studentPointDTO);

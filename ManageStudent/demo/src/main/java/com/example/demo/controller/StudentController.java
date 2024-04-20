@@ -96,9 +96,11 @@ public class StudentController extends CommonController {
                                           @RequestParam(name = "courseId", required = false) Long courseId,
                                           @RequestParam(name = "classroomId", required = false) Long classroomId,
                                           @RequestParam(name = "pointStart", required = false) Double pointStart,
-                                          @RequestParam(name = "pointEnd", required = false) Double pointEnd) {
+                                          @RequestParam(name = "pointEnd", required = false) Double pointEnd,
+                                         @RequestParam(value = "pageIndex") Integer pageIndex,
+                                         @RequestParam(value = "pageSize") Integer pageSize) {
     try {
-      return toSuccessResult(studentService.searchStudent(studentCode, courseId, classroomId, pointStart, pointEnd));
+      return toSuccessResult(studentService.searchStudent(studentCode, courseId, classroomId, pointStart, pointEnd, pageIndex, pageSize));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

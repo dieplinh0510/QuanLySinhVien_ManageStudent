@@ -7,6 +7,10 @@ import com.example.demo.domain.dto.StudentSemesterDTO;
 import com.example.demo.domain.model.*;
 import com.example.demo.repo.*;
 import com.example.demo.service.StudentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -27,8 +31,9 @@ public class StudentServiceImpl implements StudentService {
   private final ClassroomSubjectRepo classroomSubjectRepo;
   private final SubjectRepo subjectRepo;
   private final SemesterRepo semesterRepo;
+  private final StudentRepoCustom studentRepoCustom;
 
-  public StudentServiceImpl(StudentRepo studentRepo, StudentInSemesterRepo studentInSemesterRepo, ClassroomRepo classroomRepo, CourseRepo courseRepo, StudentInClassroomSubjectRepo studentInClassroomSubjectRepo, ClassroomSubjectRepo classroomSubjectRepo, SubjectRepo subjectRepo, SemesterRepo semesterRepo) {
+  public StudentServiceImpl(StudentRepo studentRepo, StudentInSemesterRepo studentInSemesterRepo, ClassroomRepo classroomRepo, CourseRepo courseRepo, StudentInClassroomSubjectRepo studentInClassroomSubjectRepo, ClassroomSubjectRepo classroomSubjectRepo, SubjectRepo subjectRepo, SemesterRepo semesterRepo, StudentRepoCustom studentRepoCustom) {
     this.studentRepo = studentRepo;
     this.studentInSemesterRepo = studentInSemesterRepo;
     this.classroomRepo = classroomRepo;
@@ -37,6 +42,7 @@ public class StudentServiceImpl implements StudentService {
     this.classroomSubjectRepo = classroomSubjectRepo;
     this.subjectRepo = subjectRepo;
     this.semesterRepo = semesterRepo;
+    this.studentRepoCustom = studentRepoCustom;
   }
 
   @Override
@@ -51,8 +57,8 @@ public class StudentServiceImpl implements StudentService {
         .studentCode(student.getStudentCode())
         .studentName(student.getStudentName())
         .classroomName(classroom.getNameClass())
-        .courseName(course!=null ? course.getNameCourse() : null)
-        .accumulatedPoints(point!=null ? Math.ceil(point/countPoint * 100)/100 : null)
+        .courseName(course != null ? course.getNameCourse() : null)
+        .accumulatedPoints(point != null ? Math.ceil(point / countPoint * 100) / 100 : null)
         .build();
   }
 
@@ -64,14 +70,14 @@ public class StudentServiceImpl implements StudentService {
     Classroom classroom = classroomRepo.getClassroomByClassroomId(classroomId);
     Course course = courseRepo.getCourseByCourseId(courseId);
     List<StudentPointDTO> studentPointDTOList = new ArrayList<>();
-    for (Student item: listStudent) {
+    for (Student item : listStudent) {
       Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(item.getId());
       StudentPointDTO studentPointDTO = StudentPointDTO.builder()
           .studentCode(item.getStudentCode())
           .accumulatedPoints(point)
           .studentName(item.getStudentName())
-          .classroomName(classroom!=null ? classroom.getNameClass() : null)
-          .courseName(course!=null ? course.getNameCourse() : null)
+          .classroomName(classroom != null ? classroom.getNameClass() : null)
+          .courseName(course != null ? course.getNameCourse() : null)
           .build();
       studentPointDTOList.add(studentPointDTO);
     }
@@ -111,207 +117,127 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
-  public List<StudentPointDTO> searchStudent(String studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd) throws Exception {
-    List<StudentPointDTO> listStudentPoint = new ArrayList<>();
-    if (studentCode != null){
+  public Page<StudentPointDTO> searchStudent(String studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd, Integer pageIndex, Integer pageSize) throws Exception {
+    List<StudentPointDTO> listStudentPoint = studentRepoCustom.getStudent(studentCode, courseId, classroomId);
+
+    for (int i = 0 ; i <listStudentPoint.size(); i++) {
+      Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(listStudentPoint.get(i).getStudentId());
+      Integer countPoint = studentInSemesterRepo.countAccumulatedPointsByStudentId(listStudentPoint.get(i).getStudentId());
+      if (point != null) {
+        point = Math.ceil(point / countPoint * 100) / 100;
+        if (pointStart != null && pointEnd == null) {
+          if (point >= pointStart) {
+            listStudentPoint.get(i).setAccumulatedPoints(point);
+          } else {
+            listStudentPoint.remove(listStudentPoint.get(i));
+            i--;
+          }
+        }
+        if (pointStart == null && pointEnd == null) {
+          listStudentPoint.get(i).setAccumulatedPoints((point));
+        }
+        if (pointStart == null && pointEnd != null) {
+          if (point <= pointEnd) {
+            listStudentPoint.get(i).setAccumulatedPoints(point);
+          } else {
+            listStudentPoint.remove(listStudentPoint.get(i));
+            i--;
+          }
+        }
+        if (pointStart != null && pointEnd !=null){
+          if (point >= pointStart && point <= pointEnd){
+            listStudentPoint.get(i).setAccumulatedPoints(point);
+          } else {
+            listStudentPoint.remove(listStudentPoint.get(i));
+            i--;
+          }
+        }
+
+      } else {
+        if (pointStart != null || pointEnd != null) {
+          listStudentPoint.remove(listStudentPoint.get(i));
+          i--;
+        }
+      }
+    }
+      Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
+      int start = (int) pageRequest.getOffset();
+      int end = Math.min(start + pageRequest.getPageSize(), listStudentPoint.size());
+      List<StudentPointDTO> pageContent = listStudentPoint.subList(start, end);
+
+      return new PageImpl<>(pageContent, pageRequest, listStudentPoint.size());
+
+    }
+
+    @Override
+    public List<DetailStudentDTO> getSubjectInStudent (String studentCode){
       Student student = studentRepo.getStudentByStudentCode(studentCode);
-      Assert.notNull(student, "Student is null");
-      Classroom classroom = classroomRepo.getClassroomByClassroomId(student.getIdClass());
-      Course course = courseRepo.getCourseByCourseId(classroom.getIdCourse());
-      Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(student.getId());
-      Integer countPoint = studentInSemesterRepo.countAccumulatedPointsByStudentId(student.getId());
-      StudentPointDTO studentPoint = StudentPointDTO.builder()
-          .studentCode(student.getStudentCode())
-          .studentName(student.getStudentName())
-          .classroomName(classroom.getNameClass())
-          .courseName(course!=null ? course.getNameCourse() : null)
-          .accumulatedPoints(point!=null ? Math.ceil(point/countPoint * 100)/100 : null)
-          .build();
-      listStudentPoint.add(studentPoint);
-      return listStudentPoint;
-    } else if (studentCode == null && pointStart == null && pointEnd == null && courseId != null && classroomId != null){
-      List<Student> listStudent = studentRepo.getStudentByClassroomId(classroomId);
-      Classroom classroom = classroomRepo.getClassroomByClassroomId(classroomId);
-      Course course = courseRepo.getCourseByCourseId(courseId);
-      for (Student item: listStudent) {
-        Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(item.getId());
-        Integer count = studentInSemesterRepo.countAccumulatedPointsByStudentId(item.getId());
-        if (point == null){
-          StudentPointDTO studentPointDTO = StudentPointDTO.builder()
-              .studentCode(item.getStudentCode())
-              .accumulatedPoints(null)
-              .studentName(item.getStudentName())
-              .classroomName(classroom!=null ? classroom.getNameClass() : null)
-              .courseName(course!=null ? course.getNameCourse() : null)
-              .build();
-          listStudentPoint.add(studentPointDTO);
-        } else {
-          StudentPointDTO studentPointDTO = StudentPointDTO.builder()
-              .studentCode(item.getStudentCode())
-              .accumulatedPoints(Math.ceil(point/count * 100)/100)
-              .studentName(item.getStudentName())
-              .classroomName(classroom!=null ? classroom.getNameClass() : null)
-              .courseName(course!=null ? course.getNameCourse() : null)
-              .build();
-          listStudentPoint.add(studentPointDTO);
+      List<StudentInClassroomSubject> studentSubject = studentInClassroomSubjectRepo.findByStudentId(student.getId());
+      List<DetailStudentDTO> detailStudentDTOList = new ArrayList<>();
+      for (StudentInClassroomSubject item : studentSubject) {
+        Long subjectId = studentInClassroomSubjectRepo.getIdSubject(item.getIdClassroomInSubject(), item.getIdStudent());
+        Subject subject = subjectRepo.findById(subjectId).get();
+        String classroomCode = studentInClassroomSubjectRepo.getClassroomCode(item.getIdClassroomInSubject(), item.getIdStudent());
+        double mediumPoint = 0.0;
+        if (item.getRegularPointOne() != null && item.getRegularPointTwo() != null && item.getMidtermPointOne() != null) {
+          mediumPoint = Math.ceil(((item.getRegularPointOne() + item.getRegularPointTwo()) / 2 + item.getMidtermPointOne() * 2) / 3 * 100) / 100;
         }
-
-
+        double accumulatedPoint = 0;
+        if (item.getRegularPointOne() != null && item.getRegularPointTwo() != null && item.getMidtermPointOne() != null && item.getTestPointOne() != null) {
+          accumulatedPoint = Math.ceil((mediumPoint + item.getTestPointOne() * 2) / 3 * 100) / 100;
+        }
+        double point = accumulatedPoint / 2.5;
+        DetailStudentDTO detailStudentDTO = DetailStudentDTO.builder()
+            .studentInClassroomSubject(item)
+            .subjectName(subject.getSubjectName())
+            .classroomCode(classroomCode)
+            .mediumPoint(Math.ceil(mediumPoint))
+            .accumulated_point(accumulatedPoint)
+            .point(Math.ceil(point * 100) / 100)
+            .build();
+        detailStudentDTOList.add(detailStudentDTO);
       }
-      return listStudentPoint;
-    } else if (studentCode == null && pointStart != null && pointEnd != null && courseId != null && classroomId != null ) {
-      List<StudentInSemester> studentInSemesters = studentInSemesterRepo.getStudentInSemester(pointStart, pointEnd, classroomId);
-      for (StudentInSemester studentInSemester : studentInSemesters) {
-        Student student = studentRepo.getById(studentInSemester.getStudentId());
-        Classroom classroom = classroomRepo.getClassroomByClassroomId(student.getIdClass());
-        Course course = courseRepo.getCourseByCourseId(classroom.getIdCourse());
-        boolean check = false;
-        for (StudentPointDTO item : listStudentPoint) {
-          if (item.getStudentCode().equals(student.getStudentCode())) {
-            check = true;
-            break;
-          }
-        }
-        if (!check) {
-          Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(studentInSemester.getStudentId());
-          Integer count = studentInSemesterRepo.countAccumulatedPointsByStudentId(studentInSemester.getStudentId());
-          if (point == null){
-            StudentPointDTO studentPointDTO = StudentPointDTO.builder()
-                .studentCode(student.getStudentCode())
-                .classroomName(classroom.getNameClass())
-                .courseName(course != null ? course.getNameCourse() : null)
-                .studentName(student.getStudentName())
-                .accumulatedPoints(null)
-                .build();
-            listStudentPoint.add(studentPointDTO);
-          } else {
-            StudentPointDTO studentPointDTO = StudentPointDTO.builder()
-                .studentCode(student.getStudentCode())
-                .classroomName(classroom.getNameClass())
-                .courseName(course != null ? course.getNameCourse() : null)
-                .studentName(student.getStudentName())
-                .accumulatedPoints(Math.ceil(point/count * 100) / 100)
-                .build();
-            listStudentPoint.add(studentPointDTO);
-          }
-
-        }
-      }
-      return listStudentPoint;
-    } else if (studentCode == null && pointStart != null && pointEnd != null && courseId == null && classroomId == null) {
-      List<StudentInSemester> studentInSemesters = studentInSemesterRepo.getStudentInSemesterByPoint(pointStart, pointEnd);
-      for (StudentInSemester studentInSemester : studentInSemesters) {
-        Student student = studentRepo.getById(studentInSemester.getStudentId());
-        Classroom classroom = classroomRepo.getClassroomByClassroomId(student.getIdClass());
-        Course course = courseRepo.getCourseByCourseId(classroom.getIdCourse());
-        boolean check = false;
-        for (StudentPointDTO item : listStudentPoint) {
-          if (item.getStudentCode().equals(student.getStudentCode())) {
-            check = true;
-            break;
-          }
-        }
-        if (!check) {
-          Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(studentInSemester.getStudentId());
-          Integer count = studentInSemesterRepo.countAccumulatedPointsByStudentId(studentInSemester.getStudentId());
-          if (point == null){
-            StudentPointDTO studentPointDTO = StudentPointDTO.builder()
-                .studentCode(student.getStudentCode())
-                .classroomName(classroom.getNameClass())
-                .courseName(course != null ? course.getNameCourse() : null)
-                .studentName(student.getStudentName())
-                .accumulatedPoints(null)
-                .build();
-            listStudentPoint.add(studentPointDTO);
-          } else {
-            StudentPointDTO studentPointDTO = StudentPointDTO.builder()
-                .studentCode(student.getStudentCode())
-                .classroomName(classroom.getNameClass())
-                .courseName(course != null ? course.getNameCourse() : null)
-                .studentName(student.getStudentName())
-                .accumulatedPoints(Math.ceil(point/count * 100) / 100)
-                .build();
-            listStudentPoint.add(studentPointDTO);
-          }
-
-        }
-      }
-      return listStudentPoint;
-    } else {
-      throw new Exception("");
+      return detailStudentDTOList;
     }
 
-  }
-
-  @Override
-  public List<DetailStudentDTO> getSubjectInStudent(String studentCode) {
-    Student student = studentRepo.getStudentByStudentCode(studentCode);
-    List<StudentInClassroomSubject> studentSubject = studentInClassroomSubjectRepo.findByStudentId(student.getId());
-    List<DetailStudentDTO> detailStudentDTOList = new ArrayList<>();
-    for (StudentInClassroomSubject item: studentSubject) {
-      Long subjectId = studentInClassroomSubjectRepo.getIdSubject(item.getIdClassroomInSubject(), item.getIdStudent());
-      Subject subject = subjectRepo.findById(subjectId).get();
-      String classroomCode = studentInClassroomSubjectRepo.getClassroomCode(item.getIdClassroomInSubject(), item.getIdStudent());
-      double mediumPoint = 0.0;
-      if (item.getRegularPointOne() != null && item.getRegularPointTwo() != null &&  item.getMidtermPointOne() != null){
-        mediumPoint = Math.ceil(((item.getRegularPointOne() + item.getRegularPointTwo())/2 + item.getMidtermPointOne()*2)/3 * 100)/100;
-      }
-      double accumulatedPoint = 0;
-      if (item.getRegularPointOne() != null && item.getRegularPointTwo() != null && item.getMidtermPointOne() != null && item.getTestPointOne()!=null){
-        accumulatedPoint = Math.ceil((mediumPoint + item.getTestPointOne()*2)/3 * 100)/100;
-      }
-      double point = accumulatedPoint/2.5;
-     DetailStudentDTO detailStudentDTO = DetailStudentDTO.builder()
-         .studentInClassroomSubject(item)
-         .subjectName(subject.getSubjectName())
-         .classroomCode(classroomCode)
-         .mediumPoint(Math.ceil(mediumPoint))
-         .accumulated_point(accumulatedPoint)
-         .point(Math.ceil(point*100)/100)
-         .build();
-      detailStudentDTOList.add(detailStudentDTO);
-    }
-    return detailStudentDTOList;
-  }
-
-  @Override
-  public List<StudentSemesterDTO> getAccumulatedPointByStudentCode(String studentCode) {
-    Student student = studentRepo.getStudentByStudentCode(studentCode);
-    List<Semester> semesters= semesterRepo.getAllSemester();
-    List<StudentSemesterDTO> studentSemesterDTOS = new ArrayList<>();
-    for (Semester item: semesters) {
-      Integer sumCredit = 0;
-      double point = 0.0;
-      List<Subject> listIdSubject = subjectRepo.getIdSubjectBySemesterAndStudent(item.getId(), student.getId());
-      for (Subject subject: listIdSubject){
-        sumCredit+=subject.getNumberOfCredits();
-        StudentInClassroomSubject studentSubject = studentInClassroomSubjectRepo.getListByIdSubject(subject.getId()).get(0);
-        double accumulatedPoint = 0.0;
-        if (studentSubject.getRegularPointOne() != null && studentSubject.getRegularPointTwo() != null && studentSubject.getMidtermPointOne() != null && studentSubject.getTestPointOne()!=null){
-          accumulatedPoint = Math.ceil((((studentSubject.getRegularPointOne() + studentSubject.getRegularPointTwo())/2 + studentSubject.getMidtermPointOne()*2)/3 + studentSubject.getTestPointOne()*2)/3 * 100)/100;
+    @Override
+    public List<StudentSemesterDTO> getAccumulatedPointByStudentCode (String studentCode){
+      Student student = studentRepo.getStudentByStudentCode(studentCode);
+      List<Semester> semesters = semesterRepo.getAllSemester();
+      List<StudentSemesterDTO> studentSemesterDTOS = new ArrayList<>();
+      for (Semester item : semesters) {
+        Integer sumCredit = 0;
+        double point = 0.0;
+        List<Subject> listIdSubject = subjectRepo.getIdSubjectBySemesterAndStudent(item.getId(), student.getId());
+        for (Subject subject : listIdSubject) {
+          sumCredit += subject.getNumberOfCredits();
+          StudentInClassroomSubject studentSubject = studentInClassroomSubjectRepo.getListByIdSubject(subject.getId()).get(0);
+          double accumulatedPoint = 0.0;
+          if (studentSubject.getRegularPointOne() != null && studentSubject.getRegularPointTwo() != null && studentSubject.getMidtermPointOne() != null && studentSubject.getTestPointOne() != null) {
+            accumulatedPoint = Math.ceil((((studentSubject.getRegularPointOne() + studentSubject.getRegularPointTwo()) / 2 + studentSubject.getMidtermPointOne() * 2) / 3 + studentSubject.getTestPointOne() * 2) / 3 * 100) / 100;
+          }
+          point += accumulatedPoint * subject.getNumberOfCredits();
         }
-        point += accumulatedPoint*subject.getNumberOfCredits();
+        StudentSemesterDTO studentSemesterDTO = StudentSemesterDTO.builder()
+            .idSemester(item.getId()).sumCredit(sumCredit).accumulatedPoint(Math.ceil(point / sumCredit / 2.5 * 100) / 100).build();
+        studentSemesterDTOS.add(studentSemesterDTO);
+
+        studentInSemesterRepo.deleteStudentIdAndSemesterId(item.getId(), student.getId());
+        StudentInSemester studentInSemester = StudentInSemester.builder().semesterId(item.getId()).studentId(student.getId()).build();
+        studentInSemesterRepo.save(studentInSemester);
       }
-      StudentSemesterDTO studentSemesterDTO = StudentSemesterDTO.builder()
-          .idSemester(item.getId()).sumCredit(sumCredit).accumulatedPoint(Math.ceil(point/sumCredit/2.5*100)/100).build();
-      studentSemesterDTOS.add(studentSemesterDTO);
-
-      studentInSemesterRepo.deleteStudentIdAndSemesterId(item.getId(), student.getId());
-      StudentInSemester studentInSemester = StudentInSemester.builder().semesterId(item.getId()).studentId(student.getId()).build();
-      studentInSemesterRepo.save(studentInSemester);
+      return studentSemesterDTOS;
     }
-    return studentSemesterDTOS;
-  }
 
-  @Override
-  public Student createStudent(StudentPointDTO studentPointDTO) {
-    Assert.notNull(studentPointDTO.getStudentCode(), "Student code is null");
-    Assert.notNull(studentPointDTO.getStudentName(), "Student name is null");
-    Assert.notNull(studentPointDTO.getIdClass(), "Class is null");
+    @Override
+    public Student createStudent (StudentPointDTO studentPointDTO){
+      Assert.notNull(studentPointDTO.getStudentCode(), "Student code is null");
+      Assert.notNull(studentPointDTO.getStudentName(), "Student name is null");
+      Assert.notNull(studentPointDTO.getIdClass(), "Class is null");
 //    Assert.notNull(studentPointDTO.getIdCourse(), "Course is null");
-    Assert.notNull(studentPointDTO.getStudentImage(), "Student Image is null");
-    Student student = studentRepo.getStudentByStudentCode(studentPointDTO.getStudentCode());
-    Assert.isNull(student, "Student already exits");
+      Assert.notNull(studentPointDTO.getStudentImage(), "Student Image is null");
+      Student student = studentRepo.getStudentByStudentCode(studentPointDTO.getStudentCode());
+      Assert.isNull(student, "Student already exits");
       Student studentNew = Student.builder()
           .studentCode(studentPointDTO.getStudentCode())
           .studentImage(studentPointDTO.getStudentImage())
@@ -319,123 +245,123 @@ public class StudentServiceImpl implements StudentService {
           .idClass(studentPointDTO.getIdClass())
           .createDatetime(LocalDateTime.now())
           .build();
-    return studentRepo.save(studentNew);
-  }
-
-  @Override
-  public Student changeStudent(StudentPointDTO studentPointDTO) {
-    Assert.notNull(studentPointDTO.getStudentCode(), "Student code is null");
-    Assert.notNull(studentPointDTO.getStudentName(), "Student name is null");
-    Assert.notNull(studentPointDTO.getIdClass(), "Class is null");
-    Assert.notNull(studentPointDTO.getIdCourse(), "Course is null");
-    Assert.notNull(studentPointDTO.getStudentImage(), "Student Image is null");
-    Student student = studentRepo.getStudentByStudentCode(studentPointDTO.getStudentCode());
-    Assert.notNull(student, "Student does not exits");
-    student.setStudentCode(studentPointDTO.getStudentCode());
-    student.setStudentName(studentPointDTO.getStudentName());
-    student.setStudentImage(studentPointDTO.getStudentImage());
-    student.setIdClass(studentPointDTO.getIdClass());
-    student.setUpdateDatetime(LocalDateTime.now());
-    return studentRepo.save(student);
-  }
-
-  @Override
-  public Boolean deleteStudent(String studentCode) {
-    /// chưa delete dữ liệu  các table khác với student Code
-    Assert.notNull(studentCode, "Student code is null");
-    Student student = studentRepo.getStudentByStudentCode(studentCode);
-    Assert.notNull(student, "Student does not exits");
-    studentRepo.delete(student);
-    return true;
-  }
-
-  @Override
-  public List<StudentPointInClassroomDTO> viewPointInClassroom(String classroomCode) {
-    List<StudentPointInClassroomDTO> listStudent = new ArrayList<>();
-    List<StudentInClassroomSubject> listStudentInClass = studentInClassroomSubjectRepo.getStudentInClassroomSubjectsByClassroomCode(classroomCode);
-    for (StudentInClassroomSubject item: listStudentInClass) {
-      Student student = studentRepo.getById(item.getIdStudent());
-      double mediumPoint = 0.0;
-      if (item.getRegularPointOne() != null && item.getRegularPointTwo() != null &&  item.getMidtermPointOne() != null){
-        mediumPoint = Math.ceil(((item.getRegularPointOne() + item.getRegularPointTwo())/2 + item.getMidtermPointOne()*2)/3 * 100)/100;
-      }
-      double accumulatedPoint = 0;
-      if (item.getRegularPointOne() != null && item.getRegularPointTwo() != null && item.getMidtermPointOne() != null && item.getTestPointOne()!=null){
-        accumulatedPoint = Math.ceil((mediumPoint + item.getTestPointOne()*2)/3 * 100)/100;
-      }
-      double point = accumulatedPoint/2.5;
-      StudentPointInClassroomDTO studentDTO = StudentPointInClassroomDTO.builder()
-          .id(item.getId())
-          .studentCode(student.getStudentCode())
-          .studentName(student.getStudentName())
-          .regularPointOne(item.getRegularPointOne())
-          .regularPointTwo(item.getRegularPointTwo())
-          .midtermPointOne(item.getMidtermPointOne())
-          .testPointOne(item.getTestPointOne())
-          .mediumPoint(Math.ceil(mediumPoint))
-          .testPointOne(Math.ceil(point))
-          .build();
-      listStudent.add(studentDTO);
+      return studentRepo.save(studentNew);
     }
-    return listStudent;
-  }
 
-  @Override
-  public StudentPointInClassroomDTO changePointInClassroom(StudentPointInClassroomDTO studentPointInClassroomDTO) {
-    StudentInClassroomSubject studentInClassroomSubject = studentInClassroomSubjectRepo.getById(studentPointInClassroomDTO.getId());
-    StudentPointInClassroomDTO studentDTO = studentPointInClassroomDTO;
-    if (studentInClassroomSubject!=null){
-      studentInClassroomSubject.setRegularPointOne(studentPointInClassroomDTO.getRegularPointOne());
-      studentInClassroomSubject.setRegularPointTwo(studentPointInClassroomDTO.getRegularPointTwo());
-      studentInClassroomSubject.setMidtermPointOne(studentPointInClassroomDTO.getMidtermPointOne());
-      studentInClassroomSubject.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
-      studentInClassroomSubjectRepo.save(studentInClassroomSubject);
-
-      double mediumPoint = 0.0;
-      if (studentInClassroomSubject.getRegularPointOne() != null && studentInClassroomSubject.getRegularPointTwo() != null &&  studentInClassroomSubject.getMidtermPointOne() != null){
-        mediumPoint = Math.ceil(((studentInClassroomSubject.getRegularPointOne() + studentInClassroomSubject.getRegularPointTwo())/2 + studentInClassroomSubject.getMidtermPointOne()*2)/3 * 100)/100;
-      }
-      double accumulatedPoint = 0;
-      if (studentInClassroomSubject.getRegularPointOne() != null && studentInClassroomSubject.getRegularPointTwo() != null && studentInClassroomSubject.getMidtermPointOne() != null && studentInClassroomSubject.getTestPointOne()!=null){
-        accumulatedPoint = Math.ceil((mediumPoint + studentInClassroomSubject.getTestPointOne()*2)/3 * 100)/100;
-      }
-      double point = accumulatedPoint/2.5;
-      studentDTO.setRegularPointOne(studentPointInClassroomDTO.getRegularPointOne());
-      studentDTO.setRegularPointTwo(studentPointInClassroomDTO.getRegularPointTwo());
-      studentDTO.setMidtermPointOne(studentPointInClassroomDTO.getMidtermPointOne());
-      studentDTO.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
-      studentDTO.setMediumPoint(Math.ceil(mediumPoint));
-      studentDTO.setAccumulated_point(Math.ceil(point));
-
+    @Override
+    public Student changeStudent (StudentPointDTO studentPointDTO){
+      Assert.notNull(studentPointDTO.getStudentCode(), "Student code is null");
+      Assert.notNull(studentPointDTO.getStudentName(), "Student name is null");
+      Assert.notNull(studentPointDTO.getIdClass(), "Class is null");
+      Assert.notNull(studentPointDTO.getIdCourse(), "Course is null");
+      Assert.notNull(studentPointDTO.getStudentImage(), "Student Image is null");
+      Student student = studentRepo.getStudentByStudentCode(studentPointDTO.getStudentCode());
+      Assert.notNull(student, "Student does not exits");
+      student.setStudentCode(studentPointDTO.getStudentCode());
+      student.setStudentName(studentPointDTO.getStudentName());
+      student.setStudentImage(studentPointDTO.getStudentImage());
+      student.setIdClass(studentPointDTO.getIdClass());
+      student.setUpdateDatetime(LocalDateTime.now());
+      return studentRepo.save(student);
     }
-    return studentDTO;
-  }
 
-  @Override
-  public void deleteStudentInClass(Long studentClassId) {
-    studentInClassroomSubjectRepo.delete(studentInClassroomSubjectRepo.getById(studentClassId));
-  }
+    @Override
+    public Boolean deleteStudent (String studentCode){
+      /// chưa delete dữ liệu  các table khác với student Code
+      Assert.notNull(studentCode, "Student code is null");
+      Student student = studentRepo.getStudentByStudentCode(studentCode);
+      Assert.notNull(student, "Student does not exits");
+      studentRepo.delete(student);
+      return true;
+    }
 
-  @Override
-  public HashMap<String, String> getColumnForInputPoint() {
-    HashMap<String, String> fields = new HashMap<>();
-    fields.put("studentCode", "Mã sinh viên");
-    fields.put("studentName", "Họ tên");
-    fields.put("regularPointOne", "Điểm thường xuyên 1");
-    fields.put("regularPointTwo", "Điểm thường xuyên 2");
-    fields.put("midtermPointOne", "Điểm giữa kỳ");
-    fields.put("testPointOne", "Điểm thi");
-    return fields;
-  }
+    @Override
+    public List<StudentPointInClassroomDTO> viewPointInClassroom (String classroomCode){
+      List<StudentPointInClassroomDTO> listStudent = new ArrayList<>();
+      List<StudentInClassroomSubject> listStudentInClass = studentInClassroomSubjectRepo.getStudentInClassroomSubjectsByClassroomCode(classroomCode);
+      for (StudentInClassroomSubject item : listStudentInClass) {
+        Student student = studentRepo.getById(item.getIdStudent());
+        double mediumPoint = 0.0;
+        if (item.getRegularPointOne() != null && item.getRegularPointTwo() != null && item.getMidtermPointOne() != null) {
+          mediumPoint = Math.ceil(((item.getRegularPointOne() + item.getRegularPointTwo()) / 2 + item.getMidtermPointOne() * 2) / 3 * 100) / 100;
+        }
+        double accumulatedPoint = 0;
+        if (item.getRegularPointOne() != null && item.getRegularPointTwo() != null && item.getMidtermPointOne() != null && item.getTestPointOne() != null) {
+          accumulatedPoint = Math.ceil((mediumPoint + item.getTestPointOne() * 2) / 3 * 100) / 100;
+        }
+        double point = accumulatedPoint / 2.5;
+        StudentPointInClassroomDTO studentDTO = StudentPointInClassroomDTO.builder()
+            .id(item.getId())
+            .studentCode(student.getStudentCode())
+            .studentName(student.getStudentName())
+            .regularPointOne(item.getRegularPointOne())
+            .regularPointTwo(item.getRegularPointTwo())
+            .midtermPointOne(item.getMidtermPointOne())
+            .testPointOne(item.getTestPointOne())
+            .mediumPoint(Math.ceil(mediumPoint))
+            .testPointOne(Math.ceil(point))
+            .build();
+        listStudent.add(studentDTO);
+      }
+      return listStudent;
+    }
 
-  @Override
-  public HashMap<String, String> getColumnForInput() {
-    HashMap<String, String> fields = new HashMap<>();
-    fields.put("studentCode", "Mã sinh viên");
-    fields.put("studentName", "Họ tên");
-    fields.put("id_course", "Khóa");
-    fields.put("id_class", "Lớp");
-    fields.put("student_image", "Ảnh");
-    return fields;
+    @Override
+    public StudentPointInClassroomDTO changePointInClassroom (StudentPointInClassroomDTO studentPointInClassroomDTO){
+      StudentInClassroomSubject studentInClassroomSubject = studentInClassroomSubjectRepo.getById(studentPointInClassroomDTO.getId());
+      StudentPointInClassroomDTO studentDTO = studentPointInClassroomDTO;
+      if (studentInClassroomSubject != null) {
+        studentInClassroomSubject.setRegularPointOne(studentPointInClassroomDTO.getRegularPointOne());
+        studentInClassroomSubject.setRegularPointTwo(studentPointInClassroomDTO.getRegularPointTwo());
+        studentInClassroomSubject.setMidtermPointOne(studentPointInClassroomDTO.getMidtermPointOne());
+        studentInClassroomSubject.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
+        studentInClassroomSubjectRepo.save(studentInClassroomSubject);
+
+        double mediumPoint = 0.0;
+        if (studentInClassroomSubject.getRegularPointOne() != null && studentInClassroomSubject.getRegularPointTwo() != null && studentInClassroomSubject.getMidtermPointOne() != null) {
+          mediumPoint = Math.ceil(((studentInClassroomSubject.getRegularPointOne() + studentInClassroomSubject.getRegularPointTwo()) / 2 + studentInClassroomSubject.getMidtermPointOne() * 2) / 3 * 100) / 100;
+        }
+        double accumulatedPoint = 0;
+        if (studentInClassroomSubject.getRegularPointOne() != null && studentInClassroomSubject.getRegularPointTwo() != null && studentInClassroomSubject.getMidtermPointOne() != null && studentInClassroomSubject.getTestPointOne() != null) {
+          accumulatedPoint = Math.ceil((mediumPoint + studentInClassroomSubject.getTestPointOne() * 2) / 3 * 100) / 100;
+        }
+        double point = accumulatedPoint / 2.5;
+        studentDTO.setRegularPointOne(studentPointInClassroomDTO.getRegularPointOne());
+        studentDTO.setRegularPointTwo(studentPointInClassroomDTO.getRegularPointTwo());
+        studentDTO.setMidtermPointOne(studentPointInClassroomDTO.getMidtermPointOne());
+        studentDTO.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
+        studentDTO.setMediumPoint(Math.ceil(mediumPoint));
+        studentDTO.setAccumulated_point(Math.ceil(point));
+
+      }
+      return studentDTO;
+    }
+
+    @Override
+    public void deleteStudentInClass (Long studentClassId){
+      studentInClassroomSubjectRepo.delete(studentInClassroomSubjectRepo.getById(studentClassId));
+    }
+
+    @Override
+    public HashMap<String, String> getColumnForInputPoint () {
+      HashMap<String, String> fields = new HashMap<>();
+      fields.put("studentCode", "Mã sinh viên");
+      fields.put("studentName", "Họ tên");
+      fields.put("regularPointOne", "Điểm thường xuyên 1");
+      fields.put("regularPointTwo", "Điểm thường xuyên 2");
+      fields.put("midtermPointOne", "Điểm giữa kỳ");
+      fields.put("testPointOne", "Điểm thi");
+      return fields;
+    }
+
+    @Override
+    public HashMap<String, String> getColumnForInput () {
+      HashMap<String, String> fields = new HashMap<>();
+      fields.put("studentCode", "Mã sinh viên");
+      fields.put("studentName", "Họ tên");
+      fields.put("id_course", "Khóa");
+      fields.put("id_class", "Lớp");
+      fields.put("student_image", "Ảnh");
+      return fields;
+    }
   }
-}

@@ -14,6 +14,8 @@ public class StudentPointDTO {
   private String classroomName;
   private Double accumulatedPoints;
 
+  private Long studentId;
+
   //create student
   private String studentImage;
   private Long idClass;
