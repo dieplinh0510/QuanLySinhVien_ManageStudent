@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import static com.example.demo.common.Const.RETURN_CODE_ERROR;
 @Slf4j
 @RequestMapping("/semesters")
 public class SemesterController extends CommonController{
+  @Autowired
   private SemesterService semesterService;
   @Operation(summary = "API lấy all semester")
   @ApiResponses(value = {

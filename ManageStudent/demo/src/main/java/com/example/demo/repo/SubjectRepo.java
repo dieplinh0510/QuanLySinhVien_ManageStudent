@@ -22,4 +22,7 @@ public interface SubjectRepo extends JpaRepository<Subject, Long> {
 
   @Query(value = "select * from subjects s where s.subject_code = :subjectCode", nativeQuery = true)
   Subject getSubjectBySubjectCode(String subjectCode);
+
+  @Query(value = "select * from subjects s where s.id = :subjectId", nativeQuery = true)
+  Subject getSubjectBySubjectId(Long subjectId);
 }

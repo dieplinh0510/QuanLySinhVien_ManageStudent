@@ -60,6 +60,8 @@ public class ClassroomSubjectController extends CommonController{
     }
   }
 
+
+
   @Operation(summary = "API tạo lớp học trong môn học")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Success",

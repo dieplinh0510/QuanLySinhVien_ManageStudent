@@ -73,7 +73,25 @@ public class SubjectController extends CommonController{
   @GetMapping("/classrooms")
   public ResponseEntity<?> getClassroomBySubjectCode(@RequestParam(value = "subjectId") Long subjectId){
     try {
-      return toSuccessResult(subjectService.getClassroomBySubjectCode(subjectId));
+      return toSuccessResult(subjectService.getClassroomBySubjectId(subjectId));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @Operation(summary = "API lấy môn học theo subjectId")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Success",
+          content = {@Content(mediaType = "application/json",
+              schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
+          content = @Content)
+  })
+  @GetMapping("/detail/id")
+  public ResponseEntity<?> getSubjectBySubjectId(@RequestParam(value = "subjectId") Long subjectId){
+    try {
+      return toSuccessResult(subjectService.getSubjectBySubjectId(subjectId));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

@@ -39,7 +39,7 @@ public class SubjectServiceImpl implements SubjectService {
   }
 
   @Override
-  public List<ClassroomDTO> getClassroomBySubjectCode(Long subjectId) {
+  public List<ClassroomDTO> getClassroomBySubjectId(Long subjectId) {
     List<ClassroomDTO> classroomDTOS = new ArrayList<>();
     Subject subject = subjectRepo.getById(subjectId);
     List<ClassroomSubject> classroomSubjects = classroomSubjectRepo.getByIdSubject(subjectId);
@@ -53,6 +53,15 @@ public class SubjectServiceImpl implements SubjectService {
       classroomDTOS.add(classroomDTO);
     }
     return classroomDTOS;
+  }
+
+  @Override
+  public Subject getSubjectBySubjectId(Long subjectId) throws Exception {
+    Subject subject = subjectRepo.getSubjectBySubjectId(subjectId);
+    if(subject==null){
+      throw new Exception("Không tim thấy môn học");
+    }
+    return subject;
   }
 
   @Override
