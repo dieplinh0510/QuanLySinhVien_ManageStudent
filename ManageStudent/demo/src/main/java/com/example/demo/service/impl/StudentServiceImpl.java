@@ -1,16 +1,15 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.domain.dto.DetailStudentDTO;
-import com.example.demo.domain.dto.StudentPointDTO;
-import com.example.demo.domain.dto.StudentPointInClassroomDTO;
-import com.example.demo.domain.dto.StudentSemesterDTO;
+import com.example.demo.domain.dto.*;
 import com.example.demo.domain.model.*;
 import com.example.demo.repo.*;
 import com.example.demo.service.StudentService;
+import com.example.demo.utils.SecurityUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -179,7 +178,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<DetailStudentDTO> getSubjectInStudent (Long studentId){
+    public Page<DetailStudentDTO> getSubjectInStudent (Long studentId, Integer pageIndex, Integer pageSize){
+      System.out.println("=================> Local date time" + LocalDateTime.now());
       Student student = studentRepo.getById(studentId);
       List<StudentInClassroomSubject> studentSubject = studentInClassroomSubjectRepo.findByStudentId(student.getId());
       List<DetailStudentDTO> detailStudentDTOList = new ArrayList<>();
@@ -206,7 +206,13 @@ public class StudentServiceImpl implements StudentService {
             .build();
         detailStudentDTOList.add(detailStudentDTO);
       }
-      return detailStudentDTOList;
+
+      Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
+      int start = (int) pageRequest.getOffset();
+      int end = Math.min(start + pageRequest.getPageSize(), detailStudentDTOList.size());
+      List<DetailStudentDTO> pageContent = detailStudentDTOList.subList(start, end);
+
+      return new PageImpl<>(pageContent, pageRequest, detailStudentDTOList.size());
     }
 
     @Override
@@ -316,34 +322,44 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentPointInClassroomDTO changePointInClassroom (StudentPointInClassroomDTO studentPointInClassroomDTO){
-      StudentInClassroomSubject studentInClassroomSubject = studentInClassroomSubjectRepo.getById(studentPointInClassroomDTO.getId());
-      StudentPointInClassroomDTO studentDTO = studentPointInClassroomDTO;
-      if (studentInClassroomSubject != null) {
-        studentInClassroomSubject.setRegularPointOne(studentPointInClassroomDTO.getRegularPointOne());
-        studentInClassroomSubject.setRegularPointTwo(studentPointInClassroomDTO.getRegularPointTwo());
-        studentInClassroomSubject.setMidtermPointOne(studentPointInClassroomDTO.getMidtermPointOne());
-        studentInClassroomSubject.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
-        studentInClassroomSubjectRepo.save(studentInClassroomSubject);
-
-        double mediumPoint = 0.0;
-        if (studentInClassroomSubject.getRegularPointOne() != null && studentInClassroomSubject.getRegularPointTwo() != null && studentInClassroomSubject.getMidtermPointOne() != null) {
-          mediumPoint = Math.ceil(((studentInClassroomSubject.getRegularPointOne() + studentInClassroomSubject.getRegularPointTwo()) / 2 + studentInClassroomSubject.getMidtermPointOne() * 2) / 3 * 100) / 100;
-        }
-        double accumulatedPoint = 0;
-        if (studentInClassroomSubject.getRegularPointOne() != null && studentInClassroomSubject.getRegularPointTwo() != null && studentInClassroomSubject.getMidtermPointOne() != null && studentInClassroomSubject.getTestPointOne() != null) {
-          accumulatedPoint = Math.ceil((mediumPoint + studentInClassroomSubject.getTestPointOne() * 2) / 3 * 100) / 100;
-        }
-        double point = accumulatedPoint / 2.5;
-        studentDTO.setRegularPointOne(studentPointInClassroomDTO.getRegularPointOne());
-        studentDTO.setRegularPointTwo(studentPointInClassroomDTO.getRegularPointTwo());
-        studentDTO.setMidtermPointOne(studentPointInClassroomDTO.getMidtermPointOne());
-        studentDTO.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
-        studentDTO.setMediumPoint(Math.ceil(mediumPoint));
-        studentDTO.setAccumulated_point(Math.ceil(point));
-
+    public StudentPointInClassroomDTO changePointInClassroom (StudentPointInClassroomDTO studentPointInClassroomDTO) throws Exception {
+      User user = SecurityUtil.getCurrentUserLogin();
+      if (user == null){
+        throw new Exception(HttpStatus.UNAUTHORIZED.toString());
       }
-      return studentDTO;
+      Long userId = classroomSubjectRepo.getTeacherId(studentPointInClassroomDTO.getId());
+      if (user.getId() == userId){
+        StudentInClassroomSubject studentInClassroomSubject = studentInClassroomSubjectRepo.getById(studentPointInClassroomDTO.getId());
+        StudentPointInClassroomDTO studentDTO = studentPointInClassroomDTO;
+        if (studentInClassroomSubject != null) {
+          studentInClassroomSubject.setRegularPointOne(studentPointInClassroomDTO.getRegularPointOne());
+          studentInClassroomSubject.setRegularPointTwo(studentPointInClassroomDTO.getRegularPointTwo());
+          studentInClassroomSubject.setMidtermPointOne(studentPointInClassroomDTO.getMidtermPointOne());
+          studentInClassroomSubject.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
+          studentInClassroomSubjectRepo.save(studentInClassroomSubject);
+
+          double mediumPoint = 0.0;
+          if (studentInClassroomSubject.getRegularPointOne() != null && studentInClassroomSubject.getRegularPointTwo() != null && studentInClassroomSubject.getMidtermPointOne() != null) {
+            mediumPoint = Math.ceil(((studentInClassroomSubject.getRegularPointOne() + studentInClassroomSubject.getRegularPointTwo()) / 2 + studentInClassroomSubject.getMidtermPointOne() * 2) / 3 * 100) / 100;
+          }
+          double accumulatedPoint = 0;
+          if (studentInClassroomSubject.getRegularPointOne() != null && studentInClassroomSubject.getRegularPointTwo() != null && studentInClassroomSubject.getMidtermPointOne() != null && studentInClassroomSubject.getTestPointOne() != null) {
+            accumulatedPoint = Math.ceil((mediumPoint + studentInClassroomSubject.getTestPointOne() * 2) / 3 * 100) / 100;
+          }
+          double point = accumulatedPoint / 2.5;
+          studentDTO.setRegularPointOne(studentPointInClassroomDTO.getRegularPointOne());
+          studentDTO.setRegularPointTwo(studentPointInClassroomDTO.getRegularPointTwo());
+          studentDTO.setMidtermPointOne(studentPointInClassroomDTO.getMidtermPointOne());
+          studentDTO.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
+          studentDTO.setMediumPoint(Math.ceil(mediumPoint));
+          studentDTO.setAccumulated_point(Math.ceil(point));
+
+        }
+        return studentDTO;
+      }
+      else {
+        throw new Exception("Bạn không có quyền sử dụng chức năng này");
+      }
     }
 
     @Override

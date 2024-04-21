@@ -15,7 +15,7 @@ public interface StudentInClassroomSubjectRepo extends JpaRepository<StudentInCl
   @Query(value = "select cis.id_subject  from student_in_classroom_subjects sics join classroom_in_subjects cis on sics.id_class_sbject = cis.id where sics.id_class_sbject = :idClassSubject and sics.id_student = :idStudent", nativeQuery = true)
   Long getIdSubject(Long idClassSubject, Long idStudent);
 
-  @Query(value = "select cis.classroom_code  from student_in_classroom_subjects sics join classroom_in_subjects cis on sics.id_class_sbject = cis.id where sics.id_class_sbject = :idClassSubject and sics.id_student = :idStudent", nativeQuery = true)
+  @Query(value = "select cis.classroom_code  from student_in_classroom_subjects sics join classroom_in_subjects cis on sics.id_class_sbject = cis.id where sics.id_class_sbject = :idClassSubject and sics.id_student = :idStudent order by sics.create_datetime desc limit 1", nativeQuery = true)
   String getClassroomCode(Long idClassSubject, Long idStudent);
 
   @Query(value = "select\n" +

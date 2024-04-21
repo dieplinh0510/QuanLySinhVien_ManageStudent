@@ -39,11 +39,17 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
 
   @Override
   public ClassroomSubjectDTO getClassroomByClassroomCode(Long subjectId, String classroomCode) throws Exception {
-    ClassroomSubjectDTO classroom = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, classroomCode).get(0);
-    if (classroom == null){
+    List<ClassroomSubjectDTO> listClassroom = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, classroomCode);
+    if (listClassroom.size() != 0){
+      ClassroomSubjectDTO classroom = listClassroom.get(0);
+      if (classroom == null){
+        throw new Exception("Không tìm thấy thông tin lớp học");
+      }
+      return classroom;
+    } else {
       throw new Exception("Không tìm thấy thông tin lớp học");
     }
-    return classroom;
+
   }
 
   @Override
@@ -109,6 +115,8 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
         StudentInClassroomSubject studentInClassroomSubject = StudentInClassroomSubject.builder()
                                                               .idClassroomInSubject(classroomId)
                                                               .idStudent(studentId)
+            .status(1)
+            .createDatetime(LocalDateTime.now())
                                                               .build();
         studentInClassroomSubjectRepo.save(studentInClassroomSubject);
         return studentInClassroomSubject;

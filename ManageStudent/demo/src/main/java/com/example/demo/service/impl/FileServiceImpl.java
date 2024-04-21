@@ -1,9 +1,12 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.domain.dto.InsertFieldDTO;
 import com.example.demo.domain.dto.SearchProcessDTO;
 import com.example.demo.domain.model.ProcessFileImport;
 import com.example.demo.repo.ProcessFileImportRepo;
 import com.example.demo.service.FileService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -16,12 +19,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -65,5 +72,57 @@ public class FileServiceImpl implements FileService {
           .contentLength(processFileImport.getFileContent().length)
           .contentType(MediaType.APPLICATION_OCTET_STREAM)
           .body(resource);
+  }
+
+  @Override
+  public Long uploadFile(MultipartFile file, byte[] fileContent) throws IOException {
+    String[] str = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
+    String filename = String.format("%s(%s).%s", Arrays.stream(str).filter(item -> !item.equals(str[str.length - 1])).collect(Collectors.joining(".")),
+        UUID.randomUUID(), str[str.length - 1]);
+    try {
+      ProcessFileImport process = ProcessFileImport.builder()
+          .createDatetime(LocalDateTime.now())
+          .fileContent(fileContent)
+          .filePath(filePath)
+          .status(-3)
+          .keyRequest(filename)
+          .build();
+      processFileImportRepo.save(process);
+      FileCopyUtils.copy(fileContent, new File(filePath, filename));
+      return process.getId();
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IOException(e.getMessage());
+    }
+  }
+
+  @Override
+  public boolean insertField(InsertFieldDTO insertFieldDTO, Integer typeInsert) throws JsonProcessingException {
+    Optional<ProcessFileImport> processFileImport = processFileImportRepo.findById(insertFieldDTO.getId());
+
+
+    if (processFileImport.get() != null) {
+      if (typeInsert == 1){
+        processFileImport.get().setMapField(new ObjectMapper().writeValueAsString(insertFieldDTO.getMapFields()));
+        processFileImport.get().setSchema("manage_student");
+        processFileImport.get().setTable("student_in_classroom_subjects");
+        processFileImport.get().setStatus(1);
+        processFileImport.get().setType(1L);
+        processFileImport.get().setUpdateDatetime(LocalDateTime.now());
+        processFileImportRepo.save(processFileImport.get());
+        return true;
+      }
+      if (typeInsert == 2){
+        processFileImport.get().setMapField(new ObjectMapper().writeValueAsString(insertFieldDTO.getMapFields()));
+        processFileImport.get().setSchema("manage_student");
+        processFileImport.get().setTable("students");
+        processFileImport.get().setStatus(1);
+        processFileImport.get().setType(2L);
+        processFileImport.get().setUpdateDatetime(LocalDateTime.now());
+        processFileImportRepo.save(processFileImport.get());
+        return true;
+      }
+    }
+    return false;
   }
 }
