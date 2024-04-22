@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.domain.dto.InsertFieldDTO;
 import com.example.demo.domain.dto.SearchProcessDTO;
+import com.example.demo.domain.model.ProcessFileImport;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,8 @@ import java.io.IOException;
 public interface FileService {
   Page<SearchProcessDTO> queryProcess(Integer pageIndex, Integer pageSize);
   ResponseEntity<?> downloadFile(Long idFile) throws FileNotFoundException;
-  Long uploadFile(MultipartFile file, byte[] fileContent) throws IOException;
+  Long uploadFile(MultipartFile file, byte[] fileContent) throws Exception;
 
-  boolean insertField(InsertFieldDTO insertFieldDTO, Integer typeInsert) throws JsonProcessingException;
+  boolean insertField(InsertFieldDTO insertFieldDTO, Integer typeInsert) throws Exception;
+  void importFile(ProcessFileImport processFileImport) throws IOException;
 }

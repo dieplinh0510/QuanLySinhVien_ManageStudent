@@ -53,6 +53,7 @@ public class StudentServiceImpl implements StudentService {
     Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(student.getId());
     Integer countPoint = studentInSemesterRepo.countAccumulatedPointsByStudentId(student.getId());
     return StudentPointDTO.builder()
+        .studentId(student.getId())
         .studentCode(student.getStudentCode())
         .studentName(student.getStudentName())
         .classroomName(classroom.getNameClass())
@@ -245,7 +246,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student createStudent (StudentPointDTO studentPointDTO){
+    public Student createStudent (StudentPointDTO studentPointDTO) throws Exception {
+      User user = SecurityUtil.getCurrentUserLogin();
+      if (user == null){
+        throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+      }
       Assert.notNull(studentPointDTO.getStudentCode(), "Student code is null");
       Assert.notNull(studentPointDTO.getStudentName(), "Student name is null");
       Assert.notNull(studentPointDTO.getIdClass(), "Class is null");
@@ -259,12 +264,17 @@ public class StudentServiceImpl implements StudentService {
           .studentName(studentPointDTO.getStudentName())
           .idClass(studentPointDTO.getIdClass())
           .createDatetime(LocalDateTime.now())
+          .createUser(user.getUsername())
           .build();
       return studentRepo.save(studentNew);
     }
 
     @Override
-    public Student changeStudent (StudentPointDTO studentPointDTO){
+    public Student changeStudent (StudentPointDTO studentPointDTO) throws Exception {
+      User user = SecurityUtil.getCurrentUserLogin();
+      if (user == null){
+        throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+      }
       Assert.notNull(studentPointDTO.getStudentCode(), "Student code is null");
       Assert.notNull(studentPointDTO.getStudentName(), "Student name is null");
       Assert.notNull(studentPointDTO.getIdClass(), "Class is null");
@@ -277,6 +287,7 @@ public class StudentServiceImpl implements StudentService {
       student.setStudentImage(studentPointDTO.getStudentImage());
       student.setIdClass(studentPointDTO.getIdClass());
       student.setUpdateDatetime(LocalDateTime.now());
+      student.setUpdateUser(user.getUsername());
       return studentRepo.save(student);
     }
 
@@ -336,6 +347,8 @@ public class StudentServiceImpl implements StudentService {
           studentInClassroomSubject.setRegularPointTwo(studentPointInClassroomDTO.getRegularPointTwo());
           studentInClassroomSubject.setMidtermPointOne(studentPointInClassroomDTO.getMidtermPointOne());
           studentInClassroomSubject.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
+          studentInClassroomSubject.setUpdateDatetime(LocalDateTime.now());
+          studentInClassroomSubject.setUpdateUser(user.getUsername());
           studentInClassroomSubjectRepo.save(studentInClassroomSubject);
 
           double mediumPoint = 0.0;
@@ -353,7 +366,8 @@ public class StudentServiceImpl implements StudentService {
           studentDTO.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
           studentDTO.setMediumPoint(Math.ceil(mediumPoint));
           studentDTO.setAccumulated_point(Math.ceil(point));
-
+          studentInClassroomSubject.setUpdateDatetime(LocalDateTime.now());
+          studentInClassroomSubject.setUpdateUser(user.getUsername());
         }
         return studentDTO;
       }

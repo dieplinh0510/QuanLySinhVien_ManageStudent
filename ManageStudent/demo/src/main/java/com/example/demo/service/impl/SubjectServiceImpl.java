@@ -4,10 +4,13 @@ import com.example.demo.domain.dto.ClassroomDTO;
 import com.example.demo.domain.dto.SubjectDTO;
 import com.example.demo.domain.model.ClassroomSubject;
 import com.example.demo.domain.model.Subject;
+import com.example.demo.domain.model.User;
 import com.example.demo.repo.ClassroomSubjectRepo;
 import com.example.demo.repo.SubjectRepo;
 import com.example.demo.repo.UserRepo;
 import com.example.demo.service.SubjectService;
+import com.example.demo.utils.SecurityUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -66,6 +69,10 @@ public class SubjectServiceImpl implements SubjectService {
 
   @Override
   public Subject createSubject(SubjectDTO subjectDTO) throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
     Subject subject = subjectRepo.getSubjectBySubjectCode(subjectDTO.getSubjectCode());
     if (subject == null){
       Subject subjectNew = Subject.builder()
@@ -74,6 +81,7 @@ public class SubjectServiceImpl implements SubjectService {
           .idSemester(subjectDTO.getIdSemester())
           .numberOfCredits(subjectDTO.getNumberOfCredits())
           .createDatetime(LocalDateTime.now())
+          .createUser(user.getUsername())
           .build();
       subjectRepo.save(subjectNew);
       return subjectNew;
@@ -84,6 +92,10 @@ public class SubjectServiceImpl implements SubjectService {
 
   @Override
   public Subject changeSubject(SubjectDTO subjectDTO, Long subjectId) throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
     Subject subject = subjectRepo.findById(subjectId).get();
     if (subject != null){
       subject.setSubjectCode(subjectDTO.getSubjectCode());
@@ -91,6 +103,7 @@ public class SubjectServiceImpl implements SubjectService {
       subject.setIdSemester(subjectDTO.getIdSemester());
       subject.setNumberOfCredits(subjectDTO.getNumberOfCredits());
       subject.setUpdateDatetime(LocalDateTime.now());
+      subject.setUpdateUser(user.getUsername());
       subjectRepo.save(subject);
       return subject;
     } else {

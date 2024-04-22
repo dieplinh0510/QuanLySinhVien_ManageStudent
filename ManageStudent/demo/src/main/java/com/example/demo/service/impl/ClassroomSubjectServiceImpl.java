@@ -3,10 +3,13 @@ package com.example.demo.service.impl;
 import com.example.demo.domain.dto.ClassroomSubjectDTO;
 import com.example.demo.domain.model.ClassroomSubject;
 import com.example.demo.domain.model.StudentInClassroomSubject;
+import com.example.demo.domain.model.User;
 import com.example.demo.repo.ClassroomSubjectRepo;
 import com.example.demo.repo.ClassroomSubjectRepoCustom;
 import com.example.demo.repo.StudentInClassroomSubjectRepo;
 import com.example.demo.service.ClassroomSubjectService;
+import com.example.demo.utils.SecurityUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -107,6 +110,10 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
 
   @Override
   public StudentInClassroomSubject addStudentInClassroom(Long classroomId, Long subjectId, Long studentId) throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
     Long result = studentInClassroomSubjectRepo.getStudentInStudentClass(studentId, subjectId);
     if (result == null){
         Long quantityStudentInClass = studentInClassroomSubjectRepo.getQuantityStudent(classroomId);
@@ -115,8 +122,10 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
         StudentInClassroomSubject studentInClassroomSubject = StudentInClassroomSubject.builder()
                                                               .idClassroomInSubject(classroomId)
                                                               .idStudent(studentId)
-            .status(1)
-            .createDatetime(LocalDateTime.now())
+                                                              .createUser(user.getUsername())
+                                                              .createDatetime(LocalDateTime.now())
+                                                              .status(1)
+                                                              .createDatetime(LocalDateTime.now())
                                                               .build();
         studentInClassroomSubjectRepo.save(studentInClassroomSubject);
         return studentInClassroomSubject;

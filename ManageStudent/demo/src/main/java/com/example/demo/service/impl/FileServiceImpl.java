@@ -3,11 +3,15 @@ package com.example.demo.service.impl;
 import com.example.demo.domain.dto.InsertFieldDTO;
 import com.example.demo.domain.dto.SearchProcessDTO;
 import com.example.demo.domain.model.ProcessFileImport;
+import com.example.demo.domain.model.User;
 import com.example.demo.repo.ProcessFileImportRepo;
 import com.example.demo.service.FileService;
+import com.example.demo.utils.SecurityUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
@@ -15,17 +19,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,7 +78,11 @@ public class FileServiceImpl implements FileService {
   }
 
   @Override
-  public Long uploadFile(MultipartFile file, byte[] fileContent) throws IOException {
+  public Long uploadFile(MultipartFile file, byte[] fileContent) throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
     String[] str = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
     String filename = String.format("%s(%s).%s", Arrays.stream(str).filter(item -> !item.equals(str[str.length - 1])).collect(Collectors.joining(".")),
         UUID.randomUUID(), str[str.length - 1]);
@@ -84,8 +91,9 @@ public class FileServiceImpl implements FileService {
           .createDatetime(LocalDateTime.now())
           .fileContent(fileContent)
           .filePath(filePath)
-          .status(-3)
+          .status(0)
           .keyRequest(filename)
+          .createUser(user.getUsername())
           .build();
       processFileImportRepo.save(process);
       FileCopyUtils.copy(fileContent, new File(filePath, filename));
@@ -97,9 +105,12 @@ public class FileServiceImpl implements FileService {
   }
 
   @Override
-  public boolean insertField(InsertFieldDTO insertFieldDTO, Integer typeInsert) throws JsonProcessingException {
+  public boolean insertField(InsertFieldDTO insertFieldDTO, Integer typeInsert) throws Exception {
     Optional<ProcessFileImport> processFileImport = processFileImportRepo.findById(insertFieldDTO.getId());
-
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
 
     if (processFileImport.get() != null) {
       if (typeInsert == 1){
@@ -109,6 +120,7 @@ public class FileServiceImpl implements FileService {
         processFileImport.get().setStatus(1);
         processFileImport.get().setType(1L);
         processFileImport.get().setUpdateDatetime(LocalDateTime.now());
+        processFileImport.get().setUpdateUser(user.getUsername());
         processFileImportRepo.save(processFileImport.get());
         return true;
       }
@@ -118,11 +130,30 @@ public class FileServiceImpl implements FileService {
         processFileImport.get().setTable("students");
         processFileImport.get().setStatus(1);
         processFileImport.get().setType(2L);
+        processFileImport.get().setUpdateUser(user.getUsername());
         processFileImport.get().setUpdateDatetime(LocalDateTime.now());
         processFileImportRepo.save(processFileImport.get());
         return true;
       }
     }
     return false;
+  }
+
+  @Override
+  public void importFile(ProcessFileImport processFileImport) throws IOException {
+    String schema = processFileImport.getSchema();
+    String table = processFileImport.getTable();
+    String mapFieldsStr = processFileImport.getMapField();
+    String fileName = "result_" + processFileImport.getKeyRequest();
+    byte[] data = processFileImport.getFileContent();
+    Long type = processFileImport.getType();
+
+    InputStream is = new BufferedInputStream(new ByteArrayInputStream(data));
+    XSSFWorkbook wb = new XSSFWorkbook(is);
+
+    Sheet sheet = wb.getSheetAt(0);
+    HashMap<String, String> mapFields = new ObjectMapper().readValue(mapFieldsStr, HashMap.class);
+    mapFields.entrySet().removeIf(e -> !StringUtils.hasText(e.getValue()));
+
   }
 }
