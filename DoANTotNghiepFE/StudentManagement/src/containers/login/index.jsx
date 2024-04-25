@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './style.scss';
 import banner from '../../assets/images/login_image.png';
 import Input from '../../hook/input';
 import Button from '../../hook/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as AuthActions from '../../store/actions/AuthActions';
 import { Loader } from '../../components';
 
 const Login = () => {
   const dispatch = useDispatch();
-  const {loading= false, data =  {}, error = null} = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const {loading= false, data =  {}, error = null, navigatePath=null} = useSelector((state) => state.auth);
   const [payload, setPayload] = React.useState({
-    username: 'huannd0101',
+    username: 'admin',
     password: '123',
   });
 
   const handleLogin = () => {
     dispatch(AuthActions.loginRequest(payload))
   }
+
+  useEffect(() => {
+    if (navigatePath) {
+      navigate(navigatePath, { replace: true })
+    }
+  }, [navigatePath]);
 
   return (
     <Loader active={loading} >

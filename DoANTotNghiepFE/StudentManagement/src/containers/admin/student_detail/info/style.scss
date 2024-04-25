@@ -1,0 +1,30 @@
+.detail-block {
+  display: flex;
+  align-items: center;
+  width: 60%;
+
+  .detail-left {
+    img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin: 0 20px;
+    }
+  }
+
+  .detail-right {
+    .detail-item {
+      display: flex;
+      margin-bottom: 10px;
+
+      .detail-label {
+        width: 150px;
+        font-weight: bold;
+      }
+
+      .detail-value {
+        color: #333;
+      }
+    }
+  }
+}

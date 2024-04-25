@@ -19,4 +19,5 @@ public class StudentPointInClassroomDTO {
   private Double testPointOne;
   private Double accumulated_point;
   private Double mediumPoint;
+  private Double point;
 }

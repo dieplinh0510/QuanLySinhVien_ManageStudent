@@ -1,6 +1,7 @@
 import axios from 'axios';
 import storageService from './storage.service';
-import { AuthKeys } from '../constant';
+import { Api, AuthKeys } from '../constant';
+import { toast } from 'react-toastify';
 
 class _HttpService {
 
@@ -8,7 +9,9 @@ class _HttpService {
     try {
       return await this.request('GET', uri, options);
     } catch (error) {
-      throw new Error(error.message);
+      return {
+        data: error?.response?.data,
+      }
     }
   }
 
@@ -16,7 +19,19 @@ class _HttpService {
     try {
       return await this.request('POST', uri, options);
     } catch (error) {
-      throw new Error(error.message);
+      return {
+        data: error?.response?.data,
+      }
+    }
+  }
+
+  async put(uri, options = { headers: {}, params: {}, body: {} }) {
+    try {
+      return await this.request('PUT', uri, options);
+    } catch (error) {
+      return {
+        data: error?.response?.data,
+      }
     }
   }
 
@@ -24,7 +39,9 @@ class _HttpService {
     try {
       return await this.request('PATCH', uri, options);
     } catch (error) {
-      throw new Error(error.message);
+      return {
+        data: error?.response?.data,
+      }
     }
   }
 
@@ -32,7 +49,9 @@ class _HttpService {
     try {
       return await this.request('DELETE', uri, options);
     } catch (error) {
-      throw new Error(error.message);
+      return {
+        data: error?.response?.data,
+      }
     }
   }
 
@@ -41,7 +60,7 @@ class _HttpService {
     // if (whiteList.filter((item) => uri.includes(item)).length > 0 || storageService.get('accessToken')) {
     return await axios.request({
       method: method,
-      baseURL: 'http://localhost:8081/api/v1/',
+      baseURL: Api.BASE_URL,
       url: uri,
       headers: this.generateHttpHeaders(options.headers),
       params: options.params,
@@ -71,6 +90,18 @@ class _HttpService {
       storageService.get(AuthKeys.ACCESS_TOKEN) ||
       storageService.getSession(AuthKeys.ACCESS_TOKEN)
     );
+  }
+
+  checkResponseCommon(response, defaultResponse, messageSuccess) {
+    if (response?.data?.code !== '200') {
+      toast.error(response?.data?.description)
+      return defaultResponse;
+    }
+    if (messageSuccess) {
+      toast.success(messageSuccess);
+    }
+
+    return response?.data?.data;
   }
 }
 

@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public interface FileService {
   Page<SearchProcessDTO> queryProcess(Integer pageIndex, Integer pageSize);
-  ResponseEntity<?> downloadFile(Long idFile) throws FileNotFoundException;
   Long uploadFile(MultipartFile file, byte[] fileContent) throws Exception;
 
   boolean insertField(InsertFieldDTO insertFieldDTO, Integer typeInsert) throws Exception;

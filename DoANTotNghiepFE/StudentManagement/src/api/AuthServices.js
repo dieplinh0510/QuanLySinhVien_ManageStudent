@@ -4,10 +4,11 @@ import HttpService from '../utils/http-service';
 import StorageService from '../utils/storage.service';
 
 export const login = async (payload) => {
-  let response = await HttpService.post('auth/login', {
+  let response = await HttpService.post('/auth/login', {
     body: payload,
   });
-  return response?.data?.data;
+
+  return HttpService.checkResponseCommon(response, null);
 };
 
 export const register = async (payload) => {

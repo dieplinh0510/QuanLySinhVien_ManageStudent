@@ -1,149 +1,71 @@
 import HttpService from '../utils/http-service';
 
 export const getAllStudent = async () => {
-  let response = {
-    data: [
-      {
-        id: 1,
-        name: 'Nguyễn Văn A',
-        class: 'HD01',
-        subject: 'HD01',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-      {
-        id: 2,
-        name: 'Nguyễn Văn B',
-        class: 'HD02',
-        subject: 'HD02',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-      {
-        id: 3,
-        name: 'Nguyễn Văn C',
-        class: 'HD03',
-        subject: 'HD03',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-      {
-        id: 4,
-        name: 'Nguyễn Văn D',
-        class: 'HD04',
-        subject: 'HD04',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-      {
-        id: 5,
-        name: 'Nguyễn Văn E',
-        class: 'HD05',
-        subject: 'HD05',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-      {
-        id: 6,
-        name: 'Nguyễn Văn F',
-        class: 'HD06',
-        subject: 'HD06',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-      {
-        id: 7,
-        name: 'Nguyễn Văn G',
-        class: 'HD07',
-        subject: 'HD07',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-      {
-        id: 8,
-        name: 'Nguyễn Văn H',
-        class: 'HD08',
-        subject: 'HD08',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-      {
-        id: 9,
-        name: 'Nguyễn Văn I',
-        class: 'HD09',
-        subject: 'HD09',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-      {
-        id: 10,
-        name: 'Nguyễn Văn K',
-        class: 'HD10',
-        subject: 'HD10',
-        regularScore1: 8,
-        regularScore2: 9,
-        regularScore3: 10,
-        midTermScore1: 8,
-        midTermScore2: 9,
-        averageRegularScore: 9,
-        finalScore: 9,
-        finalScoreTL: 9,
-      },
-    ],
-  };
-  return response.data;
+  return [];
+};
+
+export const search = async (payload) => {
+  let response = await HttpService.get('/students/search', {
+    params: {
+      ...payload,
+      studentCode: payload.studentCode || null,
+    },
+  });
+  return response?.data?.data;
+};
+
+export const createStudent = async (payload) => {
+  let response = await HttpService.post('/students', {
+    body: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, [], 'Create student success');
+};
+
+export const editStudent = async (payload) => {
+  let response = await HttpService.put('/students', {
+    body: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, [], 'Edit student success');
+};
+
+export const deleteStudent = async (payload) => {
+  let response = await HttpService.delete('/students', {
+    params: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, [], 'Delete student success');
+};
+
+export const getStudentDetailById = async (payload) => {
+  let response = await HttpService.get(`/students/view/detail`, {
+    params: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, {});
+};
+
+export const getStudentMarkById = async (payload) => {
+  let response = await HttpService.get(`/students/detail/subject`, {
+    params: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, []);
+};
+
+// Get accumulate point by student id
+export const getAccumulatedPoint = async (payload) => {
+  let response = await HttpService.get(`/students/semester/accumulated_point`, {
+    params: payload,
+  });
+  return HttpService.checkResponseCommon(response, []);
+};
+
+// Get studentDetail by studentCode
+export const getStudentDetailByStudentCode = async (payload) => {
+  let response = await HttpService.get(`/students`, {
+    params: payload,
+  });
+  return HttpService.checkResponseCommon(response, {studentName: "", courseName: '', classroomName: ''});
 };

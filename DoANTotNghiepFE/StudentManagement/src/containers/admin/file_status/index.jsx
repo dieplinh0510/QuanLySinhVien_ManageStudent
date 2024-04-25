@@ -1,43 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './style.scss';
 import Title from '../../../hook/title/Title';
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import Button from '../../../hook/button';
-
-const fileStatus = [
-  {
-    id: 1,
-    fileName: 'File 1',
-    uploadDate: '2021-09-01',
-    status: 1,
-  },
-  {
-    id: 2,
-    fileName: 'File 2',
-    uploadDate: '2021-09-02',
-    status: 2,
-  },
-  {
-    id: 3,
-    fileName: 'File 3',
-    uploadDate: '2021-09-03',
-    status: 3,
-  },
-  {
-    id: 4,
-    fileName: 'File 4',
-    uploadDate: '2021-09-04',
-    status: 2,
-  },
-  {
-    id: 5,
-    fileName: 'File 5',
-    uploadDate: '2021-09-05',
-    status: 1,
-  },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Pagination from '../../../components/paging';
+import * as UploadActions from '../../../store/actions/UploadActions';
 
 const FileStatus = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {
+    loading = false,
+    error = null,
+    fileStatus = [],
+    paging = null,
+  } = useSelector((state) => state.upload);
+
+  const [searchPayload, setSearchPayload] = React.useState({
+    pageIndex: 1,
+    pageSize: 12,
+  });
+
+  useEffect(() => {
+    dispatch(UploadActions.getFileStatusRequest(searchPayload));
+  }, []);
+
+  const handlePageChange = (pageNumber) => {
+    dispatch(UploadActions.getFileStatusRequest({
+      ...searchPayload,
+      pageIndex: pageNumber,
+    }));
+
+    setSearchPayload({ ...searchPayload, pageIndex: pageNumber })
+  };
+
+  const handleDownload = (item) => {
+    console.log(item)
+    dispatch(UploadActions.downloadFileRequest({
+      idFile: item.id,
+      fileName: item.fileName
+    }));
+  }
+
   return (
     <div className={'file-status-page'}>
       <Title text={'TRẠNG THÁI CÁC FILE ĐÃ UPLOAD'} />
@@ -57,9 +63,9 @@ const FileStatus = () => {
             {
               fileStatus && fileStatus.length > 0 && fileStatus.map((item, index) => (
                 <tr key={index}>
-                  <td>{index + 1}</td>
+                  <td>{((searchPayload.pageIndex - 1) * 10) + index + 1}</td>
                   <td>{item.fileName}</td>
-                  <td>{item.uploadDate}</td>
+                  <td>{item.createDatetime}</td>
                   <td style={{ width: '100px', margin: '4px 25px' }}>
                     {item.status === 1 ?
                       <p className={'success-message'}>Thành công</p> :
@@ -78,7 +84,7 @@ const FileStatus = () => {
                     }}>
                       <Button
                         title={'Download'}
-                        onClick={() => console.log(item)}
+                        onClick={() => handleDownload(item)}
                         width={'100px'}
                         customStyle={{ padding: '6px 0' }}
                       />
@@ -89,6 +95,19 @@ const FileStatus = () => {
             }
           </MDBTableBody>
         </MDBTable>
+      </div>
+
+      {/* Paging */}
+      <div style={{position: 'absolute', bottom: '20px', right: '20px'}}>
+        {
+          paging && (
+            <Pagination
+              totalPages={paging?.totalPages}
+              currentPage={paging?.pageIndex + 1}
+              onPageChange={handlePageChange}
+            />
+          )
+        }
       </div>
 
     </div>

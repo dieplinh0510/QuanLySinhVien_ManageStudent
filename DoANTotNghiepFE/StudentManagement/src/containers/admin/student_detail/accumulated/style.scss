@@ -1,0 +1,17 @@
+.student-accumulate-container {
+
+  .student-accumulate-content {
+    display: flex;
+    justify-content: space-between;
+
+    .accumulate-table {
+        width: 35%;
+    }
+
+    .accumulate-chart {
+      //height: 90%;
+      width: 55%;
+    }
+
+  }
+}

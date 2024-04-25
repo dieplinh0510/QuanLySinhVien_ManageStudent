@@ -13,10 +13,10 @@ const Dropdown = ({ items, value, setSelected, ignores, label, customStyle, erro
         background: '#F5F5F5',
         color: 'black',
         border: '1px solid #F5F5F5',
-      }}>{value ? value.value : label}</CDropdownToggle>
+      }}>{value ? value.label : label}</CDropdownToggle>
       <CDropdownMenu style={{ width: '100%', border: '1px solid #F5F5F5', height: '200px', overflowX: 'auto' }}>
         {items
-          .filter(item => ignores.filter(i => i.value !== item.value).length === 0) //!ignores.includes(item)
+          .filter(item => ignores.filter(i => i.value === item.value).length === 0) //!ignores.includes(item)
           .map((item, index) => {
             return <CDropdownItem style={{ width: '100%' }} onClick={
               () => {

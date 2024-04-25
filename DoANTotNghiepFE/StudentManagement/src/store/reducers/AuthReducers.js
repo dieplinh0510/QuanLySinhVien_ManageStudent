@@ -5,7 +5,8 @@ import * as AuthTypes from '../types/AuthTypes';
 const initialState = {
   loading: false,
   data: {},
-  error: null
+  error: null,
+  navigatePath: null
 };
 
 const authReducer = (state = initialState, action) => {
@@ -16,10 +17,13 @@ const authReducer = (state = initialState, action) => {
     case AuthTypes.LOGIN_SUCCESS:
       // Save info log
       let user = action.payload.data;
-      storageService.set(AuthKeys.ACCESS_TOKEN, user?.accessToken);
+      if (user === null) {
+        return { ...state, loading: false, navigatePath: null, data: {}, error: "Username or password is incorrect" };
+      }
+      storageService.set(AuthKeys.ACCESS_TOKEN, user?.jwt);
       storageService.set(AuthKeys.LOGGED_IN, true);
-      storageService.setObject(AuthKeys.CURRENT_USER, user);
-      return { ...state, loading: false, data: user };
+      storageService.setObject(AuthKeys.CURRENT_USER, user?.information);
+      return { ...state, loading: false, data: user, navigatePath: "/admin/students" };
     case AuthTypes.LOGIN_FAILURE:
       return { ...state, loading: false, error: action.payload };
 

@@ -1,0 +1,37 @@
+.pagination {
+  display: flex;
+  justify-content: end;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.pagination button {
+  background-color: #fafafa;
+  color: #050586;
+  font-size: 16px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 10%;
+  border: 1px solid #cce6ff;
+}
+
+.pagination button.active {
+  font-weight: bold;
+  background-color: #6bb2ff;
+  color: white;
+}
+
+.pagination button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pagination button.selected {
+  background-color: #0056b3;
+  border-radius: 50%;
+}
+
+.dots {
+  color: black;
+}

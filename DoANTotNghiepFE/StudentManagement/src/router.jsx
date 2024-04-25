@@ -12,6 +12,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { isAuthenticated } from './utils/authentication-util';
 import StudentManager from './containers/admin/student_manager';
 import StatisticsByClass from './containers/admin/statistics_by_class';
+import StudentAccumulated from './containers/admin/student_detail/accumulated';
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
           {
             path: 'class-manager',
             element: <ClassManager />,
+          },
+          {
+            path: 'students/detail',
+            element: <StudentDetail />,
+          },
+          {
+            path: 'students/accumulated',
+            element: <StudentAccumulated />,
           },
         ],
       },

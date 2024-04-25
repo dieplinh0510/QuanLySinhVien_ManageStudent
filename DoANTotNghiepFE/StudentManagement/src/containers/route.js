@@ -13,7 +13,6 @@ const routes = [
   { path: 'input-mark', name: 'Nhập điểm', element: InputMark, exact: true, icon: insertIcon },
   { path: 'file-status', name: 'Quản lý trạng thái file', element: FileStatus, exact: true, icon: statusIcon },
   { path: 'subject-manager', name: 'Quản lý môn học', element: SubjectManager, exact: true, icon: statusIcon },
-  { path: 'class-manager', name: 'Quản lý lớp học', element: ClassManager, exact: true, icon: statusIcon },
 ];
 
 export default routes;

@@ -2,6 +2,7 @@ package com.example.demo.repo;
 
 import com.example.demo.domain.model.ProcessFileImport;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,4 +11,6 @@ import java.util.List;
 public interface ProcessFileImportRepo extends JpaRepository<ProcessFileImport, Long> {
   List<ProcessFileImport> getProcessFileImportsByStatus(Integer status);
   List<ProcessFileImport> findAllByStatusInOrderByCreateDatetimeDesc(List<Integer> statusList);
+  @Query(value = "select * from process_file_import where id = :idFile", nativeQuery = true)
+  ProcessFileImport getProcessFileById(Long idFile);
 }

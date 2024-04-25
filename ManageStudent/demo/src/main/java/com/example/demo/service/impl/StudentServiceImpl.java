@@ -251,13 +251,13 @@ public class StudentServiceImpl implements StudentService {
       if (user == null){
         throw new Exception(HttpStatus.UNAUTHORIZED.toString());
       }
-      Assert.notNull(studentPointDTO.getStudentCode(), "Student code is null");
-      Assert.notNull(studentPointDTO.getStudentName(), "Student name is null");
+      Assert.hasText(studentPointDTO.getStudentCode(), "Student code is null");
+      Assert.hasText(studentPointDTO.getStudentName(), "Student name is null");
       Assert.notNull(studentPointDTO.getIdClass(), "Class is null");
 //    Assert.notNull(studentPointDTO.getIdCourse(), "Course is null");
-      Assert.notNull(studentPointDTO.getStudentImage(), "Student Image is null");
+      Assert.hasText(studentPointDTO.getStudentImage(), "Student Image is null");
       Student student = studentRepo.getStudentByStudentCode(studentPointDTO.getStudentCode());
-      Assert.isNull(student, "Student already exits");
+      Assert.isNull(student, "Sinh viên đã tồn tại");
       Student studentNew = Student.builder()
           .studentCode(studentPointDTO.getStudentCode())
           .studentImage(studentPointDTO.getStudentImage())
@@ -324,8 +324,9 @@ public class StudentServiceImpl implements StudentService {
             .regularPointTwo(item.getRegularPointTwo())
             .midtermPointOne(item.getMidtermPointOne())
             .testPointOne(item.getTestPointOne())
-            .mediumPoint(Math.ceil(mediumPoint))
-            .testPointOne(Math.ceil(point))
+            .mediumPoint(Math.ceil(mediumPoint*100)/100)
+            .accumulated_point(Math.ceil(point*100)/100)
+            .point(Math.ceil(accumulatedPoint*100)/100)
             .build();
         listStudent.add(studentDTO);
       }

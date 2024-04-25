@@ -30,5 +30,3 @@ spring:
 upload:
   file:
     path : D:\Learning\DoAnTotNghiep\ManageStudent
-
-
