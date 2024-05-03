@@ -6,27 +6,39 @@ import * as StudentActions from '../../../store/actions/StudentActions';
 import Button from '../../../hook/button';
 import './style.scss';
 import StudentDetailInfo from './info';
+import Pagination from '../../../components/paging';
 
 const StudentDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { studentDetail = null, studentMark = [] } = useSelector((state) => state.student);
-  const [studentId, setStudentId] = useState(null);
+  const { studentDetail = null, studentMark = [], pagingForDetail = null } = useSelector((state) => state.student);
+  const [searchPayload, setSearchPayload] = React.useState({
+    studentId: '',
+    pageIndex: 1,
+    pageSize: 10,
+  });
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
-    setStudentId(queryParams.get('studentId'));
-    dispatch(StudentActions.getStudentDetailByIdRequest({ studentId: queryParams.get('studentId') }));
-    dispatch(StudentActions.getStudentMarkByIdRequest({ studentId: queryParams.get('studentId') }));
+    let payload = { ...searchPayload, studentId: queryParams.get('studentId') };
+    setSearchPayload(payload);
+    dispatch(StudentActions.getStudentDetailByIdRequest(payload));
+    dispatch(StudentActions.getStudentMarkByIdRequest(payload));
   }, []);
 
+  const handlePageChange = (pageNumber) => {
+    dispatch(StudentActions.getStudentMarkByIdRequest({ ...searchPayload, pageIndex: pageNumber }));
+
+    setSearchPayload({ ...searchPayload, pageIndex: pageNumber });
+  };
+
   return (
-    <div className='student-detail-container'>
-      <div className='info-container'>
+    <div className="student-detail-container">
+      <div className="info-container">
         <StudentDetailInfo studentDetail={studentDetail} />
         <Button title={'Xem tích luỹ theo kì'}
-                onClick={() => navigate(`/admin/students/accumulated?studentId=${studentId}`)}
-                style={{ width: '200px', height: '40px', fontSize: '16px'}}
+                onClick={() => navigate(`/admin/students/accumulated?studentId=${searchPayload.studentId}`)}
+                style={{ width: '200px', height: '40px', fontSize: '16px' }}
         />
       </div>
 
@@ -35,21 +47,38 @@ const StudentDetail = () => {
         <MDBTableBody>
           {studentMark && studentMark.length > 0 && studentMark.map((item, index) => (
             <tr key={index}>
-              <td style={{textAlign: 'center'}}>{index + 1}</td>
-              <td>{item?.subjectName}</td>
-              <td>{item?.classroomCode}</td>
-              <td>{item?.studentInClassroomSubject?.regularPointOne}</td>
-              <td>{item?.studentInClassroomSubject?.regularPointTwo}</td>
-              <td>{item?.studentInClassroomSubject?.midtermPointOne}</td>
-              <td>{item?.mediumPoint}</td>
-              <td>{item?.studentInClassroomSubject?.testPointOne}</td>
-              <td>{item?.point}</td>
-              <td>{item?.accumulated_point}</td>
+              <td style={{ textAlign: 'center', lineHeight: '12px' }}>{index + 1}</td>
+              <td style={{ lineHeight: '12px' }}>{item?.subjectName}</td>
+              <td style={{ lineHeight: '12px' }}>{item?.classroomCode}</td>
+              <td style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.regularPointOne}</td>
+              <td style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.regularPointTwo}</td>
+              <td style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.midtermPointOne}</td>
+              <td
+                style={{ lineHeight: '12px' }}>{(
+                item?.studentInClassroomSubject?.regularPointOne
+                && item?.studentInClassroomSubject?.regularPointTwo
+                && item?.studentInClassroomSubject?.midtermPointOne) ? item?.mediumPoint : ''}</td>
+              <td style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.testPointOne}</td>
+              <td style={{ lineHeight: '12px' }}>{(item?.studentInClassroomSubject?.testPointOne) ? item?.point : ''}</td>
+              <td style={{ lineHeight: '12px' }}>{(item?.studentInClassroomSubject?.testPointOne) ? item?.accumulated_point : ''}</td>
             </tr>
           ))}
 
         </MDBTableBody>
       </MDBTable>
+
+      {/* Paging */}
+      <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+        {
+          pagingForDetail && (
+            <Pagination
+              totalPages={pagingForDetail?.totalPages}
+              currentPage={pagingForDetail?.pageIndex + 1}
+              onPageChange={handlePageChange}
+            />
+          )
+        }
+      </div>
     </div>
   );
 };

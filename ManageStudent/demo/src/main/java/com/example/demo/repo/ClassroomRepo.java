@@ -14,4 +14,7 @@ public interface ClassroomRepo extends JpaRepository<Classroom, Long> {
 
   @Query(value = "select * from classroomes where id = :classroomId", nativeQuery = true)
   Classroom getClassroomByClassroomId(Long classroomId);
+
+  @Query(value = "select c.id  from classroomes c where c.id_course = :courseId and c.name_class = :className", nativeQuery = true)
+  Long getIdByClassNameAndCourseId(Long courseId, String className);
 }

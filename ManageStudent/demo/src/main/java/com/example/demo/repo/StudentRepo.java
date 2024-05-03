@@ -14,7 +14,7 @@ public interface StudentRepo extends JpaRepository<Student, Long> {
   @Query(value = "select * from students s where s.id_class = :classroomId", nativeQuery = true)
   List<Student> getStudentByClassroomId(Long classroomId);
 
-  @Query(value = "select * from students where student_code = :studentCode", nativeQuery = true)
+  @Query(value = "select * from students where student_code = :studentCode limit 1", nativeQuery = true)
   Student getStudentByStudentCode(String studentCode);
 
   @Query("select s from Student s where s.id = ?1")

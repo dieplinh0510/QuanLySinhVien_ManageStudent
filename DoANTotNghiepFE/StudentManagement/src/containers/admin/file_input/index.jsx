@@ -147,7 +147,7 @@ const FileInput = () => {
                         }}
                         isRequired={false}
                         error={false}
-                        customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
+                        customStyle={{ width: '80%', backgroundColor: '#f5f5f5' }}
               />
             </div>
           ))
@@ -165,8 +165,6 @@ const FileInput = () => {
           <Button
             title={'Làm mới'}
             onClick={() => {
-              setFile(null);
-              setColumnsInFile([]);
               setColumnsIgnore([]);
               setPayloadMapping([]);
             }}

@@ -37,6 +37,9 @@ const FileStatus = () => {
   };
 
   const handleDownload = (item) => {
+    if (item.status !== 1 && item.status !== 2) {
+      return;
+    }
     console.log(item)
     dispatch(UploadActions.downloadFileRequest({
       idFile: item.id,
@@ -71,7 +74,7 @@ const FileStatus = () => {
                       <p className={'success-message'}>Thành công</p> :
                       item.status === 2 ?
                         <p className={'error-message'}>Thất bại</p> :
-                        <p className={'inprocess-message'}>Đang upload</p>
+                        <p className={'inprocess-message'}>Đang xử lý</p>
                     }
                   </td>
                   <td>
@@ -87,6 +90,7 @@ const FileStatus = () => {
                         onClick={() => handleDownload(item)}
                         width={'100px'}
                         customStyle={{ padding: '6px 0' }}
+                        disabled={item.status !== 1 && item.status !== 2}
                       />
                     </div>
                   </td>

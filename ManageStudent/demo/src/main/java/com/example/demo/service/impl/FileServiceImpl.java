@@ -4,6 +4,8 @@ import com.example.demo.domain.dto.InsertFieldDTO;
 import com.example.demo.domain.dto.SearchProcessDTO;
 import com.example.demo.domain.model.ProcessFileImport;
 import com.example.demo.domain.model.User;
+import com.example.demo.repo.ClassroomRepo;
+import com.example.demo.repo.CourseRepo;
 import com.example.demo.repo.ProcessFileImportRepo;
 import com.example.demo.service.FileService;
 import com.example.demo.service.StudentService;
@@ -11,6 +13,7 @@ import com.example.demo.utils.SecurityUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.util.IOUtils;
@@ -27,6 +30,10 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -37,12 +44,21 @@ import java.util.stream.Collectors;
 public class FileServiceImpl implements FileService {
   private final ProcessFileImportRepo processFileImportRepo;
   private final StudentService studentService;
+  private final CourseRepo courseRepo;
+  private final ClassroomRepo classroomRepo;
+  private final DataFormatter df = new DataFormatter();
+  @PersistenceContext
+  private EntityManager entityManager;
+  @PersistenceUnit
+  private EntityManagerFactory entityManagerFactory;
   @Value("${upload.file.path}")
   private String filePath;
 
-  public FileServiceImpl(ProcessFileImportRepo processFileImportRepo, StudentService studentService) {
+  public FileServiceImpl(ProcessFileImportRepo processFileImportRepo, StudentService studentService, CourseRepo courseRepo, ClassroomRepo classroomRepo) {
     this.processFileImportRepo = processFileImportRepo;
     this.studentService = studentService;
+    this.courseRepo = courseRepo;
+    this.classroomRepo = classroomRepo;
   }
 
   @Override
@@ -69,7 +85,7 @@ public class FileServiceImpl implements FileService {
   @Override
   public Long uploadFile(MultipartFile file, byte[] fileContent) throws Exception {
     User user = SecurityUtil.getCurrentUserLogin();
-    if (user == null){
+    if (user == null) {
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
     }
     String[] str = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
@@ -97,28 +113,28 @@ public class FileServiceImpl implements FileService {
   public boolean insertField(InsertFieldDTO insertFieldDTO, Integer typeInsert) throws Exception {
     Optional<ProcessFileImport> processFileImport = processFileImportRepo.findById(insertFieldDTO.getId());
     User user = SecurityUtil.getCurrentUserLogin();
-    if (user == null){
+    if (user == null) {
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
     }
 
     if (processFileImport.get() != null) {
-      if (typeInsert == 1){
+      if (typeInsert == 2) {
         processFileImport.get().setMapField(new ObjectMapper().writeValueAsString(insertFieldDTO.getMapFields()));
         processFileImport.get().setSchema("manage_student");
         processFileImport.get().setTable("student_in_classroom_subjects");
         processFileImport.get().setStatus(1);
-        processFileImport.get().setType(1L);
+        processFileImport.get().setType(2L);
         processFileImport.get().setUpdateDatetime(LocalDateTime.now());
         processFileImport.get().setUpdateUser(user.getUsername());
         processFileImportRepo.save(processFileImport.get());
         return true;
       }
-      if (typeInsert == 2){
+      if (typeInsert == 1) {
         processFileImport.get().setMapField(new ObjectMapper().writeValueAsString(insertFieldDTO.getMapFields()));
         processFileImport.get().setSchema("manage_student");
         processFileImport.get().setTable("students");
         processFileImport.get().setStatus(1);
-        processFileImport.get().setType(2L);
+        processFileImport.get().setType(1L);
         processFileImport.get().setUpdateUser(user.getUsername());
         processFileImport.get().setUpdateDatetime(LocalDateTime.now());
         processFileImportRepo.save(processFileImport.get());
@@ -136,7 +152,7 @@ public class FileServiceImpl implements FileService {
     String fileName = "result_" + processFileImport.getKeyRequest();
     byte[] data = processFileImport.getFileContent();
     Long type = processFileImport.getType();
-
+    StringBuilder insertQuery = new StringBuilder("insert into " + schema + "." + table);
     InputStream is = new BufferedInputStream(new ByteArrayInputStream(data));
     XSSFWorkbook wb = new XSSFWorkbook(is);
 
@@ -147,10 +163,13 @@ public class FileServiceImpl implements FileService {
 
     HashMap<Integer, String> columnFile = new HashMap<>();
     HashMap<String, String> columnTable = studentService.getColumnForInput();
-    HashSet<String> mapFieldFile = new HashSet<>(mapFields.keySet());
-    if (type == 2){
+    HashSet<String> mapFieldFile = new HashSet<>(mapFields.values());
+    if (type == 1) {
       try {
         for (Row row : sheet) {
+          Long courseId = null;
+          Long classroomId = null;
+          boolean checkStudent = false;
           if (checkField) {
             for (int i = 0; i < row.getLastCellNum(); i++) {
               Cell cell = row.getCell(i);
@@ -158,7 +177,6 @@ public class FileServiceImpl implements FileService {
                 columnFile.put(i, row.getCell(i).getStringCellValue());
 
             }
-//            Assert.isTrue(new HashSet<>(columnTable.keySet()).containsAll(new HashSet<>(mapFields.values())), "Primary key not found");
             row.createCell(row.getLastCellNum()).setCellValue("Import result");
             row.createCell(row.getLastCellNum()).setCellValue("Description");
             checkField = false;
@@ -170,10 +188,71 @@ public class FileServiceImpl implements FileService {
           int i;
           for (i = 0; i < row.getLastCellNum(); i++) {
 
+            String course = "";
+            String classroom = "";
+            Cell cell = row.getCell(i);
+            String fileColumn = columnFile.get(i);
+            if (Objects.nonNull(fileColumn)) {
+              for (Map.Entry<String, String> itemCourse : mapFields.entrySet()) {
+                if (itemCourse.getValue().equals(fileColumn)) {
+                  if (itemCourse.getKey().equals("id_course")) {
+                    course = itemCourse.getValue();
+                    courseId = courseRepo.getIdByCourseName(df.formatCellValue(cell));
+                    break;
+                  }
+                }
+              }
+              for (Map.Entry<String, String> itemClass : mapFields.entrySet()) {
+                if (itemClass.getValue().equals(fileColumn)) {
+                  if (itemClass.getKey().equals("id_class")) {
+                    classroom = itemClass.getValue();
+                    classroomId = classroomRepo.getIdByClassNameAndCourseId(courseId, df.formatCellValue(cell));
+                    break;
+                  }
+                }
+              }
+
+              if (!fileColumn.equals(course) && !fileColumn.equals(classroom) && !checkStudent) {
+                String valueStr = df.formatCellValue(cell);
+                if (StringUtils.hasText(valueStr)) {
+                  if (checkFirst) {
+                    for (Map.Entry<String, String> item : mapFields.entrySet()) {
+                      if (item.getValue().equals(fileColumn)) {
+                        columnQuery.append(item.getKey());
+                      }
+                    }
+                    valuesQuery.append("'").append(valueStr).append("'");
+                    checkFirst = false;
+                    continue;
+                  }
+                  boolean checkColumn = true;
+                  for (Map.Entry<String, String> item : mapFields.entrySet()) {
+                    if (item.getValue().equals(fileColumn)) {
+                      columnQuery.append(", ").append(item.getKey());
+                      checkColumn = false;
+                      break;
+                    }
+                  }
+                  if (checkColumn) {
+                    columnQuery.append(", ").append(mapFields.get(fileColumn));
+                  }
+
+                  valuesQuery.append(", '").append(valueStr).append("'");
+                }
+              }
+            }
+
           }
+          columnQuery.append(" , id_class , create_user, create_datetime)");
+          valuesQuery.append(", ").append(classroomId).append(" , ").append("'PROCESS' , '").append(LocalDateTime.now()).append("')");
 
           try {
-
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            entityManager.createNativeQuery(insertQuery.toString() + columnQuery + valuesQuery).executeUpdate();
+            entityManager.flush();
+            entityManager.getTransaction().commit();
+            entityManager.close();
             row.createCell(i).setCellValue("Import data success");
           } catch (Exception ex) {
             row.createCell(i++).setCellValue("Import date fail");
@@ -192,18 +271,19 @@ public class FileServiceImpl implements FileService {
         InputStream fis = new ByteArrayInputStream(IOUtils.toByteArray(new ByteArrayInputStream(boas.toByteArray())));
         FileCopyUtils.copy(fis.readAllBytes(), new File(filePath, String.valueOf(name)));
 
-
+        processFileImport.setDiscription(boas.toByteArray());
         processFileImport.setStatus(2);
         processFileImport.setKeyResponse(name.toString());
         processFileImport.setUpdateUser("PROCESS");
         processFileImport.setUpdateDatetime(LocalDateTime.now());
+        processFileImportRepo.save(processFileImport);
       } catch (Exception e) {
         processFileImport.setStatus(3);
-        processFileImport.setDiscription(e.getMessage());
+        processFileImport.setCreateUser(e.getMessage());
         processFileImport.setUpdateUser("PROCESS");
         processFileImport.setUpdateDatetime(LocalDateTime.now());
         processFileImportRepo.save(processFileImport);
       }
-  }
+    }
   }
 }

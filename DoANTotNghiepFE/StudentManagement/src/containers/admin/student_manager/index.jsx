@@ -64,9 +64,10 @@ const StudentManager = () => {
 
   useEffect(() => {
     if (courses) {
-      setLstCourse(courses.map((item) => {
+      let arr = courses.map((item) => {
         return { label: item.nameCourse, value: item.id };
-      }));
+      });
+      setLstCourse([...arr, { label: 'Hủy bỏ', value: null }]);
     }
   }, [courses]);
 
@@ -81,11 +82,11 @@ const StudentManager = () => {
 
   useEffect(() => {
     if (classes) {
-      setLstClass(classes.map((item) => {
+      setLstClass([...classes.map((item) => {
         return { label: item.nameClass, value: item.id };
-      }));
+      }), { label: 'Hủy bỏ', value: null }]);
     }
-  }, [classes.length]);
+  }, [classes]);
 
   const handleSearchStudent = () => {
     // validate input not blank
@@ -117,6 +118,14 @@ const StudentManager = () => {
     }));
 
     setShowCreate(false);
+    // clear data
+    setPayloadCreate({
+      studentName: '',
+      studentCode: '',
+      studentImage: '',
+      idCourse: 0,
+      idClass: 0,
+    });
   };
 
   const handleEditStudent = () => {
@@ -185,7 +194,7 @@ const StudentManager = () => {
                       ignores={[]}
                       setSelected={(value) => {
                         setCourse(value);
-                        setSearchPayload({ ...searchPayload, courseId: value.value });
+                        setSearchPayload({ ...searchPayload, courseId: value.value, classroomId: null});
                       }}
                       isRequired={false}
                       error={false}
@@ -272,13 +281,13 @@ const StudentManager = () => {
           </MDBTableHead>
           <MDBTableBody>
             {students && students.length > 0 && students.map((item, index) => (
-              <tr style={{cursor: 'pointer'}} key={index} onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>
-                <td>{((searchPayload.pageIndex - 1) * 10) + index + 1}</td>
-                <td>{item.studentCode}</td>
-                <td>{item.studentName}</td>
-                <td>{item.courseName}</td>
-                <td>{item.classroomName}</td>
-                <td>{item.accumulatedPoints}</td>
+              <tr style={{cursor: 'pointer'}} key={index}>
+                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{((searchPayload.pageIndex - 1) * 10) + index + 1}</td>
+                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.studentCode}</td>
+                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.studentName}</td>
+                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.courseName}</td>
+                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.classroomName}</td>
+                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.accumulatedPoints}</td>
                 <td style={{ width: '120px' }}>
                   <div style={{
                     display: 'flex',
@@ -368,7 +377,7 @@ const StudentManager = () => {
                           value={payloadCreate.idCourse}
                           ignores={[]}
                           setSelected={(value) => {
-                            setPayloadCreate({ ...payloadCreate, idCourse: value });
+                            setPayloadCreate({ ...payloadCreate, idCourse: value, idClass: 0});
                             setCourse(value);
                           }}
                           isRequired={false}

@@ -19,7 +19,7 @@ public class ImportFile {
   private final ProcessFileImportRepo processFileImportRepo;
 
   @SneakyThrows
-//  @Scheduled(fixedDelay = 60*1000)
+  @Scheduled(fixedDelay = 60*1000)
   private void importFile(){
     List<ProcessFileImport> processFileImports = processFileImportRepo.getProcessFileImportsByStatus(1);
     for (ProcessFileImport process: processFileImports){

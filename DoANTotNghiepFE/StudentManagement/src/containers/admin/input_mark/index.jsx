@@ -19,12 +19,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as PointInputActions from '../../../store/actions/PointInputActions';
 import { useNavigate } from 'react-router-dom';
 import { UploadType } from '../../../constant';
+import { Loader } from '../../../components';
 
 const InputMark = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { students = [], loading, error, classrooms = [] } = useSelector((state) => state.pointInput);
-  const [classroomCode, setClassroomCode] = React.useState('10001.2');
+  const { students = [], loading = false, error, classrooms = [] } = useSelector((state) => state.pointInput);
+  const [classroomCode, setClassroomCode] = React.useState('');
   const [openModalClassroomCode, setOpenModalClassroomCode] = useState(false);
   const [openModalEditPoint, setOpenModalEditPoint] = useState(false);
   const [openModalDeletePoint, setOpenModalDeletePoint] = useState(false);
@@ -35,19 +36,17 @@ const InputMark = () => {
   };
 
   useEffect(() => {
-    // Fake tạm
-    dispatch(PointInputActions.getStudentColumnRequest({ classroomCode }));
-
-    //
     dispatch(PointInputActions.getAllClassroomRequest());
   }, []);
 
   const handleToggleModelClassroomCode = () => {
-    console.log('open model classroom code');
     setOpenModalClassroomCode(!openModalClassroomCode);
   };
 
+  console.log(loading)
+
   return (
+    // <Loader active={loading} >
     <div className={'input-mark-page'}>
       <Title text="NHẬP ĐIỂM THEO MÔN HỌC" />
 
@@ -92,9 +91,9 @@ const InputMark = () => {
               <td>{item.regularPointOne}</td>
               <td>{item.regularPointTwo}</td>
               <td>{item.midtermPointOne}</td>
-              <td>{item.mediumPoint}</td>
+              <td>{(item.midtermPointOne == null || item.regularPointOne || item.regularPointTwo) ? '' : item.mediumPoint}</td>
               <td>{item.testPointOne}</td>
-              <td>{item.accumulated_point}</td>
+              <td>{(item.testPointOne == null) ? '' : item.accumulated_point}</td>
               <td>
                 <div style={{ display: 'flex', justifyContent: 'center', padding: '5px', alignItems: 'center' }}>
                   <Button title={'Sửa'}
@@ -241,7 +240,7 @@ const InputMark = () => {
                 }}
               />
               <Space height={16} />
-              <div style={{display: 'flex'}}>
+              <div style={{ display: 'flex' }}>
                 <Button title={'Lưu'}
                         onClick={() => {
                           dispatch(PointInputActions.editPointRequest({
@@ -270,12 +269,12 @@ const InputMark = () => {
         <MDBModalDialog scrollable size="fullscreen-xxl-down">
           <MDBModalContent>
             <MDBModalHeader>
-              <p>Xác nhận xoá điểm sinh viên</p>
+              <p>Xác nhận xoá sinh viên trong lớp học này</p>
             </MDBModalHeader>
             <MDBModalBody>
               <p style={{ textAlign: 'center' }}>{payload?.studentName} - {payload?.studentCode}</p>
-              <p>Bạn có chắc chắn muốn xoá điểm của sinh viên này không?</p>
-              <div style={{display: 'flex'}}>
+              <p>Bạn có chắc chắn muốn xoá sinh viên trong lớp học này không?</p>
+              <div style={{ display: 'flex' }}>
                 <Button title={'Xoá'}
                         onClick={() => {
                           dispatch(PointInputActions.deletePointRequest({
@@ -298,6 +297,7 @@ const InputMark = () => {
       </MDBModal>
 
     </div>
+    // </Loader>
   );
 };
 

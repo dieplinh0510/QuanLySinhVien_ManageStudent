@@ -37,7 +37,7 @@ public class ProcessFileImport {
   @Column(name = "key_response")
   private String keyResponse;
   @Column(name = "discription")
-  private String discription;
+  private byte[] discription;
   @Column(name = "create_user")
   private String createUser;
   @Column(name = "create_datetime")

@@ -4,6 +4,7 @@ const initialState = {
   students: [],
   loading: false,
   paging: null,
+  pagingForDetail: null,
   studentDetail: null,
   studentMark: [],
   accumulatedPoint: [],
@@ -131,10 +132,24 @@ const studentsReducer = (state = initialState, action) => {
         loading: true,
       };
     case StudentTypes.GET_STUDENT_MARK_BY_ID_SUCCESS:
+      console.log('action.payload', action.payload)
+
       return {
         ...state,
         loading: false,
-        studentMark: action.payload,
+        studentMark: action.payload.content,
+        pagingForDetail: {
+          last: action.payload.last,
+          totalElements: action.payload.totalElements,
+          totalPages: action.payload.totalPages,
+          size: action.payload.size,
+          number: action.payload.number,
+          first: action.payload.first,
+          numberOfElements: action.payload.numberOfElements,
+          pageIndex: action.payload.pageable.pageNumber,
+          pageSize: action.payload.pageable.pageSize,
+          offset: action.payload.pageable.offset,
+        }
       };
     case StudentTypes.GET_STUDENT_MARK_BY_ID_FAILURE:
       return {

@@ -9,6 +9,7 @@ import com.example.demo.domain.model.StudentInClassroomSubject;
 import org.springframework.data.domain.Page;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public interface StudentService {
@@ -25,6 +26,6 @@ public interface StudentService {
   List<StudentPointInClassroomDTO> viewPointInClassroom(String classroomCode);
   StudentPointInClassroomDTO changePointInClassroom(StudentPointInClassroomDTO studentPointInClassroomDTO) throws Exception;
   void deleteStudentInClass(Long studentClassId);
-  HashMap<String, String> getColumnForInputPoint();
-  HashMap<String, String> getColumnForInput();
+  LinkedHashMap<String, String> getColumnForInputPoint();
+  LinkedHashMap<String, String> getColumnForInput();
 }

@@ -32,23 +32,16 @@ export const createClassInSubject = async (payload) => {
     }
   });
 
-  if (response?.data?.status !== '200') {
-    toast.error(response?.data?.description)
-    return {};
-  }
-
-  return response?.data;
+  return HttpService.checkResponseCommon(response, {}, "Thêm lớp học thành công");
 };
 
 // API edit class in subject
 export const editClassInSubject = async (payload) => {
-  let response = await HttpService.put(`/classroom-subject`, {
+  console.log(payload)
+  let response = await HttpService.put(`/classroom-subject?classroomId=${payload.id}`, {
     body: payload,
-    params: {
-      classroomId: payload.id,
-    },
   });
-  return response?.data;
+  return HttpService.checkResponseCommon(response, {}, "Sửa lớp học thành công");
 };
 
 // API get all teachers
@@ -86,5 +79,5 @@ export const addStudentToClass = async (payload) => {
     params: payload,
   });
 
-  return HttpService.checkResponseCommon(response, {}, 'Add student to class success');
+  return HttpService.checkResponseCommon(response, {}, 'Thêm thành công sinh viên vào lớp học');
 };

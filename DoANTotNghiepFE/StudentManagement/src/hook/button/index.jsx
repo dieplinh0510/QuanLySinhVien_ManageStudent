@@ -9,7 +9,8 @@ const Button = ({
                   onClick,
                   width,
                   isLoading,
-                  customStyle
+                  customStyle,
+                  disabled
                 }) => {
   return (
     <MDBBtn
@@ -20,7 +21,9 @@ const Button = ({
         ...customStyle
       }}
       color={'primary'}
-      onClick={onClick}>
+      onClick={onClick}
+      disabled={disabled === true}
+    >
       {isLoading ?
         <CSpinner component="span" size="sm" aria-hidden="true"
                   style={{ marginRight: '5px' }} /> : ''

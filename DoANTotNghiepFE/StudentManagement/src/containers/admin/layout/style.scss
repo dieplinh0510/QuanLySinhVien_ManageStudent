@@ -41,6 +41,16 @@ p, h1, h2, h3, h4, h5, h6, span, a, button, input, label, div, li, ul, ol, texta
     }
   }
 
+  .sidebar-info {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    justify-content: space-between;
+    width: 18.75%;
+  }
+
   .item-sidebar {
     //display: flex;
     //align-items: center;

@@ -25,7 +25,7 @@ export const createSubject = async (payload) => {
   let response = await HttpService.post('/subjects', {
     body: payload,
   });
-  return response?.data;
+  return HttpService.checkResponseCommon(response, {}, 'Tạo môn học thành công');
 };
 
 export const updateSubject = async (payload) => {
@@ -35,7 +35,7 @@ export const updateSubject = async (payload) => {
       subjectId: payload.id,
     },
   });
-  return response?.data;
+  return HttpService.checkResponseCommon(response, {}, 'Sửa môn học thành công');
 };
 
 export const deleteSubject = async (payload) => {

@@ -60,9 +60,9 @@ const SubjectManager = () => {
       toast.error('Chưa chọn học kì');
       return;
     }
-    dispatch(SubjectActions.createSubjectRequest({...payloadCreate, idSemester: payloadCreate.idSemester.value}));
+    dispatch(SubjectActions.createSubjectRequest({ ...payloadCreate, idSemester: payloadCreate.idSemester.value }));
     handleCancelCreate();
-  }
+  };
 
   const handleCancelCreate = () => {
     setPayloadCreate({
@@ -72,11 +72,11 @@ const SubjectManager = () => {
       idSemester: 0,
     });
     setShowCreate(false);
-  }
+  };
 
   const findSemester = (id) => {
     return semesters.find((item) => item.value === id);
-  }
+  };
 
   const handleEditSubject = () => {
     if (payloadEdit.subjectCode === '') {
@@ -97,17 +97,17 @@ const SubjectManager = () => {
     }
     dispatch(SubjectActions.editSubjectRequest(payloadEdit));
     handleCancelEdit();
-  }
+  };
 
   const handleCancelEdit = () => {
     setPayloadEdit(null);
     setShowEdit(false);
-  }
+  };
 
   const handleDeleteSubject = () => {
     dispatch(SubjectActions.deleteSubjectRequest(payloadDelete));
     setShowDelete(false);
-  }
+  };
 
   return (
     <div className={'subject-manager-page'}>
@@ -136,6 +136,16 @@ const SubjectManager = () => {
             backgroundColor: '#f5f5f5',
           }}
         />
+
+        <Space width={20} />
+
+        <Button title={'Tìm kiếm'} onClick={() => {
+          if (searchPayload !== '') {
+            dispatch(SubjectActions.getSubjectDetailRequest({ subjectCode: searchPayload }));
+          } else {
+            dispatch(SubjectActions.getSubjectsRequest());
+          }
+        }} customStyle={{ width: '120px' }} />
       </div>
 
       {/* Content */}
@@ -159,12 +169,12 @@ const SubjectManager = () => {
           </MDBTableHead>
           <MDBTableBody>
             {subjects && subjects.map((item, index) => (
-              <tr style={{cursor: 'pointer'}} key={index} onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>
-                <td>{index + 1}</td>
-                <td>{item.subjectCode}</td>
-                <td>{item.subjectName}</td>
-                <td>{item.numberOfCredits}</td>
-                <td>{item.idSemester}</td>
+              <tr style={{ cursor: 'pointer' }} key={index}>
+                <td onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>{index + 1}</td>
+                <td onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>{item.subjectCode}</td>
+                <td onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>{item.subjectName}</td>
+                <td onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>{item.numberOfCredits}</td>
+                <td onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>{item.idSemester}</td>
                 <td style={{ width: '120px' }}>
                   <div style={{
                     display: 'flex',
@@ -375,7 +385,7 @@ const SubjectManager = () => {
               <MDBBtn className="btn-close" color="none" onClick={() => setShowDelete(false)}></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-              <p style={{textAlign: 'center'}}>Bạn có chắc muốn xoá môn học này không?</p>
+              <p style={{ textAlign: 'center' }}>Bạn có chắc muốn xoá môn học này không?</p>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Button title={'Có'}
                         onClick={() => handleDeleteSubject()}

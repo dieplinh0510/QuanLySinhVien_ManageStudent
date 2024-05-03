@@ -22,13 +22,14 @@ import * as StudentActions from '../../../store/actions/StudentActions';
 import Space from '../../../hook/space/space';
 import Pulldown from '../../../hook/pulldown';
 import { toast } from 'react-toastify';
+import { UploadType } from '../../../constant';
 
 const ClassManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { subject = null, semesters = [] } = useSelector((state) => state.subject);
   const { classes = [], teachers = [] } = useSelector((state) => state.class);
-  const { studentDetail = []} = useSelector((state) => state.student);
+  const { studentDetail = [] } = useSelector((state) => state.student);
   const [subjectId, setSubjectId] = useState(null);
 
   const [searchPayload, setSearchPayload] = React.useState('');
@@ -108,7 +109,7 @@ const ClassManager = () => {
   const handleOpenEdit = (item) => {
     setShowEdit(true);
     setPayloadEdit({
-      id: item.id,
+      id: item.idClassroom,
       subjectId: subjectId,
       teacher: item.teacher,
       classroomCode: item.classroomCode,
@@ -145,6 +146,7 @@ const ClassManager = () => {
   };
 
   const handleOpenCreateStudent = (item) => {
+    console.log("2020598578", item, payloadCreateStudent);
     setShowCreateStudent(true);
     setPayloadCreateStudent({
       classroomId: item.idClassroom,
@@ -154,20 +156,27 @@ const ClassManager = () => {
 
   const handleCreateStudent = () => {
     let payload = {
-      studentId: studentDetail?.studentId,
+      studentId: payloadCreateStudent?.studentId,
       classroomId: payloadCreateStudent?.classroomId,
       subjectId: payloadCreateStudent?.subjectId,
-    }
+    };
 
     if (!payload.studentId || payload.studentId === '') {
-      toast.error('Sinh viên không tồn tại');
+      toast.error('Bạn cần nhập mã sinh viên');
       return;
     }
 
-    dispatch(ClassActions.addStudentToClassRequest({...payload, subjectId: +payload.subjectId}));
     setShowCreateStudent(false);
     setPayloadCreateStudent(null);
+    dispatch(ClassActions.addStudentToClassRequest({ ...payload, subjectId: +payload.subjectId }));
   };
+
+  useEffect(() => {
+    console.log("show create student", studentDetail);
+    if (studentDetail != null) {
+      setPayloadCreateStudent({...payloadCreateStudent, ...studentDetail})
+    }
+  }, [studentDetail]);
 
   return (
     <div className={'class-manager-page'}>
@@ -294,9 +303,9 @@ const ClassManager = () => {
 
                 <Input value={payloadCreate?.subjectName}
                        onChange={(value) => setPayloadCreate({ ...payloadCreate, subjectName: value })}
-                       label="Họ tên môn học"
+                       label="Tên môn học"
                        isRequired={true}
-                       placeHolder="Nhập họ tên"
+                       placeHolder="Nhập tên môn học"
                        errorMessage="Tên môn học không được để trống"
                        error={false}
                        isDisable={true}
@@ -378,9 +387,9 @@ const ClassManager = () => {
 
                 <Input value={payloadEdit?.subjectName}
                        onChange={(value) => setPayloadEdit({ ...payloadEdit, subjectName: value })}
-                       label="Họ tên môn học"
+                       label="Tên môn học"
                        isRequired={true}
-                       placeHolder="Nhập họ tên"
+                       placeHolder="Nhập tên môn học"
                        errorMessage="Tên môn học không được để trống"
                        error={false}
                        isDisable={true}
@@ -447,20 +456,20 @@ const ClassManager = () => {
             </MDBModalHeader>
             <MDBModalBody>
               <div>
-                <Input value={payloadCreateStudent?.studentCode}
+                <Input value={payloadCreateStudent?.studentCode ? payloadCreateStudent?.studentCode : ''}
                        onChange={(value) => setPayloadCreateStudent({ ...payloadCreateStudent, studentCode: value })}
                        label="Mã sinh viên"
                        isRequired={true}
                        onKeyPress={
                          (e) => {
-                            if (e.key === 'Enter') {
-                              if (payloadCreateStudent?.studentCode === '') {
-                                toast.error('Mã sinh viên không được để trống');
-                                return;
-                              }
+                           if (e.key === 'Enter') {
+                             if (payloadCreateStudent?.studentCode === '') {
+                               toast.error('Mã sinh viên không được để trống');
+                               return;
+                             }
 
-                              dispatch(StudentActions.getStudentDetailByStudentCodeRequest({studentCode: payloadCreateStudent?.studentCode}))
-                            }
+                             dispatch(StudentActions.getStudentDetailByStudentCodeRequest({ studentCode: payloadCreateStudent?.studentCode }));
+                           }
                          }
                        }
                        onBlur={() => {
@@ -469,7 +478,7 @@ const ClassManager = () => {
                            return;
                          }
 
-                         dispatch(StudentActions.getStudentDetailByStudentCodeRequest({studentCode: payloadCreateStudent?.studentCode}))
+                         dispatch(StudentActions.getStudentDetailByStudentCodeRequest({ studentCode: payloadCreateStudent?.studentCode }));
                        }}
                        placeHolder="Nhập mã sinh viên"
                        errorMessage="Mã sinh viên không được để trống"
@@ -480,7 +489,7 @@ const ClassManager = () => {
 
                 <Space height={20} />
 
-                <Input value={studentDetail?.studentName}
+                <Input value={payloadCreateStudent?.studentName ? payloadCreateStudent?.studentName : ''}
                        onChange={(value) => setPayloadCreateStudent({ ...payloadCreateStudent, studentName: value })}
                        label="Họ tên sinh viên"
                        isRequired={true}
@@ -493,7 +502,7 @@ const ClassManager = () => {
 
                 <Space height={20} />
 
-                <Input value={studentDetail?.courseName}
+                <Input value={payloadCreateStudent?.courseName ? payloadCreateStudent?.courseName : ''}
                        label="Khoá học"
                        isRequired={true}
                        error={false}
@@ -503,7 +512,7 @@ const ClassManager = () => {
 
                 <Space height={20} />
 
-                <Input value={studentDetail?.classroomName}
+                <Input value={payloadCreateStudent?.classroomName ? payloadCreateStudent?.classroomName : ''}
                        label="Lớp học"
                        isRequired={true}
                        error={false}
@@ -515,7 +524,7 @@ const ClassManager = () => {
 
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Button title={'Dữ liệu từ file'}
-                          onClick={() => console.log('Thêm từ file')}
+                          onClick={() => navigate(`/admin/file-input?uploadType=${UploadType.STUDENT}`)}
                           width={'200px'}
                           customStyle={{ padding: '6px 0' }}
                   />

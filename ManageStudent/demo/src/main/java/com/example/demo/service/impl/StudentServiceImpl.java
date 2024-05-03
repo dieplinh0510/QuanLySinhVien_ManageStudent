@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Transactional
@@ -383,8 +384,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public HashMap<String, String> getColumnForInputPoint () {
-      HashMap<String, String> fields = new HashMap<>();
+    public LinkedHashMap<String, String> getColumnForInputPoint () {
+      LinkedHashMap<String, String> fields = new LinkedHashMap<>();
       fields.put("studentCode", "Mã sinh viên");
       fields.put("studentName", "Họ tên");
       fields.put("regularPointOne", "Điểm thường xuyên 1");
@@ -395,10 +396,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public HashMap<String, String> getColumnForInput () {
-      HashMap<String, String> fields = new HashMap<>();
-      fields.put("studentCode", "Mã sinh viên");
-      fields.put("studentName", "Họ tên");
+    public LinkedHashMap<String, String> getColumnForInput () {
+      LinkedHashMap<String, String> fields = new LinkedHashMap<>();
+      fields.put("student_code", "Mã sinh viên");
+      fields.put("student_name", "Họ tên");
       fields.put("id_course", "Khóa");
       fields.put("id_class", "Lớp");
       fields.put("student_image", "Ảnh");

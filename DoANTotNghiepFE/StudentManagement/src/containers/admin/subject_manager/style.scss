@@ -2,9 +2,10 @@
   height: 100vh;
 
   .subject-input-box {
-    width: 40%;
+    width: 100%;
     margin-top: 20px;
     display: flex;
+    align-items: center;
 
     p {
       line-height: 40px;

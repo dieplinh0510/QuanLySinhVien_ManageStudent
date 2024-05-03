@@ -14,15 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 import static com.example.demo.common.Const.RETURN_CODE_ERROR;
 
@@ -71,15 +70,19 @@ public class FileController extends CommonController{
   @GetMapping("/download-file")
   public ResponseEntity<?> downloadFile(@RequestParam(value = "idFile") Long idFile){
     try {
+      HttpHeaders httpHeaders = new HttpHeaders();
+      httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+      InputStream inputStream;
+      byte[] data ;
       ProcessFileImport processFileImport = processFileImportRepo.getProcessFileById(idFile);
       Assert.notNull(processFileImport, "File download does not exits");
-      File file = new File(filePath+"/"+processFileImport.getKeyRequest());
-      InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-      return ResponseEntity.ok()
-          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + processFileImport.getKeyRequest())
-          .contentLength(processFileImport.getFileContent().length)
-          .contentType(MediaType.APPLICATION_OCTET_STREAM)
-          .body(resource);
+      data = processFileImport.getDiscription();
+      String path = filePath+"/"+processFileImport.getKeyResponse();
+      httpHeaders.set("Content-disposition", "attachment; filename=" + processFileImport.getKeyResponse());
+      httpHeaders.setContentLength(data.length);
+      inputStream= new BufferedInputStream(new ByteArrayInputStream(data));
+      InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
+      return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
     } catch (Exception ex){
       log.error(ex.getMessage(), ex);
       return toExceptionResult(ex.getMessage(), RETURN_CODE_ERROR);
