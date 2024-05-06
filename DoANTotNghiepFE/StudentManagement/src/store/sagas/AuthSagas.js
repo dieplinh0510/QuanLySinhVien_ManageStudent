@@ -20,9 +20,19 @@ function* logoutSaga() {
   }
 }
 
+function* changePasswordSaga(action) {
+  try {
+    const response = yield call(api.changePassword, action.payload);
+    yield put(AuthActions.changePasswordSuccess(response));
+  } catch (error) {
+    yield put(AuthActions.changePasswordFailure(error.message));
+  }
+}
+
 function* watchAuthSaga() {
   yield takeEvery(AuthTypes.LOGIN_REQUEST, loginSaga);
   yield takeEvery(AuthTypes.LOGOUT_REQUEST, logoutSaga);
+  yield takeEvery(AuthTypes.CHANGE_PASSWORD_REQUEST, changePasswordSaga);
 }
 
 export default watchAuthSaga;

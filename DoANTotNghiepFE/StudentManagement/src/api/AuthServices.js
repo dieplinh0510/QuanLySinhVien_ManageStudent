@@ -8,7 +8,7 @@ export const login = async (payload) => {
     body: payload,
   });
 
-  return HttpService.checkResponseCommon(response, null);
+  return HttpService.checkResponseCommon(response, null, "Đăng nhập thành công!");
 };
 
 export const register = async (payload) => {
@@ -28,4 +28,13 @@ export const isLoggedIn = () => {
   const accessToken = StorageService.get(AuthKeys.ACCESS_TOKEN);
   const loggedIn = StorageService.get(AuthKeys.LOGGED_IN) === 'true';
   return !!accessToken && loggedIn;
+};
+
+// change password
+export const changePassword = async (payload) => {
+  let response = await HttpService.post('/auth/change-password', {
+    body: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, null, "Change password successfully");
 };

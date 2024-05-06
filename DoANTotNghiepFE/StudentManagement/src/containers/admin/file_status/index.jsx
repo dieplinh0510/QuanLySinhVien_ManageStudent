@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import './style.scss';
 import Title from '../../../hook/title/Title';
-import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
+import { MDBModal, MDBModalDialog, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import Button from '../../../hook/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../../components/paging';
 import * as UploadActions from '../../../store/actions/UploadActions';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const FileStatus = () => {
   const dispatch = useDispatch();
@@ -70,9 +72,9 @@ const FileStatus = () => {
                   <td>{item.fileName}</td>
                   <td>{item.createDatetime}</td>
                   <td style={{ width: '100px', margin: '4px 25px' }}>
-                    {item.status === 1 ?
+                    {item.status === 2 ?
                       <p className={'success-message'}>Thành công</p> :
-                      item.status === 2 ?
+                      (item.status === 3 || item.status === -1) ?
                         <p className={'error-message'}>Thất bại</p> :
                         <p className={'inprocess-message'}>Đang xử lý</p>
                     }
@@ -113,6 +115,16 @@ const FileStatus = () => {
           )
         }
       </div>
+
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true} >
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
+        </MDBModalDialog>
+      </MDBModal>
 
     </div>
   );

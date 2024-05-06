@@ -4,26 +4,27 @@ import StorageService from './storage.service';
 import { AuthKeys } from '../constant';
 
 export const isAuthenticated = ({ request }) => {
-  // const token = HttpService.getAccessToken();
-  // const userInfo = JSON.parse(StorageService.getObject(AuthKeys.CURRENT_USER));
-  //
-  // if (
-  //   !token &&
-  //   !(request.url.includes('/login') || request.url.includes('/register'))
-  // ) {
-  //   return redirect('/login');
-  // }
-  //
-  // if (
-  //   token &&
-  //   (request.url.includes('/login'))
-  // ) {
-  //   if (userInfo?.role === AuthKeys.ROLE_ADMIN) {
-  //     return redirect('/admin');
-  //   }
-  //
-  //   return redirect('/');
-  // }
+  const token = HttpService.getAccessToken();
+  const isLoggedIn = StorageService.get(AuthKeys.LOGGED_IN) === 'true';
+  const userInfo = JSON.parse(JSON.stringify(StorageService.getObject(AuthKeys.CURRENT_USER)));
+
+  if (
+    (!token || !isLoggedIn) &&
+    !(request.url.includes('/login') || request.url.includes('/register') || request.url.includes('/change-password'))
+  ) {
+    return redirect('/login');
+  }
+
+  if (
+    token && isLoggedIn &&
+    (request.url.includes('/login'))
+  ) {
+    if (userInfo?.role === AuthKeys.ROLE_ADMIN) {
+      return redirect('/admin');
+    }
+
+    return redirect('/');
+  }
 
   return true;
 };

@@ -6,6 +6,7 @@ import classReducer from './ClassReducers';
 import subjectReducer from './SubjectReducers';
 import uploadReducer from './UploadReducers';
 import pointInputReducer from './PointInputReducers';
+import teacherReducer from './TeacherReducers';
 
 export default combineReducers({
   auth,
@@ -14,5 +15,6 @@ export default combineReducers({
   classReducer,
   subjectReducer,
   uploadReducer,
-  pointInputReducer
+  pointInputReducer,
+  teacherReducer,
 });

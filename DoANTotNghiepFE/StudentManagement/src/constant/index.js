@@ -14,3 +14,7 @@ export const UploadType = {
 export const Api = {
     BASE_URL: "http://localhost:8080/"
 }
+
+export const Pattern = {
+    EMAIL: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
+}

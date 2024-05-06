@@ -4,6 +4,7 @@ import com.example.demo.domain.dto.*;
 import com.example.demo.domain.model.*;
 import com.example.demo.repo.*;
 import com.example.demo.service.StudentService;
+import com.example.demo.utils.FileUtil;
 import com.example.demo.utils.SecurityUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -247,7 +248,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student createStudent (StudentPointDTO studentPointDTO) throws Exception {
+    public Student createStudent (StudentDTO studentPointDTO) throws Exception {
       User user = SecurityUtil.getCurrentUserLogin();
       if (user == null){
         throw new Exception(HttpStatus.UNAUTHORIZED.toString());
@@ -256,12 +257,12 @@ public class StudentServiceImpl implements StudentService {
       Assert.hasText(studentPointDTO.getStudentName(), "Student name is null");
       Assert.notNull(studentPointDTO.getIdClass(), "Class is null");
 //    Assert.notNull(studentPointDTO.getIdCourse(), "Course is null");
-      Assert.hasText(studentPointDTO.getStudentImage(), "Student Image is null");
+      Assert.notNull(studentPointDTO.getStudentImage(), "Student Image is null");
       Student student = studentRepo.getStudentByStudentCode(studentPointDTO.getStudentCode());
       Assert.isNull(student, "Sinh viên đã tồn tại");
       Student studentNew = Student.builder()
           .studentCode(studentPointDTO.getStudentCode())
-          .studentImage(studentPointDTO.getStudentImage())
+          .studentImage(FileUtil.saveImage(studentPointDTO.getStudentImage()))
           .studentName(studentPointDTO.getStudentName())
           .idClass(studentPointDTO.getIdClass())
           .createDatetime(LocalDateTime.now())
@@ -271,7 +272,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student changeStudent (StudentPointDTO studentPointDTO) throws Exception {
+    public Student changeStudent (StudentDTO studentPointDTO) throws Exception {
       User user = SecurityUtil.getCurrentUserLogin();
       if (user == null){
         throw new Exception(HttpStatus.UNAUTHORIZED.toString());
@@ -285,7 +286,7 @@ public class StudentServiceImpl implements StudentService {
       Assert.notNull(student, "Student does not exits");
       student.setStudentCode(studentPointDTO.getStudentCode());
       student.setStudentName(studentPointDTO.getStudentName());
-      student.setStudentImage(studentPointDTO.getStudentImage());
+      student.setStudentImage(FileUtil.saveImage(studentPointDTO.getStudentImage()));
       student.setIdClass(studentPointDTO.getIdClass());
       student.setUpdateDatetime(LocalDateTime.now());
       student.setUpdateUser(user.getUsername());

@@ -19,7 +19,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as PointInputActions from '../../../store/actions/PointInputActions';
 import { useNavigate } from 'react-router-dom';
 import { UploadType } from '../../../constant';
-import { Loader } from '../../../components';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const InputMark = () => {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ const InputMark = () => {
     setOpenModalClassroomCode(!openModalClassroomCode);
   };
 
-  console.log(loading)
+  console.log(loading);
 
   return (
     // <Loader active={loading} >
@@ -293,6 +294,16 @@ const InputMark = () => {
               </div>
             </MDBModalBody>
           </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
+
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true} >
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
         </MDBModalDialog>
       </MDBModal>
 

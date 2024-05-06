@@ -1,7 +1,7 @@
 import React from 'react';
 import DefaultLayout from './containers/admin/layout/DefaultLayout';
 import InputMark from './containers/admin/input_mark';
-import Login from './containers/login';
+import Login from './containers/auth/login';
 import StudentDetail from './containers/admin/student_detail';
 import AccumulatedPoint from './containers/admin/accumulated_point';
 import FileInput from './containers/admin/file_input';
@@ -13,6 +13,8 @@ import { isAuthenticated } from './utils/authentication-util';
 import StudentManager from './containers/admin/student_manager';
 import StatisticsByClass from './containers/admin/statistics_by_class';
 import StudentAccumulated from './containers/admin/student_detail/accumulated';
+import ChangePassword from './containers/auth/change_password';
+import TeacherManager from './containers/admin/teacher_manager';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,10 @@ const router = createBrowserRouter([
         element: <DefaultLayout />,
         loader: isAuthenticated,
         children: [
+          {
+            path: 'teachers',
+            element: <TeacherManager />,
+          },
           {
             path: 'students',
             element: <StudentManager />,
@@ -75,6 +81,10 @@ const router = createBrowserRouter([
     path: '/login',
     element: <Login />,
     loader: isAuthenticated,
+  },
+  {
+    path: '/change-password',
+    element: <ChangePassword />,
   },
 ]);
 

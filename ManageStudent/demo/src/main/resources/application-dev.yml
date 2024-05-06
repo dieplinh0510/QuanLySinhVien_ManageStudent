@@ -30,3 +30,7 @@ spring:
 upload:
   file:
     path : D:\Learning\DoAnTotNghiep\ManageStudent
+
+mail:
+  username: "dieplinh1005.dh@gmail.com"
+  password: "gubn ytpl xcuq jcoj"

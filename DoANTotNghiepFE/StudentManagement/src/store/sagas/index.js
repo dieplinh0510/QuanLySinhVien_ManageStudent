@@ -6,6 +6,7 @@ import watchClassSaga from './ClassSagas';
 import subjectWatcherSaga from './SubjectSagas';
 import uploadWatcherSaga from './UploadSagas';
 import pointInputWatcherSaga from './PointInputSagas';
+import teacherSagas from './TeacherSagas';
 
 export default function* rootSaga() {
   yield all([
@@ -16,5 +17,6 @@ export default function* rootSaga() {
     subjectWatcherSaga(),
     uploadWatcherSaga(),
     pointInputWatcherSaga(),
+    teacherSagas(),
   ]);
 }

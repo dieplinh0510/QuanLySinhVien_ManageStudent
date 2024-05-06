@@ -30,6 +30,13 @@ public class User {
   @Column(name = "teacher_code")
   private String teacherCode;
 
+  @Column(name = "email")
+  private String email;
+  @Column(name = "is_first_login")
+  private Boolean isFirstLogin;
+  @Column(name = "is_active")
+  private Boolean isActive;
+
   @Column(name = "create_user")
   private String createUser;
   @Column(name = "create_datetime")

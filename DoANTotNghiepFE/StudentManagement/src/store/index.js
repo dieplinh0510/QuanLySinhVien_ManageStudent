@@ -8,6 +8,7 @@ import classReducer from './reducers/ClassReducers';
 import subjectReducer from './reducers/SubjectReducers';
 import uploadReducer from './reducers/UploadReducers';
 import pointInputReducer from './reducers/PointInputReducers';
+import teacherReducer from './reducers/TeacherReducers';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   subject: subjectReducer,
   upload: uploadReducer,
   pointInput: pointInputReducer,
+  teacher: teacherReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

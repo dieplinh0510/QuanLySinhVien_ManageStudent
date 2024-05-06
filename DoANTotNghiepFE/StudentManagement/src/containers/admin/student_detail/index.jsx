@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
+import { MDBModal, MDBModalDialog, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import * as StudentActions from '../../../store/actions/StudentActions';
 import Button from '../../../hook/button';
 import './style.scss';
 import StudentDetailInfo from './info';
 import Pagination from '../../../components/paging';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const StudentDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { studentDetail = null, studentMark = [], pagingForDetail = null } = useSelector((state) => state.student);
+  const { studentDetail = null, studentMark = [], pagingForDetail = null, loading=false } = useSelector((state) => state.student);
   const [searchPayload, setSearchPayload] = React.useState({
     studentId: '',
     pageIndex: 1,
@@ -79,6 +81,16 @@ const StudentDetail = () => {
           )
         }
       </div>
+
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true} >
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
+        </MDBModalDialog>
+      </MDBModal>
     </div>
   );
 };

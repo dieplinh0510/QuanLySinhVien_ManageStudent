@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import './style.scss';
-import banner from '../../assets/images/login_image.png';
-import Input from '../../hook/input';
-import Button from '../../hook/button';
+import banner from '../../../assets/images/login_image.png';
+import Input from '../../../hook/input';
+import Button from '../../../hook/button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import * as AuthActions from '../../store/actions/AuthActions';
-import { Loader } from '../../components';
+import * as AuthActions from '../../../store/actions/AuthActions';
+import { Loader } from '../../../components';
 
 const Login = () => {
   const dispatch = useDispatch();

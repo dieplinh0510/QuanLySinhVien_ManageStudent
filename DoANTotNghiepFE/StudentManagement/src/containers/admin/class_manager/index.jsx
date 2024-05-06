@@ -23,11 +23,13 @@ import Space from '../../../hook/space/space';
 import Pulldown from '../../../hook/pulldown';
 import { toast } from 'react-toastify';
 import { UploadType } from '../../../constant';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const ClassManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { subject = null, semesters = [] } = useSelector((state) => state.subject);
+  const { subject = null, semesters = [], loading=false } = useSelector((state) => state.subject);
   const { classes = [], teachers = [] } = useSelector((state) => state.class);
   const { studentDetail = [] } = useSelector((state) => state.student);
   const [subjectId, setSubjectId] = useState(null);
@@ -538,6 +540,16 @@ const ClassManager = () => {
               </div>
             </MDBModalBody>
           </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
+
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true} >
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
         </MDBModalDialog>
       </MDBModal>
 

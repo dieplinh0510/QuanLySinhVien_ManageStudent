@@ -4,7 +4,7 @@ import './style.scss';
 import Pulldown from '../../../hook/pulldown';
 import Button from '../../../hook/button';
 import {
-  MDBBtn,
+  MDBBtn, MDBFile,
   MDBModal,
   MDBModalBody,
   MDBModalContent,
@@ -24,6 +24,8 @@ import * as StudentActions from '../../../store/actions/StudentActions';
 import { toast } from 'react-toastify';
 import Pagination from '../../../components/paging';
 import { UploadType } from '../../../constant';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const StudentManager = () => {
   const dispatch = useDispatch();
@@ -48,7 +50,7 @@ const StudentManager = () => {
   const [payloadCreate, setPayloadCreate] = React.useState({
     studentName: '',
     studentCode: '',
-    studentImage: '',
+    studentImage: null,
     idCourse: 0,
     idClass: 0,
   });
@@ -111,6 +113,13 @@ const StudentManager = () => {
       toast.info('Vui lòng nhập thông tin sinh viên');
       return;
     }
+
+    console.log("Create ", {
+      ...payloadCreate,
+      idClass: payloadCreate.idClass.value,
+      idCourse: payloadCreate.idCourse.value,
+    })
+
     dispatch(StudentActions.createStudentRequest({
       ...payloadCreate,
       idClass: payloadCreate.idClass.value,
@@ -122,7 +131,7 @@ const StudentManager = () => {
     setPayloadCreate({
       studentName: '',
       studentCode: '',
-      studentImage: '',
+      studentImage: null,
       idCourse: 0,
       idClass: 0,
     });
@@ -402,16 +411,17 @@ const StudentManager = () => {
 
                 <Space height={20} />
 
-                <Input value={payloadCreate.studentImage}
-                       onChange={(value) => setPayloadCreate({ ...payloadCreate, studentImage: value })}
-                       label="Hình ảnh"
-                       isRequired={false}
-                       placeHolder="Chọn hình ảnh"
-                       errorMessage=""
-                       error={false}
-                       isDisable={false}
-                       customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
-                />
+                {/*<Input value={payloadCreate.studentImage}*/}
+                {/*       onChange={(value) => setPayloadCreate({ ...payloadCreate, studentImage: value })}*/}
+                {/*       label="Hình ảnh"*/}
+                {/*       isRequired={false}*/}
+                {/*       placeHolder="Chọn hình ảnh"*/}
+                {/*       errorMessage=""*/}
+                {/*       error={false}*/}
+                {/*       isDisable={false}*/}
+                {/*       customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}*/}
+                {/*/>*/}
+                <MDBFile label='Hình ảnh' id='customFile' onChange={(e) => setPayloadCreate({ ...payloadCreate, studentImage: e.target.files[0] })} />
 
                 <Space height={20} />
 
@@ -558,6 +568,16 @@ const StudentManager = () => {
                 </div>
             </MDBModalBody>
           </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
+
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true} >
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
         </MDBModalDialog>
       </MDBModal>
     </div>

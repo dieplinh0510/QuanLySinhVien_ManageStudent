@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.dto.AuthenticationResponse;
+import com.example.demo.domain.dto.UserDTO;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,9 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.demo.common.Const.RETURN_CODE_ERROR;
 
@@ -37,6 +36,37 @@ public class UserController extends CommonController{
   ResponseEntity<?> getAllTeacher(){
     try {
       return toSuccessResult(userService.getAllTeacher());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @GetMapping("/search")
+  ResponseEntity<?> search() {
+    try {
+      return toSuccessResult(userService.search());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+  @Operation(summary = "API tạo mới giáo viên")
+  @PostMapping
+  ResponseEntity<?> createUser(@RequestBody UserDTO dto) {
+    try {
+      return toSuccessResult(userService.createUser(dto));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @Operation(summary = "API cập nhật thông tin giáo viên")
+  @PutMapping
+  ResponseEntity<?> updateUser(@RequestBody UserDTO dto) {
+    try {
+      return toSuccessResult(userService.updateUser(dto));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

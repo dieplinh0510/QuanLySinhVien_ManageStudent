@@ -31,3 +31,19 @@ export const logoutFailure = (error) => ({
   type: AuthTypes.LOGOUT_FAILURE,
   payload: error,
 });
+
+// Change password
+export const changePasswordRequest = (payload) => ({
+  type: AuthTypes.CHANGE_PASSWORD_REQUEST,
+  payload: payload,
+});
+
+export const changePasswordSuccess = (data) => ({
+  type: AuthTypes.CHANGE_PASSWORD_SUCCESS,
+  payload: { data },
+});
+
+export const changePasswordFailure = (error) => ({
+  type: AuthTypes.CHANGE_PASSWORD_FAILURE,
+  payload: error,
+});

@@ -1,6 +1,7 @@
 package com.example.demo.domain.dto;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Setter
 @Getter

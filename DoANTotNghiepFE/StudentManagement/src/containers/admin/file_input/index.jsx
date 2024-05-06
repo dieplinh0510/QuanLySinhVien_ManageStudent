@@ -6,11 +6,13 @@ import { UploadType } from '../../../constant';
 import * as UploadActions from '../../../store/actions/UploadActions';
 import Title from '../../../hook/title/Title';
 import * as XLSX from 'xlsx';
-import { MDBFile } from 'mdb-react-ui-kit';
+import { MDBFile, MDBModal, MDBModalDialog } from 'mdb-react-ui-kit';
 import Pulldown from '../../../hook/pulldown';
 import Button from '../../../hook/button';
 import Space from '../../../hook/space/space';
 import { toast } from 'react-toastify';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const FileInput = () => {
   const dispatch = useDispatch();
@@ -176,6 +178,15 @@ const FileInput = () => {
           />
         </div>
       </div>
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true} >
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
+        </MDBModalDialog>
+      </MDBModal>
 
     </div>
   );

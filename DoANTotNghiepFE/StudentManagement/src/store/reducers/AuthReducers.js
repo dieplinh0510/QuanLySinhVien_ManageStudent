@@ -6,7 +6,7 @@ const initialState = {
   loading: false,
   data: {},
   error: null,
-  navigatePath: null
+  navigatePath: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -18,12 +18,18 @@ const authReducer = (state = initialState, action) => {
       // Save info log
       let user = action.payload.data;
       if (user === null) {
-        return { ...state, loading: false, navigatePath: null, data: {}, error: "Username or password is incorrect" };
+        return { ...state, loading: false, navigatePath: null, data: {}, error: '' };
       }
+
       storageService.set(AuthKeys.ACCESS_TOKEN, user?.jwt);
-      storageService.set(AuthKeys.LOGGED_IN, true);
       storageService.setObject(AuthKeys.CURRENT_USER, user?.information);
-      return { ...state, loading: false, data: user, navigatePath: "/admin/students" };
+      if (user?.information?.isFirstLogin === null || user?.information?.isFirstLogin === true) {
+        return { ...state, loading: false, data: user, navigatePath: '/change-password' };
+      }
+
+      storageService.set(AuthKeys.LOGGED_IN, true);
+
+      return { ...state, loading: false, data: user, navigatePath: '/admin/teachers' };
     case AuthTypes.LOGIN_FAILURE:
       return { ...state, loading: false, error: action.payload };
 
@@ -38,6 +44,23 @@ const authReducer = (state = initialState, action) => {
 
       return { ...state, loading: false, data: {} };
     case AuthTypes.LOGOUT_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+
+    // change password
+    case AuthTypes.CHANGE_PASSWORD_REQUEST:
+      return { ...state, loading: true };
+    case AuthTypes.CHANGE_PASSWORD_SUCCESS:
+      let userUpdate = action.payload.data;
+      if (userUpdate === null) {
+        return { ...state, loading: false, navigatePath: '/change-password', data: {}, error: 'Thay đổi mật khẩu thất bại!' };
+      }
+
+      storageService.set(AuthKeys.ACCESS_TOKEN, userUpdate?.jwt);
+      storageService.setObject(AuthKeys.CURRENT_USER, userUpdate?.information);
+      storageService.set(AuthKeys.LOGGED_IN, true);
+
+      return { ...state, loading: false, data: userUpdate, navigatePath: '/admin/students' };
+    case AuthTypes.CHANGE_PASSWORD_FAILURE:
       return { ...state, loading: false, error: action.payload };
 
     default:

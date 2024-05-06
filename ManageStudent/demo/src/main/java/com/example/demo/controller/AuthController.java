@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.dto.AuthenticationPayload;
 import com.example.demo.domain.dto.AuthenticationResponse;
+import com.example.demo.domain.dto.ChangePasswordPayload;
 import com.example.demo.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,13 +49,13 @@ public class AuthController extends CommonController{
     return toSuccessResult(response);
   }
 
-//  @PostMapping("/auth/change-password")
-//  public ResponseEntity<?> changePassword(@RequestBody ChangePasswordPayload payload) {
-//    Boolean res = authService.changePassword(payload);
-//
-//    if (!res) {
-//      return VsResponseUtil.error(HttpStatus.BAD_REQUEST, "Invalid old password");
-//    }
-//    return VsResponseUtil.ok(true);
-//  }
+  @PostMapping("/change-password")
+  public ResponseEntity<?> changePassword(@RequestBody ChangePasswordPayload payload) {
+    AuthenticationResponse response = authService.changePassword(payload);
+
+    if (ObjectUtils.isEmpty(response)) {
+      return toExceptionResult("Thay đổi mật khẩu thất bại", RETURN_CODE_ERROR);
+    }
+    return toSuccessResult(response);
+  }
 }

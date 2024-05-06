@@ -18,11 +18,13 @@ import * as SubjectActions from '../../../store/actions/SubjectActions';
 import Space from '../../../hook/space/space';
 import Pulldown from '../../../hook/pulldown';
 import { toast } from 'react-toastify';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const SubjectManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { subjects = [], semesters = [] } = useSelector((state) => state.subject);
+  const { subjects = [], semesters = [], loading=false } = useSelector((state) => state.subject);
   const [searchPayload, setSearchPayload] = React.useState('');
   const [showCreate, setShowCreate] = React.useState(false);
   const [payloadCreate, setPayloadCreate] = React.useState({
@@ -233,7 +235,7 @@ const SubjectManager = () => {
 
                 <Input value={payloadCreate.subjectName}
                        onChange={(value) => setPayloadCreate({ ...payloadCreate, subjectName: value })}
-                       label="Họ tên môn học"
+                       label="Tên môn học"
                        isRequired={true}
                        placeHolder="Nhập họ tên"
                        errorMessage="Tên môn học không được để trống"
@@ -403,6 +405,15 @@ const SubjectManager = () => {
         </MDBModalDialog>
       </MDBModal>
 
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true} >
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
+        </MDBModalDialog>
+      </MDBModal>
 
     </div>
   );

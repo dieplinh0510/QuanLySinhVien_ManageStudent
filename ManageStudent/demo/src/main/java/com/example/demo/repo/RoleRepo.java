@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface RoleRepo extends JpaRepository<Role, Long> {
   @Query(value = "select * from roles r where id = :roleId", nativeQuery = true)
   Role getRoleByRoleId(Long roleId);
+
+  Role findByNameRole(String nameRole);
 }

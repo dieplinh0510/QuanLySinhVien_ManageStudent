@@ -15,11 +15,26 @@ export const search = async (payload) => {
 };
 
 export const createStudent = async (payload) => {
-  let response = await HttpService.post('/students', {
-    body: payload,
-  });
+  const formData = new FormData();
 
+  for (let key in payload) {
+    formData.set(key, payload[key]);
+  }
+
+  let response = await HttpService.post('/students', {
+    body: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return HttpService.checkResponseCommon(response, [], 'Create student success');
+
+
+  // let response = await HttpService.post('/students', {
+  //   body: payload,
+  // });
+  //
+  // return HttpService.checkResponseCommon(response, [], 'Create student success');
 };
 
 export const editStudent = async (payload) => {
@@ -67,5 +82,5 @@ export const getStudentDetailByStudentCode = async (payload) => {
   let response = await HttpService.get(`/students`, {
     params: payload,
   });
-  return HttpService.checkResponseCommon(response, {studentName: "", courseName: '', classroomName: ''});
+  return HttpService.checkResponseCommon(response, { studentName: '', courseName: '', classroomName: '' });
 };

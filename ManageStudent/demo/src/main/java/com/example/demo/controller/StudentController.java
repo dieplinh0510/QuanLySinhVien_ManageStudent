@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.dto.AuthenticationResponse;
+import com.example.demo.domain.dto.StudentDTO;
 import com.example.demo.domain.dto.StudentPointDTO;
 import com.example.demo.domain.dto.StudentPointInClassroomDTO;
 import com.example.demo.service.StudentService;
@@ -174,9 +175,9 @@ public class StudentController extends CommonController {
           content = @Content)
   })
   @PostMapping()
-  public ResponseEntity<?> createStudent(@RequestBody StudentPointDTO studentPointDTO) {
+  public ResponseEntity<?> createStudent(@ModelAttribute StudentDTO studentDTO) {
     try {
-      return toSuccessResult(studentService.createStudent(studentPointDTO));
+      return toSuccessResult(studentService.createStudent(studentDTO));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
@@ -192,9 +193,9 @@ public class StudentController extends CommonController {
           content = @Content)
   })
   @PutMapping()
-  public ResponseEntity<?> changeStudent(@RequestBody StudentPointDTO studentPointDTO) {
+  public ResponseEntity<?> changeStudent(@ModelAttribute StudentDTO studentDTO) {
     try {
-      return toSuccessResult(studentService.changeStudent(studentPointDTO));
+      return toSuccessResult(studentService.changeStudent(studentDTO));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
