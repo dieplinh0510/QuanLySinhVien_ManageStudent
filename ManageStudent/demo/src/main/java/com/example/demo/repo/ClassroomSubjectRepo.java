@@ -14,7 +14,7 @@ public interface ClassroomSubjectRepo extends JpaRepository<ClassroomSubject, Lo
   List<ClassroomSubject> getByIdSubject(Long idSubject);
 
   @Query(value = "select * from classroom_in_subjects cis where cis.id_subject = :subjectId and cis.status = 0 limit 1", nativeQuery = true)
-  ClassroomSubject getByIdAndStatus(Long classroomId);
+  ClassroomSubject getByIdAndStatus(Long subjectId);
 
   @Query(value = "select * from classroom_in_subjects where classroom_code = :classroomCode", nativeQuery = true)
   ClassroomSubject getClassroomSubjectByClassroomCode(String classroomCode);

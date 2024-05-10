@@ -37,9 +37,11 @@ public class UserController extends CommonController{
   }
 
   @GetMapping("/search - admin")
-  ResponseEntity<?> search() {
+  ResponseEntity<?> search(@RequestParam(name = "teacherName") String teacherName,
+                           @RequestParam(value = "pageIndex") Integer pageIndex,
+                           @RequestParam(value = "pageSize") Integer pageSize) {
     try {
-      return toSuccessResult(userService.search());
+      return toSuccessResult(userService.search(teacherName, pageIndex, pageSize));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

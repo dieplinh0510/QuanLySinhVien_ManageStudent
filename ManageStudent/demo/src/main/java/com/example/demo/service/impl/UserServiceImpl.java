@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.common.Const;
+import com.example.demo.domain.dto.DetailStudentDTO;
 import com.example.demo.domain.dto.StudentDTO;
 import com.example.demo.domain.dto.TeacherDTO;
 import com.example.demo.domain.dto.UserDTO;
@@ -13,6 +14,10 @@ import com.example.demo.service.MailService;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.FileUtil;
 import com.example.demo.utils.SecurityUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -44,11 +49,17 @@ public class UserServiceImpl implements UserService {
     return teacherDTOList;
   }
 
-
   @Override
-  public List<User> search() {
-    return userRepo.findAll();
+  public Page<User> search(String teacherName, Integer pageIndex, Integer pageSize) {
+    List<User> users = userRepo.getUserByName(teacherName);
+    Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
+    int start = (int) pageRequest.getOffset();
+    int end = Math.min(start + pageRequest.getPageSize(), users.size());
+    List<User> pageContent = users.subList(start, end);
+
+    return new PageImpl<>(pageContent, pageRequest, users.size());
   }
+
 
   @Override
   public User createUser(UserDTO dto) {
