@@ -228,9 +228,11 @@ public class StudentController extends CommonController {
 
   @Operation(summary = "API man dang ky lop hoc - student")
   @GetMapping("/view-subject-class/register")
-  public ResponseEntity<?> viewSubjectClassRegister(@RequestParam (name = "subjectCode") String subjectCode){
+  public ResponseEntity<?> viewSubjectClassRegister(@RequestParam (name = "subjectCode") String subjectCode,
+                                                    @RequestParam(value = "pageIndex") Integer pageIndex,
+                                                    @RequestParam(value = "pageSize") Integer pageSize){
     try {
-      return toSuccessResult(studentService.viewSubjectClassRegister(subjectCode));
+      return toSuccessResult(studentService.viewSubjectClassRegister(subjectCode, pageIndex, pageSize));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
@@ -238,9 +240,10 @@ public class StudentController extends CommonController {
   }
 
   @GetMapping("/view-subject/register")
-  public ResponseEntity<?> viewSubjectRegister(){
+  public ResponseEntity<?> viewSubjectRegister(@RequestParam(value = "pageIndex") Integer pageIndex,
+                                               @RequestParam(value = "pageSize") Integer pageSize){
     try {
-      return toSuccessResult(studentService.viewSubjectRegister());
+      return toSuccessResult(studentService.viewSubjectRegister(pageIndex, pageSize));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

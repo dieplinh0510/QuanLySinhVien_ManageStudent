@@ -445,7 +445,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
   @Override
-  public List<ClassroomSubjectDTO> viewSubjectClassRegister(String subjectCode) {
+  public Page<ClassroomSubjectDTO> viewSubjectClassRegister(String subjectCode, Integer pageIndex, Integer pageSize) {
     List<ClassroomSubjectDTO> listClass = new ArrayList<>();
     Subject subject = subjectRepo.getSubjectBySubjectCode(subjectCode);
     List<ClassroomSubject> classroomSubjects = classroomSubjectRepo.getByIdSubject(subject.getId());
@@ -460,15 +460,21 @@ public class StudentServiceImpl implements StudentService {
           .quantityStudent(item.getQuantityStudent())
           .quantityStudentNow(listStudent!=null ? Long.parseLong(listStudent.size()+"") : 0)
           .teacher(user!=null ? user.getName() : null)
+          .status(item.getStatus())
           .build();
       listClass.add(classroom);
     }
 
-    return listClass;
+    Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
+    int start = (int) pageRequest.getOffset();
+    int end = Math.min(start + pageRequest.getPageSize(), listClass.size());
+    List<ClassroomSubjectDTO> pageContent = listClass.subList(start, end);
+
+    return new PageImpl<>(pageContent, pageRequest, listClass.size());
   }
 
   @Override
-  public List<SubjectDTO> viewSubjectRegister() {
+  public Page<SubjectDTO> viewSubjectRegister(Integer pageIndex, Integer pageSize) {
     List<SubjectDTO> listClass = new ArrayList<>();
     List<Subject> subjects = subjectRepo.findAll();
     for (Subject item: subjects) {
@@ -482,6 +488,11 @@ public class StudentServiceImpl implements StudentService {
           .build();
       listClass.add(subject);
     }
-    return listClass;
+    Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
+    int start = (int) pageRequest.getOffset();
+    int end = Math.min(start + pageRequest.getPageSize(), listClass.size());
+    List<SubjectDTO> pageContent = listClass.subList(start, end);
+
+    return new PageImpl<>(pageContent, pageRequest, listClass.size());
   }
 }

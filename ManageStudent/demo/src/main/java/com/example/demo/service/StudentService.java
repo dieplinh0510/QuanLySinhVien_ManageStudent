@@ -23,8 +23,8 @@ public interface StudentService {
   void deleteStudentInClass(Long studentClassId);
   LinkedHashMap<String, String> getColumnForInputPoint();
   LinkedHashMap<String, String> getColumnForInput();
-  List<ClassroomSubjectDTO> viewSubjectClassRegister(String subjectCode);
-  List<SubjectDTO> viewSubjectRegister();
+  Page<ClassroomSubjectDTO> viewSubjectClassRegister(String subjectCode, Integer pageIndex, Integer pageSize);
+  Page<SubjectDTO> viewSubjectRegister(Integer pageIndex, Integer pageSize) throws Exception;
 
 
 }
