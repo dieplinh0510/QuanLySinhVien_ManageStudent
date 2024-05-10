@@ -24,13 +24,6 @@ public class SemesterController extends CommonController{
   @Autowired
   private SemesterService semesterService;
   @Operation(summary = "API lấy all semester")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
   @GetMapping()
   public ResponseEntity<?> getAllSemester() {
     try {

@@ -10,11 +10,14 @@ import java.util.List;
 
 @Repository
 public interface StudentInSemesterRepo extends JpaRepository<StudentInSemester, Long> {
-  @Query(value = "select sum(accumulated_points) from student_semester where student_id = :studentId", nativeQuery = true)
-  Double getAccumulatedPointsByStudentId(Long studentId);
+  @Query(value = "select sum(accumulated_points) from student_semester where user_id = :userId", nativeQuery = true)
+  Double getAccumulatedPointsByStudentId(Long userId);
 
-  @Query(value = "select count(accumulated_points) from student_semester where student_id = :studentId", nativeQuery = true)
-  Integer countAccumulatedPointsByStudentId(Long studentId);
+  @Query(value = "select * from student_semester where user_id = :userId and semester_id = :semesterId", nativeQuery = true)
+  StudentInSemester getStudentSemesterByUserIdAnhSemesterId(Long userId, Long semesterId);
+
+  @Query(value = "select count(accumulated_points) from student_semester where user_id = :userId", nativeQuery = true)
+  Integer countAccumulatedPointsByStudentId(Long userId);
 
   @Query(value = "with datas as (\n" +
       "\tselect\n" +
@@ -89,7 +92,7 @@ public interface StudentInSemesterRepo extends JpaRepository<StudentInSemester, 
   StudentInSemester findBySemesterId();
 
   @Modifying
-  @Query(value = "delete from student_semester where semester_id = :idSemester and student_id = :idStudent", nativeQuery = true)
+  @Query(value = "delete from student_semester where semester_id = :idSemester and user_id = :idStudent", nativeQuery = true)
   void deleteStudentIdAndSemesterId(Long idSemester, Long idStudent);
 
 }

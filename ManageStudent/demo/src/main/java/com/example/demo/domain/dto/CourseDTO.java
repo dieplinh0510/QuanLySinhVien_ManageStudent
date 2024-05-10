@@ -5,24 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
+
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-
+public class CourseDTO {
+  private String nameCourse;
   private Long id;
-
-  private String username;
-
-  private String password;
-
-  private String teacherName;
-
-  private Long teacherCode;
-
-  private String email;
-
-  private Boolean isActive = true;
-
 }

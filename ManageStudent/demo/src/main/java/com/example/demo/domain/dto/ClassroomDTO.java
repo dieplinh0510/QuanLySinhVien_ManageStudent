@@ -12,5 +12,6 @@ public class ClassroomDTO {
   private String subjectName;
   private Long quantityStudent;
   private String teacherName;
+  private Integer status;
 
 }

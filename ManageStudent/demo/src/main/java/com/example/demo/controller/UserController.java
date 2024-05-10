@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.dto.AuthenticationResponse;
+import com.example.demo.domain.dto.StudentDTO;
 import com.example.demo.domain.dto.UserDTO;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,14 +25,7 @@ public class UserController extends CommonController{
     this.userService = userService;
   }
 
-  @Operation(summary = "API lấy tất cả thng tin giáo viên")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
+  @Operation(summary = "API lấy tất cả thng tin giáo viên - admin")
   @GetMapping()
   ResponseEntity<?> getAllTeacher(){
     try {
@@ -42,7 +36,7 @@ public class UserController extends CommonController{
     }
   }
 
-  @GetMapping("/search")
+  @GetMapping("/search - admin")
   ResponseEntity<?> search() {
     try {
       return toSuccessResult(userService.search());
@@ -51,7 +45,7 @@ public class UserController extends CommonController{
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
     }
   }
-  @Operation(summary = "API tạo mới giáo viên")
+  @Operation(summary = "API tạo mới giáo viên - admin")
   @PostMapping
   ResponseEntity<?> createUser(@RequestBody UserDTO dto) {
     try {
@@ -62,7 +56,7 @@ public class UserController extends CommonController{
     }
   }
 
-  @Operation(summary = "API cập nhật thông tin giáo viên")
+  @Operation(summary = "API cập nhật thông tin giáo viên -admin")
   @PutMapping
   ResponseEntity<?> updateUser(@RequestBody UserDTO dto) {
     try {
@@ -72,4 +66,17 @@ public class UserController extends CommonController{
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
     }
   }
+
+  @Operation(summary = "API sinh vien dang ky tk - student")
+  @PostMapping("/create-student")
+  ResponseEntity<?> createStudent(@ModelAttribute StudentDTO studentDTO) {
+    try {
+      return toSuccessResult(userService.registerStudent(studentDTO));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+
 }

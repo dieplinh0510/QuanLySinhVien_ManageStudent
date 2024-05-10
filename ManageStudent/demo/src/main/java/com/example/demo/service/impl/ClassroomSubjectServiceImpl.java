@@ -29,20 +29,34 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
   }
 
   @Override
-  public List<ClassroomSubjectDTO> getClassroomSubject() {
-    List<ClassroomSubjectDTO> classroomSubjectDTOS = classroomSubjectRepoCustom.getAllClassroomSubject();
+  public List<ClassroomSubjectDTO> getClassroomSubject() throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
+    List<ClassroomSubjectDTO> classroomSubjectDTOS = classroomSubjectRepoCustom.getAllClassroomSubject(user.getId());
     return classroomSubjectDTOS;
   }
 
   @Override
+  public List<ClassroomSubjectDTO> getClassroomSubjectByUser() throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
+    List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(null, null, user.getId());
+    return list;
+  }
+
+  @Override
   public List<ClassroomSubjectDTO> getAllClassroomSubject(Long subjectId) {
-    List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, null);
+    List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, null, null);
     return list;
   }
 
   @Override
   public ClassroomSubjectDTO getClassroomByClassroomCode(Long subjectId, String classroomCode) throws Exception {
-    List<ClassroomSubjectDTO> listClassroom = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, classroomCode);
+    List<ClassroomSubjectDTO> listClassroom = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, classroomCode, null);
     if (listClassroom.size() != 0){
       ClassroomSubjectDTO classroom = listClassroom.get(0);
       if (classroom == null){
@@ -57,6 +71,13 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
 
   @Override
   public ClassroomSubject createClassroomSubject(ClassroomSubjectDTO classroomSubjectDTO, Long subjectId) throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
+    if (user.getIdRole() != 1){
+      throw new Exception("Tài khoản không có quyền sử dụng chức năng này");
+    }
     Assert.notNull(classroomSubjectDTO.getClassroomCode(), "Mã lớp chống");
     ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByClassroomCode(classroomSubjectDTO.getClassroomCode());
     if (classroomSubject == null){
@@ -66,7 +87,7 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
           .idUser(classroomSubjectDTO.getIdUser())
           .quantityStudent(classroomSubjectDTO.getQuantityStudent())
           .createDatetime(LocalDateTime.now())
-          .type(1)
+          .status(-1)
           .build();
       classroomSubjectRepo.save(classroomSubject1);
       return  classroomSubject1;
@@ -77,30 +98,28 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
 
   @Override
   public ClassroomSubject changeInfoClassroomSubject(ClassroomSubjectDTO classroomSubjectDTO, Long classroomId) throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
     ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectById(classroomId);
+    if ( classroomSubject != null && classroomSubject.getIdUser() == user.getId()){
+      classroomSubject.setStatus(2);
+      classroomSubjectRepo.save(classroomSubject);
+    } else if (user.getIdRole() != 1){
+      throw new Exception("Tài khoản không có quyền sử dụng chức năng này");
+    }
+
     if (classroomSubject!= null){
+      if (classroomSubject.getStatus() != -1){
+        throw new Exception("Không thể thay đổi thông tin lớp học");
+      }
       Assert.notNull(classroomSubjectDTO.getClassroomCode(), "Mã lớp chống");
-      if (classroomSubject.getType() == 3){
-        if (classroomSubjectDTO.getQuantityStudent() >= classroomSubject.getQuantityStudent()){
-          classroomSubject.setQuantityStudent(classroomSubjectDTO.getQuantityStudent());
-        } else {
-          throw new Exception("Số lượng sinh viên không hợp lệ");
-        }
-      }
-      if (classroomSubject.getType() == 2){
-        Long quantityStudent = studentInClassroomSubjectRepo.getQuantityStudentInClass(classroomId);
-        if (classroomSubjectDTO.getQuantityStudent() >= quantityStudent){
-          classroomSubject.setQuantityStudent(classroomSubjectDTO.getQuantityStudent());
-        } else {
-          throw new Exception("Số lượng sinh viên không hợp lệ");
-        }
-      }
-      if (classroomSubject.getType() == 1){
-        classroomSubject.setQuantityStudent(classroomSubjectDTO.getQuantityStudent());
-      }
+      classroomSubject.setQuantityStudent(classroomSubjectDTO.getQuantityStudent());
       classroomSubject.setClassroomCode(classroomSubjectDTO.getClassroomCode());
       classroomSubject.setIdUser(classroomSubjectDTO.getIdUser());
       classroomSubject.setUpdateDatetime(LocalDateTime.now());
+      classroomSubject.setStatus(classroomSubjectDTO.getStatus());
       classroomSubjectRepo.save(classroomSubject);
       return classroomSubject;
     } else {
@@ -109,22 +128,27 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
   }
 
   @Override
-  public StudentInClassroomSubject addStudentInClassroom(Long classroomId, Long subjectId, Long studentId) throws Exception {
+  public StudentInClassroomSubject addStudentInClassroom(Long classroomId, Long subjectId, Long userId) throws Exception {
     User user = SecurityUtil.getCurrentUserLogin();
     if (user == null){
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
     }
-    Long result = studentInClassroomSubjectRepo.getStudentInStudentClass(studentId, subjectId);
+    if (user.getIdRole() != 1){
+      throw new Exception("Tài khoản không có quyền sử dụng chức năng này");
+    }
+    ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByIdAndStatus(classroomId);
+    if (classroomSubject != null){
+      throw new Exception("Lớp học đã bắt đầu, không thể thêm sinh viên");
+    }
+    Long result = studentInClassroomSubjectRepo.getStudentInStudentClass(userId, subjectId);
     if (result == null){
         Long quantityStudentInClass = studentInClassroomSubjectRepo.getQuantityStudent(classroomId);
-        ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectById(classroomId);
       if (quantityStudentInClass <= classroomSubject.getQuantityStudent()){
         StudentInClassroomSubject studentInClassroomSubject = StudentInClassroomSubject.builder()
                                                               .idClassroomInSubject(classroomId)
-                                                              .idStudent(studentId)
+                                                              .idUser(userId)
                                                               .createUser(user.getUsername())
                                                               .createDatetime(LocalDateTime.now())
-                                                              .status(1)
                                                               .createDatetime(LocalDateTime.now())
                                                               .build();
         studentInClassroomSubjectRepo.save(studentInClassroomSubject);

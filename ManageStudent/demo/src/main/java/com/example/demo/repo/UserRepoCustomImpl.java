@@ -17,7 +17,7 @@ public class UserRepoCustomImpl implements UserRepoCustom {
   public List<TeacherDTO> getAllTeacherInfo() {
     List<TeacherDTO> list = new ArrayList<>();
     StringBuilder strQuery = new StringBuilder();
-    strQuery.append("select u.id , u.teacher_name , u.teacher_code \n" +
+    strQuery.append("select u.id , u.name , u.code \n" +
         "from users u where u.id_role  = 2");
     List<Object[]> result = entityManager.createNativeQuery(strQuery.toString()).getResultList();
     if (result != null) {

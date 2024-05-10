@@ -32,14 +32,7 @@ public class AuthController extends CommonController{
     this.authService = authService;
   }
 
-  @Operation(summary = "API login")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
+  @Operation(summary = "API login - admin - teacher")
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody @Valid AuthenticationPayload payload) {
     AuthenticationResponse response = authService.login(payload);
@@ -49,6 +42,7 @@ public class AuthController extends CommonController{
     return toSuccessResult(response);
   }
 
+  @Operation(summary = "API login -  teacher - student")
   @PostMapping("/change-password")
   public ResponseEntity<?> changePassword(@RequestBody ChangePasswordPayload payload) {
     AuthenticationResponse response = authService.changePassword(payload);

@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class StudentPointDTO {
   private String courseName;
-  private String studentCode;
+  private Long studentCode;
   private String studentName;
   private String classroomName;
   private Double accumulatedPoints;

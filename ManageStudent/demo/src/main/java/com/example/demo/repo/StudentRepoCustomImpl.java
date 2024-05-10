@@ -17,14 +17,14 @@ public class StudentRepoCustomImpl implements StudentRepoCustom{
   public List<StudentPointDTO> getStudent(String studentCode, Long courseId, Long classroomId) {
     List<StudentPointDTO> listResult = new ArrayList<>();
     StringBuilder strQuery = new StringBuilder();
-    strQuery.append("select s.id, s.student_code, s.student_name, c.name_class , c2.name_course  \n" +
-        "from  students s  join classroomes c on s.id_class = c.id \n" +
+    strQuery.append("select u.id, u.code, u.name, c.name_class , c2.name_course  \n" +
+        "from  users u  join classroomes c on u.id_class = c.id \n" +
         "join courses c2 on c.id_course = c2.id ");
     if (studentCode != null || courseId!=null || classroomId!=null){
       strQuery.append(" where ");
     }
     if (studentCode != null){
-      strQuery.append(" s.student_code like CONCAT('%'," );
+      strQuery.append(" u.code like CONCAT('%'," );
       strQuery.append(":studentCode,");
       strQuery.append("'%')");
     }
@@ -58,7 +58,7 @@ public class StudentRepoCustomImpl implements StudentRepoCustom{
       for (Object[] item: result) {
         StudentPointDTO student = new StudentPointDTO();
         student.setStudentId(Long.parseLong(item[0].toString()));
-        student.setStudentCode(item[1].toString());
+        student.setStudentCode(Long.parseLong(item[1].toString()));
         student.setStudentName(item[2].toString());
         student.setClassroomName(item[3].toString());
         student.setCourseName(item[4].toString());
@@ -69,20 +69,20 @@ public class StudentRepoCustomImpl implements StudentRepoCustom{
   }
 
   @Override
-  public StudentPointDTO getStudentByStudentId(Long studentId) {
+  public StudentPointDTO getStudentByStudentId(Long userId) {
     List<StudentPointDTO> studentPointDTOList = new ArrayList<>();
     StringBuilder strQuery = new StringBuilder();
-    strQuery.append("select s.id, s.student_code, s.student_name, c.name_class , c2.name_course   , s.student_image \n" +
-        "from  students s  join classroomes c on s.id_class = c.id \n" +
-        "join courses c2 on c.id_course = c2.id where s.id = :studentId");
+    strQuery.append("select u.id, u.code, u.name, c.name_class , c2.name_course   , u.image \n" +
+        "from  users u   join classroomes c on u.id_class = c.id \n" +
+        "join courses c2 on c.id_course = c2.id where u.id = :userId and u.id_role = 3");
     Query query = entityManager.createNativeQuery(strQuery.toString());
-    query.setParameter("studentId", studentId);
+    query.setParameter("userId", userId);
     List<Object[]> result = query.getResultList();
     if (result!= null){
       for (Object[] item: result) {
         StudentPointDTO student = new StudentPointDTO();
         student.setStudentId(Long.parseLong(item[0].toString()));
-        student.setStudentCode(item[1].toString());
+        student.setStudentCode(Long.parseLong(item[1].toString()));
         student.setStudentName(item[2].toString());
         student.setClassroomName(item[3].toString());
         student.setCourseName(item[4].toString());

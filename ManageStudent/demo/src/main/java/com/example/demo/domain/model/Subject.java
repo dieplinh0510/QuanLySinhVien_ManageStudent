@@ -17,17 +17,20 @@ public class Subject {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;
-
   @Column(name = "id_semester")
   private Long idSemester;
   @Column(name = "subject_name")
   private String subjectName;
   @Column(name = "subject_code")
   private String subjectCode;
-
   @Column(name = "number_of_credits")
   private Integer numberOfCredits;
-
+  @Column(name = "coefficient_regular")
+  private Integer coefficientRegular;
+  @Column(name = "coefficient_mid")
+  private Integer coefficientMid;
+  @Column(name = "coefficient_test")
+  private Integer coefficientTest;
   @Column(name = "create_user")
   private String createUser;
   @Column(name = "create_datetime")

@@ -18,8 +18,8 @@ public class StudentInSemester {
   @Column(name = "id", nullable = false)
   private Long id;
 
-  @Column(name = "student_id")
-  private Long studentId;
+  @Column(name = "user_id")
+  private Long userId;
   @Column(name = "semester_id")
   private Long semesterId;
   @Column(name = "accumulated_points")

@@ -18,4 +18,6 @@ public class DetailStudentDTO {
   private Double accumulated_point;
   private Double point;
   private Double mediumPoint;
+  private Long semesterId;
+  private Integer numberOfCredits;
 }

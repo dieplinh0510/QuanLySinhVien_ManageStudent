@@ -24,14 +24,7 @@ public class ClassroomSubjectController extends CommonController{
     this.classroomSubjectService = classroomSubjectService;
   }
 
-  @Operation(summary = "API lấy tất cả lớp học màn nhập điểm")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
+  @Operation(summary = "API lấy tất cả lớp học màn nhập điểm theo user - teacher")
   @GetMapping()
   ResponseEntity<?> getClassroomSubject(){
     try {
@@ -42,14 +35,18 @@ public class ClassroomSubjectController extends CommonController{
     }
   }
 
-  @Operation(summary = "API lấy classroom trong môn học")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
+  @Operation(summary = "API lấy tất cả lớp học màn quan ly lop hoc theo user - teacher")
+  @GetMapping("/user")
+  ResponseEntity<?> getClassroomSubjectByUser(){
+    try {
+      return toSuccessResult(classroomSubjectService.getClassroomSubjectByUser());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @Operation(summary = "API lấy classroom trong môn học - admin")
   @GetMapping("/detail")
   ResponseEntity<?> getAllClassroomSubject(@RequestParam(name = "subjectId") Long subjectId){
     try {
@@ -60,14 +57,7 @@ public class ClassroomSubjectController extends CommonController{
     }
   }
 
-  @Operation(summary = "API search classroom trong môn học")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
+  @Operation(summary = "API search classroom trong môn học - admin")
   @GetMapping("/detail/{subjectId}/{classroomCode}")
   ResponseEntity<?> getClassroomByClassroomCode(
       @PathVariable Long subjectId,
@@ -80,14 +70,7 @@ public class ClassroomSubjectController extends CommonController{
     }
   }
 
-  @Operation(summary = "API tạo lớp học trong môn học")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
+  @Operation(summary = "API tạo lớp học trong môn học - admin")
   @PostMapping()
   ResponseEntity<?> createClassroomSubject(@RequestBody ClassroomSubjectDTO classroomSubjectDTO, @RequestParam(value = "subjectId") Long subjectId){
     try {
@@ -98,14 +81,7 @@ public class ClassroomSubjectController extends CommonController{
     }
   }
 
-  @Operation(summary = "API sửa classroom trong môn học")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
+  @Operation(summary = "API sửa classroom trong môn học - admin - teacher")
   @PutMapping()
   ResponseEntity<?> changeInfoClassroomSubject(@RequestBody ClassroomSubjectDTO classroomSubjectDTO, @RequestParam(value = "classroomId") Long classroomId){
     try {
@@ -116,20 +92,13 @@ public class ClassroomSubjectController extends CommonController{
     }
   }
 
-  @Operation(summary = "API thêm sinh viên vào lớp học")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
+  @Operation(summary = "API thêm sinh viên vào lớp học - admin")
   @PostMapping("/students")
   ResponseEntity<?> addStudentInClassroom(@RequestParam(value = "classroomId") Long classroomId,
                                           @RequestParam(value = "subjectId") Long subjectId,
-                                          @RequestParam(value = "studentId") Long studentId){
+                                          @RequestParam(value = "studentId") Long userId){
     try {
-      return toSuccessResult(classroomSubjectService.addStudentInClassroom(classroomId, subjectId, studentId));
+      return toSuccessResult(classroomSubjectService.addStudentInClassroom(classroomId, subjectId, userId));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

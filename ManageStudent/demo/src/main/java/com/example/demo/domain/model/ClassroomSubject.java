@@ -40,5 +40,8 @@ public class ClassroomSubject {
   private String updateUser;
   @Column(name = "update_datetime")
   private LocalDateTime updateDatetime;
+  @Column(name = "status")
+  private Integer status;
+
 
 }

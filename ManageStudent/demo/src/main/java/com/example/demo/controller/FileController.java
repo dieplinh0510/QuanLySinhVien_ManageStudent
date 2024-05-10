@@ -41,13 +41,6 @@ public class FileController extends CommonController{
   }
 
   @Operation(summary = "API lấy trạng thái các file ã upload")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
   @GetMapping("/process-file")
   public ResponseEntity<?> getAllProcessFile(@RequestParam(value = "pageIndex") Integer pageIndex,
                                              @RequestParam(value = "pageSize") Integer pageSize) {
@@ -60,13 +53,6 @@ public class FileController extends CommonController{
   }
 
   @Operation(summary = "API download file")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
   @GetMapping("/download-file")
   public ResponseEntity<?> downloadFile(@RequestParam(value = "idFile") Long idFile){
     try {
@@ -90,13 +76,6 @@ public class FileController extends CommonController{
   }
 
   @Operation(summary = "API upload file")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
   @PostMapping(value = "/upload-file")
   ResponseEntity<?> uploadFile(@RequestBody MultipartFile file){
     try{
@@ -108,13 +87,6 @@ public class FileController extends CommonController{
   }
 
   @Operation(summary = "API insert field mapping")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
   @PostMapping(value = "/insert-field")
   ResponseEntity<?> insertField(@RequestBody InsertFieldDTO insertFieldDTO, @RequestParam(value = "typeInsert") Integer typeInsert){
     try{

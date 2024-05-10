@@ -11,7 +11,7 @@ import javax.persistence.Column;
 @Builder
 public class StudentPointInClassroomDTO {
   private Long id;
-  private String studentCode;
+  private Long studentCode;
   private String studentName;
   private Double regularPointOne;
   private Double regularPointTwo;

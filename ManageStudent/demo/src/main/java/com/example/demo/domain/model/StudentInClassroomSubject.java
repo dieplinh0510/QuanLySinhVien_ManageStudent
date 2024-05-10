@@ -20,8 +20,8 @@ public class StudentInClassroomSubject {
 
   @Column(name = "id_class_sbject")
   private Long idClassroomInSubject;
-  @Column(name = "id_student")
-  private Long idStudent;
+  @Column(name = "id_user")
+  private Long idUser;
   @Column(name = "regular_point_one")
   private Double regularPointOne;
   @Column(name = "regular_point_two")
@@ -31,8 +31,6 @@ public class StudentInClassroomSubject {
   @Column(name = "test_point_one")
   private Double testPointOne;
 
-  @Column(name = "status")
-  private Integer status;
   @Column(name = "create_user")
   private String createUser;
   @Column(name = "create_datetime")

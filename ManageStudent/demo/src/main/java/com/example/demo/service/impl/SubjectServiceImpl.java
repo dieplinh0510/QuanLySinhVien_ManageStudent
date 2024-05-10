@@ -12,6 +12,7 @@ import com.example.demo.service.SubjectService;
 import com.example.demo.utils.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,7 +52,8 @@ public class SubjectServiceImpl implements SubjectService {
           .classroomCode(item.getClassroomCode())
           .subjectName(subject.getSubjectName())
           .quantityStudent(item.getQuantityStudent())
-          .teacherName(userRepo.findById(item.getIdUser()).get() != null ? userRepo.findById(item.getIdUser()).get().getTeacherName() : null)
+          .status(item.getStatus())
+          .teacherName(userRepo.findById(item.getIdUser()).get() != null ? userRepo.findById(item.getIdUser()).get().getName() : null)
           .build();
       classroomDTOS.add(classroomDTO);
     }
@@ -73,13 +75,26 @@ public class SubjectServiceImpl implements SubjectService {
     if (user == null){
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
     }
+    if (user.getIdRole() != 1){
+      throw new Exception("Bạn không có quyền sử dụng chức năng này");
+    }
     Subject subject = subjectRepo.getSubjectBySubjectCode(subjectDTO.getSubjectCode());
     if (subject == null){
+      Assert.notNull(subjectDTO.getSubjectCode(), "Subject code is null");
+      Assert.notNull(subjectDTO.getSubjectName(), "Subject name is null");
+      Assert.notNull(subjectDTO.getIdSemester(), "Semester is null");
+      Assert.notNull(subjectDTO.getNumberOfCredits(), "Number of credits is null");
+      Assert.notNull(subjectDTO.getCoefficientMid(), "Coefficient Mid is null");
+      Assert.notNull(subjectDTO.getCoefficientRegular(), "Coefficient Regular is null");
+      Assert.notNull(subjectDTO.getCoefficientTest(), "Coefficient Test is null");
       Subject subjectNew = Subject.builder()
           .subjectCode(subjectDTO.getSubjectCode())
           .subjectName(subjectDTO.getSubjectName())
           .idSemester(subjectDTO.getIdSemester())
           .numberOfCredits(subjectDTO.getNumberOfCredits())
+          .coefficientRegular(subjectDTO.getCoefficientRegular())
+          .coefficientMid(subjectDTO.getCoefficientMid())
+          .coefficientTest(subjectDTO.getCoefficientTest())
           .createDatetime(LocalDateTime.now())
           .createUser(user.getUsername())
           .build();
@@ -96,14 +111,27 @@ public class SubjectServiceImpl implements SubjectService {
     if (user == null){
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
     }
+    if (user.getIdRole() != 1){
+      throw new Exception("Bạn không có quyền sử dụng chức năng này");
+    }
     Subject subject = subjectRepo.findById(subjectId).get();
     if (subject != null){
+      Assert.notNull(subjectDTO.getSubjectCode(), "Subject code is null");
+      Assert.notNull(subjectDTO.getSubjectName(), "Subject name is null");
+      Assert.notNull(subjectDTO.getIdSemester(), "Semester is null");
+      Assert.notNull(subjectDTO.getNumberOfCredits(), "Number of credits is null");
+      Assert.notNull(subjectDTO.getCoefficientMid(), "Coefficient Mid is null");
+      Assert.notNull(subjectDTO.getCoefficientRegular(), "Coefficient Regular is null");
+      Assert.notNull(subjectDTO.getCoefficientTest(), "Coefficient Test is null");
       subject.setSubjectCode(subjectDTO.getSubjectCode());
       subject.setSubjectName(subjectDTO.getSubjectName());
       subject.setIdSemester(subjectDTO.getIdSemester());
       subject.setNumberOfCredits(subjectDTO.getNumberOfCredits());
       subject.setUpdateDatetime(LocalDateTime.now());
       subject.setUpdateUser(user.getUsername());
+      subject.setCoefficientMid(subjectDTO.getCoefficientMid());
+      subject.setCoefficientTest(subjectDTO.getCoefficientTest());
+      subject.setCoefficientRegular(subjectDTO.getCoefficientRegular());
       subjectRepo.save(subject);
       return subject;
     } else {

@@ -17,19 +17,20 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;
-
   @Column(name = "username")
   private String username;
   @Column(name = "password")
   private String password;
-
   @Column(name = "id_role")
   private Long idRole;
-  @Column(name = "teacher_name")
-  private String teacherName;
-  @Column(name = "teacher_code")
-  private String teacherCode;
-
+  @Column(name = "name")
+  private String name;
+  @Column(name = "code")
+  private Long code;
+  @Column(name = "id_class")
+  private Long idClass;
+  @Column(name = "image")
+  private String image;
   @Column(name = "email")
   private String email;
   @Column(name = "is_first_login")

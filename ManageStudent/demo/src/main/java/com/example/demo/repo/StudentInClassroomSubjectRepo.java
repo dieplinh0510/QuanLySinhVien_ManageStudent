@@ -9,13 +9,13 @@ import java.util.List;
 
 @Repository
 public interface StudentInClassroomSubjectRepo extends JpaRepository<StudentInClassroomSubject, Long> {
-  @Query(value = "select * from student_in_classroom_subjects s where id_student = :studentId", nativeQuery = true)
+  @Query(value = "select * from student_in_classroom_subjects s where id_user = :studentId", nativeQuery = true)
   List<StudentInClassroomSubject> findByStudentId(Long studentId);
 
-  @Query(value = "select cis.id_subject  from student_in_classroom_subjects sics join classroom_in_subjects cis on sics.id_class_sbject = cis.id where sics.id_class_sbject = :idClassSubject and sics.id_student = :idStudent", nativeQuery = true)
+  @Query(value = "select cis.id_subject  from student_in_classroom_subjects sics join classroom_in_subjects cis on sics.id_class_sbject = cis.id where sics.id_class_sbject = :idClassSubject and sics.id_user = :idStudent", nativeQuery = true)
   Long getIdSubject(Long idClassSubject, Long idStudent);
 
-  @Query(value = "select cis.classroom_code  from student_in_classroom_subjects sics join classroom_in_subjects cis on sics.id_class_sbject = cis.id where sics.id_class_sbject = :idClassSubject and sics.id_student = :idStudent order by sics.create_datetime desc limit 1", nativeQuery = true)
+  @Query(value = "select cis.classroom_code  from student_in_classroom_subjects sics join classroom_in_subjects cis on sics.id_class_sbject = cis.id where sics.id_class_sbject = :idClassSubject and sics.id_user = :idStudent order by sics.create_datetime desc limit 1", nativeQuery = true)
   String getClassroomCode(Long idClassSubject, Long idStudent);
 
   @Query(value = "select\n" +
@@ -37,9 +37,13 @@ public interface StudentInClassroomSubjectRepo extends JpaRepository<StudentInCl
   @Query(value = "select sics.id \n" +
       "from subjects s join classroom_in_subjects cis on s.id = cis.id_subject \n" +
       "join student_in_classroom_subjects sics on cis.id = sics.id_class_sbject \n" +
-      "where sics.id_student = :studentId and s.id = :subjectId and sics.status = 1", nativeQuery = true)
-  Long getStudentInStudentClass(Long studentId, Long subjectId);
+      "where sics.id_user = :userId and s.id = :subjectId and sics.status = 1", nativeQuery = true)
+  Long getStudentInStudentClass(Long userId, Long subjectId);
 
   @Query(value = "select count(sics.id_student) from student_in_classroom_subjects sics where sics.id_class_sbject = :classroomId", nativeQuery = true)
   Long getQuantityStudent(Long classroomId);
+
+  @Query(value = "select sics.*  from student_in_classroom_subjects sics join classroom_in_subjects cis on sics.id_class_sbject = cis.id \n" +
+      "where sics.id = :classroomId and cis.status = 1", nativeQuery = true)
+  StudentInClassroomSubject getClassroomSubjectByClassroomCodeAndStatus(Long classroomId);
 }

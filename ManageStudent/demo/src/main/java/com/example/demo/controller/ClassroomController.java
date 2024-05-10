@@ -27,14 +27,7 @@ public class ClassroomController extends CommonController {
   }
 
 
-  @Operation(summary = "API lấy classroom by courseId")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Success",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AuthenticationResponse.class))}),
-      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-          content = @Content)
-  })
+  @Operation(summary = "API lấy classroom by courseId - teacher - student - admin")
   @GetMapping("/course")
   public ResponseEntity<?> getClassroomByCourseId(@RequestParam(name = "courseId") Long courseId) {
     try {

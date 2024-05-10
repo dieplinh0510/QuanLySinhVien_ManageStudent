@@ -7,6 +7,7 @@ import com.example.demo.domain.model.User;
 import com.example.demo.repo.ClassroomRepo;
 import com.example.demo.repo.CourseRepo;
 import com.example.demo.repo.ProcessFileImportRepo;
+import com.example.demo.repo.UserRepo;
 import com.example.demo.service.FileService;
 import com.example.demo.service.StudentService;
 import com.example.demo.utils.SecurityUtil;
@@ -46,6 +47,7 @@ public class FileServiceImpl implements FileService {
   private final StudentService studentService;
   private final CourseRepo courseRepo;
   private final ClassroomRepo classroomRepo;
+  private final UserRepo userRepo;
   private final DataFormatter df = new DataFormatter();
   @PersistenceContext
   private EntityManager entityManager;
@@ -54,11 +56,12 @@ public class FileServiceImpl implements FileService {
   @Value("${upload.file.path}")
   private String filePath;
 
-  public FileServiceImpl(ProcessFileImportRepo processFileImportRepo, StudentService studentService, CourseRepo courseRepo, ClassroomRepo classroomRepo) {
+  public FileServiceImpl(ProcessFileImportRepo processFileImportRepo, StudentService studentService, CourseRepo courseRepo, ClassroomRepo classroomRepo, UserRepo userRepo) {
     this.processFileImportRepo = processFileImportRepo;
     this.studentService = studentService;
     this.courseRepo = courseRepo;
     this.classroomRepo = classroomRepo;
+    this.userRepo = userRepo;
   }
 
   @Override
@@ -132,7 +135,7 @@ public class FileServiceImpl implements FileService {
       if (typeInsert == 1) {
         processFileImport.get().setMapField(new ObjectMapper().writeValueAsString(insertFieldDTO.getMapFields()));
         processFileImport.get().setSchema("manage_student");
-        processFileImport.get().setTable("students");
+        processFileImport.get().setTable("users");
         processFileImport.get().setStatus(1);
         processFileImport.get().setType(1L);
         processFileImport.get().setUpdateUser(user.getUsername());
@@ -162,7 +165,6 @@ public class FileServiceImpl implements FileService {
     mapFields.entrySet().removeIf(e -> !StringUtils.hasText(e.getValue()));
 
     HashMap<Integer, String> columnFile = new HashMap<>();
-    HashMap<String, String> columnTable = studentService.getColumnForInput();
     HashSet<String> mapFieldFile = new HashSet<>(mapFields.values());
     if (type == 1) {
       try {
@@ -245,6 +247,115 @@ public class FileServiceImpl implements FileService {
           }
           columnQuery.append(" , id_class , create_user, create_datetime)");
           valuesQuery.append(", ").append(classroomId).append(" , ").append("'PROCESS' , '").append(LocalDateTime.now()).append("')");
+
+          try {
+            EntityManager entityManager = entityManagerFactory.createEntityManager();
+            entityManager.getTransaction().begin();
+            entityManager.createNativeQuery(insertQuery.toString() + columnQuery + valuesQuery).executeUpdate();
+            entityManager.flush();
+            entityManager.getTransaction().commit();
+            entityManager.close();
+            row.createCell(i).setCellValue("Import data success");
+          } catch (Exception ex) {
+            row.createCell(i++).setCellValue("Import date fail");
+            row.createCell(i).setCellValue(ex.getMessage());
+          }
+        }
+        is.close();
+        String[] validateName = fileName.replaceAll(" ", "").split("\\.+\\w+$");
+        log.info("File name {} ", Arrays.toString(validateName));
+        Assert.isTrue(validateName.length != 0, "Filename is null");
+        StringBuilder name = new StringBuilder(fileName);
+        ByteArrayOutputStream boas = new ByteArrayOutputStream();
+        wb.write(boas);
+        wb.close();
+
+        InputStream fis = new ByteArrayInputStream(IOUtils.toByteArray(new ByteArrayInputStream(boas.toByteArray())));
+        FileCopyUtils.copy(fis.readAllBytes(), new File(filePath, String.valueOf(name)));
+
+        processFileImport.setDiscription(boas.toByteArray());
+        processFileImport.setStatus(2);
+        processFileImport.setKeyResponse(name.toString());
+        processFileImport.setUpdateUser("PROCESS");
+        processFileImport.setUpdateDatetime(LocalDateTime.now());
+        processFileImportRepo.save(processFileImport);
+      } catch (Exception e) {
+        processFileImport.setStatus(3);
+        processFileImport.setCreateUser(e.getMessage());
+        processFileImport.setUpdateUser("PROCESS");
+        processFileImport.setUpdateDatetime(LocalDateTime.now());
+        processFileImportRepo.save(processFileImport);
+      }
+    }
+
+    if (type == 2){
+      try {
+        for (Row row : sheet) {
+          Long studentId = null;
+          String student = null;
+          if (checkField) {
+            for (int i = 0; i < row.getLastCellNum(); i++) {
+              Cell cell = row.getCell(i);
+              if (mapFieldFile.contains(cell.getStringCellValue()))
+                columnFile.put(i, row.getCell(i).getStringCellValue());
+
+            }
+            row.createCell(row.getLastCellNum()).setCellValue("Import result");
+            row.createCell(row.getLastCellNum()).setCellValue("Description");
+            checkField = false;
+            continue;
+          }
+          StringBuilder columnQuery = new StringBuilder(" ( ");
+          StringBuilder valuesQuery = new StringBuilder(" value ( ");
+          boolean checkFirst = true;
+          int i;
+          for (i = 0; i < row.getLastCellNum(); i++) {
+
+            Cell cell = row.getCell(i);
+            String fileColumn = columnFile.get(i);
+            if (Objects.nonNull(fileColumn)) {
+              for (Map.Entry<String, String> itemCode : mapFields.entrySet()) {
+                if (itemCode.getValue().equals(fileColumn)) {
+                    if (itemCode.getKey().equals("code")){
+                      studentId = userRepo.getStudentIdByStudentCode(Long.parseLong(df.formatCellValue(cell)));
+                      student = itemCode.getValue();
+                    }
+                }
+              }
+
+              if (!fileColumn.equals(student)) {
+                String valueStr = df.formatCellValue(cell);
+                if (StringUtils.hasText(valueStr)) {
+                  if (checkFirst) {
+                    for (Map.Entry<String, String> item : mapFields.entrySet()) {
+                      if (item.getValue().equals(fileColumn)) {
+                        columnQuery.append(item.getKey());
+                      }
+                    }
+                    valuesQuery.append("'").append(valueStr).append("'");
+                    checkFirst = false;
+                    continue;
+                  }
+                  boolean checkColumn = true;
+                  for (Map.Entry<String, String> item : mapFields.entrySet()) {
+                    if (item.getValue().equals(fileColumn)) {
+                      columnQuery.append(", ").append(item.getKey());
+                      checkColumn = false;
+                      break;
+                    }
+                  }
+                  if (checkColumn) {
+                    columnQuery.append(", ").append(mapFields.get(fileColumn));
+                  }
+
+                  valuesQuery.append(", '").append(valueStr).append("'");
+                }
+              }
+            }
+
+          }
+          columnQuery.append(" , id_user , create_user, create_datetime)");
+          valuesQuery.append(", ").append(studentId).append(" , ").append("'PROCESS' , '").append(LocalDateTime.now()).append("')");
 
           try {
             EntityManager entityManager = entityManagerFactory.createEntityManager();

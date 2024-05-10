@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.common.Const;
+import com.example.demo.domain.dto.StudentDTO;
 import com.example.demo.domain.dto.TeacherDTO;
 import com.example.demo.domain.dto.UserDTO;
 import com.example.demo.domain.model.Role;
@@ -10,11 +11,13 @@ import com.example.demo.repo.UserRepo;
 import com.example.demo.repo.UserRepoCustom;
 import com.example.demo.service.MailService;
 import com.example.demo.service.UserService;
+import com.example.demo.utils.FileUtil;
 import com.example.demo.utils.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -62,8 +65,8 @@ public class UserServiceImpl implements UserService {
     User user = User.builder()
         .username(dto.getUsername())
         .password(passwordEncoder.encode(dto.getPassword()))
-        .teacherName(dto.getTeacherName())
-        .teacherCode(dto.getTeacherCode())
+        .name(dto.getTeacherName())
+        .code(dto.getTeacherCode())
         .email(dto.getEmail())
         .isFirstLogin(true)
         .createDatetime(LocalDateTime.now())
@@ -96,8 +99,8 @@ public class UserServiceImpl implements UserService {
     }
 
     user.setUsername(dto.getUsername());
-    user.setTeacherName(dto.getTeacherName());
-    user.setTeacherCode(dto.getTeacherCode());
+    user.setName(dto.getTeacherName());
+    user.setCode(dto.getTeacherCode());
     user.setUpdateDatetime(LocalDateTime.now());
     user.setEmail(dto.getEmail());
     user.setIsActive(dto.getIsActive());
@@ -108,5 +111,33 @@ public class UserServiceImpl implements UserService {
     }
 
     return userRepo.save(user);
+  }
+
+  @Override
+  public User registerStudent(StudentDTO studentDTO) throws IOException {
+    Assert.notNull(studentDTO.getUsername(), "Student username is null");
+    Assert.notNull(studentDTO.getPassword(), "Student password is null");
+    Assert.notNull(studentDTO.getStudentImage(), "Student image is null");
+    Assert.notNull(studentDTO.getStudentName(), "Student name is null");
+    Assert.notNull(studentDTO.getEmail(), "Student email is null");
+    Assert.notNull(studentDTO.getIdClass(), "Class is null");
+    Assert.notNull(studentDTO.getIdCourse(), "Course is null");
+    User user = User.builder()
+        .createDatetime(LocalDateTime.now())
+        .createUser(studentDTO.getUsername())
+        .password(passwordEncoder.encode(studentDTO.getPassword()))
+        .username(studentDTO.getUsername())
+        .idRole(3L)
+        .isActive(true)
+        .isFirstLogin(true)
+        .image(FileUtil.saveImage(studentDTO.getStudentImage()))
+        .name(studentDTO.getStudentName())
+        .idClass(studentDTO.getIdClass())
+        .email(studentDTO.getEmail())
+        .build();
+    userRepo.save(user);
+    user.setCode(studentDTO.getIdCourse() + user.getId());
+    userRepo.save(user);
+    return user;
   }
 }
