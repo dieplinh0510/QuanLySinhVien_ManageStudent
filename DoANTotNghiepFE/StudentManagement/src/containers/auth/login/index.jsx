@@ -23,7 +23,7 @@ const Login = () => {
 
   useEffect(() => {
     if (navigatePath) {
-      navigate(navigatePath, { replace: true })
+      window.location.href = navigatePath;
     }
   }, [navigatePath]);
 
@@ -39,6 +39,11 @@ const Login = () => {
                    type={'text'}
                    value={payload.username}
                    onChange={(value) => setPayload({...payload, username: value})}
+                   onKeyPress={(e) => {
+                      if (e.charCode === 13) {
+                        handleLogin();
+                      }
+                   }}
                    customStyle={{
                       marginBottom: '30px',
                       width: '100%',
@@ -50,6 +55,11 @@ const Login = () => {
                    type={'password'}
                    value={payload.password}
                    onChange={(value) => setPayload({...payload, password: value})}
+                   onKeyPress={(e) => {
+                     if (e.charCode === 13) {
+                       handleLogin();
+                     }
+                   }}
                     customStyle={{
                         marginBottom: '30px',
                         width: '100%',

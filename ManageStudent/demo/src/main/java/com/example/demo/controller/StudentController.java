@@ -154,9 +154,11 @@ public class StudentController extends CommonController {
 
   @Operation(summary = "API lấy tất cả sinh viên, điểm trong lớp học màn nhập điểm teacher ")
   @GetMapping("/view-point-class")
-  public ResponseEntity<?> viewPointInClassroom(@RequestParam(name = "classroomCode") String classroomCode){
+  public ResponseEntity<?> viewPointInClassroom(@RequestParam(name = "classroomCode") String classroomCode,
+                                                @RequestParam(value = "pageIndex") Integer pageIndex,
+                                                @RequestParam(value = "pageSize") Integer pageSize){
     try {
-      return toSuccessResult(studentService.viewPointInClassroom(classroomCode));
+      return toSuccessResult(studentService.viewPointInClassroom(classroomCode, pageIndex, pageSize));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
@@ -240,10 +242,11 @@ public class StudentController extends CommonController {
   }
 
   @GetMapping("/view-subject/register")
-  public ResponseEntity<?> viewSubjectRegister(@RequestParam(value = "pageIndex") Integer pageIndex,
+  public ResponseEntity<?> viewSubjectRegister(@RequestParam(value = "subjectName") String subjectName,
+                                              @RequestParam(value = "pageIndex") Integer pageIndex,
                                                @RequestParam(value = "pageSize") Integer pageSize){
     try {
-      return toSuccessResult(studentService.viewSubjectRegister(pageIndex, pageSize));
+      return toSuccessResult(studentService.viewSubjectRegister(subjectName, pageIndex, pageSize));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

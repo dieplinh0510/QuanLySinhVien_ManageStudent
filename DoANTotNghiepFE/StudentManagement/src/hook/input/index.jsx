@@ -21,7 +21,7 @@ const Input = ({
     <MDBInput
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      label={isDisable ? '' : label + (isRequired && isFocus ? '\u00a0*' : '\u00a0\u00a0')}
+      label={isDisable ? label : label + (isRequired && isFocus ? '\u00a0*' : '\u00a0\u00a0')}
       placeholder={placeHolder}
       onFocus={() => setIsFocus(true)}
       onBlur={() => {

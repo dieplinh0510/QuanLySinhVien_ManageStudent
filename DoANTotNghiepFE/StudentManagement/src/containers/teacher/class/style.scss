@@ -1,0 +1,14 @@
+.student-class-container {
+  .student-class-header {
+    display: flex;
+    justify-content: space-between;
+
+    .student-class-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      align-content: center;
+      height: 40px;
+    }
+  }
+}

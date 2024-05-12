@@ -8,6 +8,12 @@ export const isAuthenticated = ({ request }) => {
   const isLoggedIn = StorageService.get(AuthKeys.LOGGED_IN) === 'true';
   const userInfo = JSON.parse(JSON.stringify(StorageService.getObject(AuthKeys.CURRENT_USER)));
 
+  console.log(isLoggedIn, token, userInfo);
+  console.log((!token || !isLoggedIn))
+  console.log(!token)
+  console.log((!token || !isLoggedIn) &&
+  !(request.url.includes('/login') || request.url.includes('/register') || request.url.includes('/change-password')))
+
   if (
     (!token || !isLoggedIn) &&
     !(request.url.includes('/login') || request.url.includes('/register') || request.url.includes('/change-password'))
@@ -20,7 +26,7 @@ export const isAuthenticated = ({ request }) => {
     (request.url.includes('/login'))
   ) {
     if (userInfo?.role === AuthKeys.ROLE_ADMIN) {
-      return redirect('/admin');
+      return redirect('/');
     }
 
     return redirect('/');

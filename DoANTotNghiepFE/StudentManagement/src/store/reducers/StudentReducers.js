@@ -8,6 +8,10 @@ const initialState = {
   studentDetail: null,
   studentMark: [],
   accumulatedPoint: [],
+  classRegisters: [],
+  pagingClassRegister: null,
+  subjectRegisters: [],
+  pagingSubjectRegister: null,
 };
 
 const studentsReducer = (state = initialState, action) => {
@@ -132,7 +136,7 @@ const studentsReducer = (state = initialState, action) => {
         loading: true,
       };
     case StudentTypes.GET_STUDENT_MARK_BY_ID_SUCCESS:
-      console.log('action.payload', action.payload)
+      console.log('action.payload', action.payload);
 
       return {
         ...state,
@@ -149,7 +153,7 @@ const studentsReducer = (state = initialState, action) => {
           pageIndex: action.payload.pageable.pageNumber,
           pageSize: action.payload.pageable.pageSize,
           offset: action.payload.pageable.offset,
-        }
+        },
       };
     case StudentTypes.GET_STUDENT_MARK_BY_ID_FAILURE:
       return {
@@ -193,6 +197,68 @@ const studentsReducer = (state = initialState, action) => {
         loading: true,
       };
 
+    // Get all class to register
+    case StudentTypes.GET_ALL_CLASS_TO_REGISTER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case StudentTypes.GET_ALL_CLASS_TO_REGISTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        classRegisters: action.payload.content,
+        pagingClassRegister: {
+          last: action.payload.last,
+          totalElements: action.payload.totalElements,
+          totalPages: action.payload.totalPages,
+          size: action.payload.size,
+          number: action.payload.number,
+          first: action.payload.first,
+          numberOfElements: action.payload.numberOfElements,
+          pageIndex: action.payload.pageable.pageNumber,
+          pageSize: action.payload.pageable.pageSize,
+          offset: action.payload.pageable.offset,
+        },
+      };
+
+    // Get all subject to register
+    case StudentTypes.GET_ALL_SUBJECT_TO_REGISTER_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case StudentTypes.GET_ALL_SUBJECT_TO_REGISTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        subjectRegisters: action.payload.content,
+        pagingSubjectRegister: {
+          last: action.payload.last,
+          totalElements: action.payload.totalElements,
+          totalPages: action.payload.totalPages,
+          size: action.payload.size,
+          number: action.payload.number,
+          first: action.payload.first,
+          numberOfElements: action.payload.numberOfElements,
+          pageIndex: action.payload.pageable.pageNumber,
+          pageSize: action.payload.pageable.pageSize,
+          offset: action.payload.pageable.offset,
+        },
+      };
+
+    case StudentTypes.GET_ALL_SUBJECT_TO_REGISTER_FAILURE:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case StudentTypes.GET_ALL_CLASS_TO_REGISTER_FAILURE:
+      return {
+        ...state,
+        loading: true,
+      };
 
     default:
       return state;

@@ -4,10 +4,12 @@ import Button from '../../../hook/button';
 import './style.scss';
 import {
   MDBBtn,
-  MDBModal, MDBModalBody,
+  MDBModal,
+  MDBModalBody,
   MDBModalContent,
   MDBModalDialog,
-  MDBModalHeader, MDBModalTitle,
+  MDBModalHeader,
+  MDBModalTitle,
   MDBTable,
   MDBTableBody,
   MDBTableHead,
@@ -20,11 +22,13 @@ import { toast } from 'react-toastify';
 import LoadingOverlay from 'react-loading-overlay';
 import { Oval } from 'react-loader-spinner';
 import { Pattern } from '../../../constant';
+import Pagination from '../../../components/paging';
+import * as UploadActions from '../../../store/actions/UploadActions';
 
 const TeacherManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { teachers = [], loading=false } = useSelector((state) => state.teacher);
+  const { teachers = [], semesters = [], loading = false, paging = null } = useSelector((state) => state.teacher);
   const [searchPayload, setSearchPayload] = React.useState({
     teacherName: '',
     pageIndex: 1,
@@ -32,7 +36,6 @@ const TeacherManager = () => {
   });
   const [showCreate, setShowCreate] = React.useState(false);
   const [payloadCreate, setPayloadCreate] = React.useState({
-    teacherCode: '',
     teacherName: '',
     email: '',
     password: '',
@@ -49,10 +52,6 @@ const TeacherManager = () => {
 
 
   const handleCreateTeacher = () => {
-    if (payloadCreate?.teacherCode === '') {
-      toast.error('Mã giảng viên không được để trống');
-      return;
-    }
     if (payloadCreate?.teacherName === '') {
       toast.error('Tên giảng viên không được để trống');
       return;
@@ -78,7 +77,7 @@ const TeacherManager = () => {
       toast.error('Mật khẩu không trùng khớp');
       return;
     }
-    dispatch(TeacherActions.createTeacherRequest(payloadCreate));
+    dispatch(TeacherActions.createTeacherRequest({...payloadCreate, searchPayload}));
     handleCancelCreate();
   };
 
@@ -117,7 +116,7 @@ const TeacherManager = () => {
       return;
     }
 
-    if(payloadEdit?.changePassword){
+    if (payloadEdit?.changePassword) {
       if (payloadEdit?.password === '') {
         toast.error('Mật khẩu không được để trống');
         return;
@@ -128,7 +127,7 @@ const TeacherManager = () => {
       }
     }
 
-    dispatch(TeacherActions.updateTeacherRequest(payloadEdit));
+    dispatch(TeacherActions.updateTeacherRequest({...payloadEdit, searchPayload}));
     handleCancelEdit();
   };
 
@@ -137,6 +136,15 @@ const TeacherManager = () => {
     setShowEdit(false);
   };
 
+
+  const handlePageChange = (pageNumber) => {
+    dispatch(TeacherActions.getAllTeacherRequest({
+      ...searchPayload,
+      pageIndex: pageNumber,
+    }));
+
+    setSearchPayload({ ...searchPayload, pageIndex: pageNumber })
+  };
 
   return (
     <div className={'subject-manager-page'}>
@@ -147,7 +155,7 @@ const TeacherManager = () => {
           onChange={(value) => setSearchPayload({ ...searchPayload, teacherName: value })}
           onKeyPress={(e) => {
             if (e.charCode === 13) {
-              dispatch(TeacherActions.getAllTeacherRequest(searchPayload));
+              dispatch(TeacherActions.getAllTeacherRequest(payloadCreate));
             }
           }}
           label=""
@@ -193,25 +201,39 @@ const TeacherManager = () => {
             {teachers && teachers.length > 0 && teachers.map((item, index) => (
               <tr style={{ cursor: 'pointer' }} key={index}>
                 <td>{index + 1}</td>
-                <td>{item?.teacherCode}</td>
-                <td>{item.teacherName}</td>
+                <td>{item?.code}</td>
+                <td>{item.name}</td>
                 <td>{item.email}</td>
                 <td>{item.username}</td>
-                <td>{item.isActive ? "Đang công tác" : "Đã nghỉ công tác"}</td>
+                <td>{item.isActive ? 'Đang công tác' : 'Đã nghỉ công tác'}</td>
                 <td style={{ width: '120px' }}>
                   <Button title={'Sửa'}
                           onClick={() => {
-                            setPayloadEdit(item);
+                            setPayloadEdit({...item, teacherName: item.name, teacherCode: item.code});
                             setShowEdit(true);
                           }}
                           width={'50px'}
                           customStyle={{ padding: '6px 0' }}
                   />
+                  <Space height={2} />
                 </td>
               </tr>
             ))}
           </MDBTableBody>
         </MDBTable>
+
+        {/* Paging */}
+        <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+          {
+            paging && (
+              <Pagination
+                totalPages={paging?.totalPages}
+                currentPage={paging?.pageIndex + 1}
+                onPageChange={handlePageChange}
+              />
+            )
+          }
+        </div>
       </div>
 
 
@@ -225,18 +247,6 @@ const TeacherManager = () => {
             </MDBModalHeader>
             <MDBModalBody>
               <div>
-                <Input value={payloadCreate?.teacherCode}
-                       onChange={(value) => setPayloadCreate({ ...payloadCreate, teacherCode: value })}
-                       label="Mã giảng viên"
-                       isRequired={true}
-                       placeHolder="Nhập mã giảng viên"
-                       errorMessage="Mã giảng viên không được để trống"
-                       error={false}
-                       isDisable={false}
-                       customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
-                />
-
-                <Space height={20} />
 
                 <Input value={payloadCreate?.teacherName}
                        onChange={(value) => setPayloadCreate({ ...payloadCreate, teacherName: value })}
@@ -341,7 +351,7 @@ const TeacherManager = () => {
                        placeHolder="Nhập mã giảng viên"
                        errorMessage="Mã giảng viên không được để trống"
                        error={false}
-                       isDisable={false}
+                       isDisable={true}
                        customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
                 />
 
@@ -385,18 +395,20 @@ const TeacherManager = () => {
 
                 <Space height={20} />
                 <div>
-                  Đang công tác <input type={'checkbox'} checked={payloadEdit?.isActive === true} onChange={(e) => setPayloadEdit({
-                  ...payloadEdit,
-                  isActive: e.target.checked,
-                })} />
+                  Đang công tác <input type={'checkbox'} checked={payloadEdit?.isActive === true}
+                                       onChange={(e) => setPayloadEdit({
+                                         ...payloadEdit,
+                                         isActive: e.target.checked,
+                                       })} />
                 </div>
 
                 <Space height={20} />
                 <div>
-                  Sửa mật khẩu <input type={'checkbox'} checked={payloadEdit?.changePassword === true} onChange={(e) => setPayloadEdit({
-                  ...payloadEdit,
-                  changePassword: e.target.checked,
-                })} />
+                  Sửa mật khẩu <input type={'checkbox'} checked={payloadEdit?.changePassword === true}
+                                      onChange={(e) => setPayloadEdit({
+                                        ...payloadEdit,
+                                        changePassword: e.target.checked,
+                                      })} />
                 </div>
 
                 {payloadEdit?.changePassword === true && (<><Space height={20} />
@@ -447,7 +459,7 @@ const TeacherManager = () => {
       </MDBModal>
 
       <MDBModal open={loading}>
-        <MDBModalDialog size="xl" centered={true} >
+        <MDBModalDialog size="xl" centered={true}>
           <div style={{ width: '100%', height: '100%' }}>
             <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
             </LoadingOverlay>

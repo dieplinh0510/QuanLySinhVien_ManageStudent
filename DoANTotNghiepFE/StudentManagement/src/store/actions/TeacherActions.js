@@ -47,3 +47,19 @@ export const updateTeacherFailure = (error) => ({
   type: TeacherTypes.UPDATE_TEACHER_FAILURE,
   payload: error,
 });
+
+// API get all my class
+export const searchMyClassesRequest = (payload) => ({
+  type: TeacherTypes.SEARCH_MY_CLASSES_REQUEST,
+  payload: payload,
+});
+
+export const searchMyClassesSuccess = (payload) => ({
+  type: TeacherTypes.SEARCH_MY_CLASSES_SUCCESS,
+  payload: payload,
+});
+
+export const searchMyClassesFailure = (error) => ({
+  type: TeacherTypes.SEARCH_MY_CLASSES_FAILURE,
+  payload: error,
+});

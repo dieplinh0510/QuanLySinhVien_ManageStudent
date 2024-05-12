@@ -2,7 +2,7 @@ import HttpService from '../utils/http-service';
 
 // API get all teacher
 export const searchTeachers = async (payload) => {
-  let response = await HttpService.get('/users/search', {
+  let response = await HttpService.get('/users/search - admin', {
     params: payload,
   });
 
@@ -25,4 +25,13 @@ export const updateTeacher = async (payload) => {
   });
 
   return HttpService.checkResponseCommon(response, null, "Cập nhật giảng viên thành công");
+};
+
+// API get all my class
+export const searchMyClasses = async (payload) => {
+  let response = await HttpService.get('/classroom-subject/user', {
+    params: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, null);
 };

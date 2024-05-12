@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import { AuthKeys } from '../constant';
 import HttpService from '../utils/http-service';
 import StorageService from '../utils/storage.service';
@@ -8,20 +7,23 @@ export const login = async (payload) => {
     body: payload,
   });
 
-  return HttpService.checkResponseCommon(response, null, "Đăng nhập thành công!");
+  return HttpService.checkResponseCommon(response, null, 'Đăng nhập thành công!');
 };
 
 export const register = async (payload) => {
-  let response = await HttpService.post('auth/register', {
-    body: payload,
-  });
+  const formData = new FormData();
 
-  if (response?.data && response?.data?.status === 500) {
-    toast.error(response?.data?.message);
-    throw Error(response?.data?.message);
+  for (let key in payload) {
+    formData.set(key, payload[key]);
   }
 
-  return response?.data;
+  let response = await HttpService.post('users/create-student', {
+    body: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return HttpService.checkResponseCommon(response, [], 'Đăng ký thành công!');
 };
 
 export const isLoggedIn = () => {
@@ -36,5 +38,5 @@ export const changePassword = async (payload) => {
     body: payload,
   });
 
-  return HttpService.checkResponseCommon(response, null, "Change password successfully");
+  return HttpService.checkResponseCommon(response, null, 'Thay đổi mật khẩu thành công!');
 };

@@ -3,9 +3,9 @@ import * as api from '../../api/SubjectServices';
 import * as SubjectActions from '../actions/SubjectActions';
 import * as SubjectTypes from '../types/SubjectTypes';
 
-function* getSubjectsSaga() {
+function* getSubjectsSaga(payload) {
   try {
-    const students = yield call(api.getSubjects);
+    const students = yield call(api.getSubjects, payload.payload);
     yield put(SubjectActions.getSubjectsSuccess(students));
   } catch (error) {
     yield put(SubjectActions.getSubjectsFailure(error.message));

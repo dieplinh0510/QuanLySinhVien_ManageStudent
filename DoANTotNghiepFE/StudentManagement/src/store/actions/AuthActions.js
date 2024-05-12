@@ -47,3 +47,19 @@ export const changePasswordFailure = (error) => ({
   type: AuthTypes.CHANGE_PASSWORD_FAILURE,
   payload: error,
 });
+
+// Register
+export const registerRequest = (payload) => ({
+  type: AuthTypes.REGISTER_REQUEST,
+  payload: payload,
+});
+
+export const registerSuccess = (data) => ({
+  type: AuthTypes.REGISTER_SUCCESS,
+  payload: { data },
+});
+
+export const registerFailure = (error) => ({
+  type: AuthTypes.REGISTER_FAILURE,
+  payload: error,
+});

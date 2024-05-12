@@ -33,10 +33,16 @@ const InputMark = () => {
   const [payload, setPayload] = useState(null);
 
   const handleImportFile = () => {
-    navigate(`/admin/file-input?uploadType=${UploadType.POINT}`);
+    navigate(`/teacher/file-input?uploadType=${UploadType.POINT}`);
   };
 
   useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    let classroomCodeParam = queryParams.get('classroomCode');
+    if (classroomCodeParam || classroomCodeParam !== '') {
+      setClassroomCode(classroomCodeParam);
+      dispatch(PointInputActions.getStudentColumnRequest({ classroomCode: classroomCodeParam }));
+    }
     dispatch(PointInputActions.getAllClassroomRequest());
   }, []);
 
@@ -86,17 +92,17 @@ const InputMark = () => {
         <MDBTableBody>
           {students && students.map((item, index) => (
             <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{item.studentCode}</td>
-              <td>{item.studentName}</td>
-              <td>{item.regularPointOne}</td>
-              <td>{item.regularPointTwo}</td>
-              <td>{item.midtermPointOne}</td>
-              <td>{(item.midtermPointOne == null || item.regularPointOne || item.regularPointTwo) ? '' : item.mediumPoint}</td>
-              <td>{item.testPointOne}</td>
-              <td>{(item.testPointOne == null) ? '' : item.accumulated_point}</td>
-              <td>
-                <div style={{ display: 'flex', justifyContent: 'center', padding: '5px', alignItems: 'center' }}>
+              <td style={{lineHeight: 0}} >{index + 1}</td>
+              <td style={{lineHeight: 0}} >{item.studentCode}</td>
+              <td style={{lineHeight: 0}} >{item.studentName}</td>
+              <td style={{lineHeight: 0}} >{item.regularPointOne}</td>
+              <td style={{lineHeight: 0}} >{item.regularPointTwo}</td>
+              <td style={{lineHeight: 0}} >{item.midtermPointOne}</td>
+              <td style={{lineHeight: 0}} >{(item.midtermPointOne == null || item.regularPointOne || item.regularPointTwo) ? '' : item.mediumPoint}</td>
+              <td style={{lineHeight: 0}} >{item.testPointOne}</td>
+              <td style={{lineHeight: 0}} >{(item.testPointOne == null) ? '' : item.accumulated_point}</td>
+              <td style={{lineHeight: 0, padding: '4px'}} >
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '0px', margin: '0px', alignItems: 'center' }}>
                   <Button title={'Sửa'}
                           onClick={() => {
                             console.log(item);

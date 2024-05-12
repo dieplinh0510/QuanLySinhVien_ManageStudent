@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SubjectService {
   Subject getSubjectBySubjectCode(String subjectCode);
-  List<Subject> getAllSubject();
+  List<Subject> getAllSubject(String subjectName);
   List<ClassroomDTO> getClassroomBySubjectId(Long subjectId);
   Subject getSubjectBySubjectId(Long subjectId) throws Exception;
   Subject createSubject(SubjectDTO subjectDTO) throws Exception;

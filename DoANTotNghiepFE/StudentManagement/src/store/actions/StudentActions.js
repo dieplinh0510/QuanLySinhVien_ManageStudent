@@ -141,3 +141,35 @@ export const getStudentDetailByStudentCodeFailure = (error) => ({
   type: StudentTypes.GET_STUDENT_DETAIL_BY_STUDENT_CODE_FAILURE,
   payload: error
 });
+
+// Get all class to register
+export const getAllClassToRegisterRequest = (payload) => ({
+  type: StudentTypes.GET_ALL_CLASS_TO_REGISTER_REQUEST,
+  payload: payload,
+});
+
+export const getAllClassToRegisterSuccess = (payload) => ({
+  type: StudentTypes.GET_ALL_CLASS_TO_REGISTER_SUCCESS,
+  payload: payload,
+});
+
+export const getAllClassToRegisterFailure = (error) => ({
+  type: StudentTypes.GET_ALL_CLASS_TO_REGISTER_FAILURE,
+  payload: error
+});
+
+// Get all subject to register
+export const getAllSubjectToRegisterRequest = (payload) => ({
+  type: StudentTypes.GET_ALL_SUBJECT_TO_REGISTER_REQUEST,
+  payload: payload,
+});
+
+export const getAllSubjectToRegisterSuccess = (payload) => ({
+  type: StudentTypes.GET_ALL_SUBJECT_TO_REGISTER_SUCCESS,
+  payload: payload,
+});
+
+export const getAllSubjectToRegisterFailure = (error) => ({
+  type: StudentTypes.GET_ALL_SUBJECT_TO_REGISTER_FAILURE,
+  payload: error
+});

@@ -4,6 +4,8 @@ const initialState = {
   loading: false,
   error: null,
   teachers: [],
+  paging: null,
+  myClasses: [],
 };
 
 const teacherReducer = (state = initialState, action) => {
@@ -12,7 +14,21 @@ const teacherReducer = (state = initialState, action) => {
     case TeacherTypes.GET_ALL_TEACHERS_REQUEST:
       return { ...state, loading: true };
     case TeacherTypes.GET_ALL_TEACHERS_SUCCESS:
-      return { ...state, loading: false, teachers: action.payload };
+      return {
+        ...state, loading: false, teachers: action.payload.content,
+        paging: {
+          last: action.payload.last,
+          totalElements: action.payload.totalElements,
+          totalPages: action.payload.totalPages,
+          size: action.payload.size,
+          number: action.payload.number,
+          first: action.payload.first,
+          numberOfElements: action.payload.numberOfElements,
+          pageIndex: action.payload.pageable.pageNumber,
+          pageSize: action.payload.pageable.pageSize,
+          offset: action.payload.pageable.offset,
+        },
+      };
     case TeacherTypes.GET_ALL_TEACHERS_FAILURE:
       return { ...state, loading: false, error: action.payload };
 
@@ -30,6 +46,14 @@ const teacherReducer = (state = initialState, action) => {
     case TeacherTypes.UPDATE_TEACHER_SUCCESS:
       return { ...state, loading: false };
     case TeacherTypes.UPDATE_TEACHER_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+
+    // API get all my class
+    case TeacherTypes.SEARCH_MY_CLASSES_REQUEST:
+      return { ...state, loading: true };
+    case TeacherTypes.SEARCH_MY_CLASSES_SUCCESS:
+      return { ...state, loading: false, myClasses: action.payload };
+    case TeacherTypes.SEARCH_MY_CLASSES_FAILURE:
       return { ...state, loading: false, error: action.payload };
 
     default:

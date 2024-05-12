@@ -22,14 +22,20 @@ import * as StudentActions from '../../../store/actions/StudentActions';
 import Space from '../../../hook/space/space';
 import Pulldown from '../../../hook/pulldown';
 import { toast } from 'react-toastify';
-import { UploadType } from '../../../constant';
 import LoadingOverlay from 'react-loading-overlay';
 import { Oval } from 'react-loader-spinner';
+
+let statusList = [
+  { value: -1, label: 'Chưa mở đăng ký' },
+  { value: 0, label: 'Chưa bắt đầu' },
+  { value: 1, label: 'Đã bắt đầu' },
+  { value: 2, label: 'Đã kết thúc' },
+];
 
 const ClassManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { subject = null, semesters = [], loading=false } = useSelector((state) => state.subject);
+  const { subject = null, semesters = [], loading = false } = useSelector((state) => state.subject);
   const { classes = [], teachers = [] } = useSelector((state) => state.class);
   const { studentDetail = [] } = useSelector((state) => state.student);
   const [subjectId, setSubjectId] = useState(null);
@@ -41,8 +47,7 @@ const ClassManager = () => {
   const [payloadCreateStudent, setPayloadCreateStudent] = React.useState(null);
   const [showEdit, setShowEdit] = React.useState(false);
   const [payloadEdit, setPayloadEdit] = React.useState(null);
-  const [showDelete, setShowDelete] = React.useState(false);
-  const [payloadDelete, setPayloadDelete] = React.useState(null);
+  const [statusListEdit, setStatusListEdit] = React.useState(statusList);
 
 
   useEffect(() => {
@@ -118,8 +123,28 @@ const ClassManager = () => {
       subjectName: item.subjectName,
       quantityStudent: item.quantityStudent,
       idUser: findTeacher(item.idUser),
+      status: item.status,
     });
+    if (item.status === -1) {
+      setStatusListEdit(statusList.filter(item => item.value === -1 || item.value === 0));
+    }
+    if (item.status === 0) {
+      setStatusListEdit(statusList.filter(item => item.value === 0 || item.value === 1));
+    }
+    if (item.status === 1) {
+      setStatusListEdit(statusList.filter(item => item.value === 1 || item.value === 2));
+    }
+    if (item.status === 2) {
+      setStatusListEdit(statusList.filter(item => item.value === 2));
+    }
   };
+
+  //let statusList = [
+  //   { value: -1, label: 'Chưa mở đăng ký' },
+  //   { value: 0, label: 'Chưa bắt đầu' },
+  //   { value: 1, label: 'Đã bắt đầu' },
+  //   { value: 2, label: 'Đã kết thúc' },
+  // ];
 
   const handleEditClassroom = () => {
     // validate
@@ -148,7 +173,6 @@ const ClassManager = () => {
   };
 
   const handleOpenCreateStudent = (item) => {
-    console.log("2020598578", item, payloadCreateStudent);
     setShowCreateStudent(true);
     setPayloadCreateStudent({
       classroomId: item.idClassroom,
@@ -174,9 +198,9 @@ const ClassManager = () => {
   };
 
   useEffect(() => {
-    console.log("show create student", studentDetail);
+    console.log('show create student', studentDetail);
     if (studentDetail != null) {
-      setPayloadCreateStudent({...payloadCreateStudent, ...studentDetail})
+      setPayloadCreateStudent({ ...payloadCreateStudent, ...studentDetail });
     }
   }, [studentDetail]);
 
@@ -238,6 +262,7 @@ const ClassManager = () => {
               <th>Tên môn</th>
               <th>Số lượng</th>
               <th>Giảng viên</th>
+              <th>Trạng thái</th>
               <th></th>
             </tr>
           </MDBTableHead>
@@ -249,6 +274,7 @@ const ClassManager = () => {
                 <td>{item.subjectName}</td>
                 <td>{item.quantityStudent}</td>
                 <td>{item.teacher}</td>
+                <td>{item.status === -1 ? 'Chưa mở đăng ký' : item.status === 0 ? 'Chưa bắt đầu' : item.status === 1 ? 'Đã bắt đầu' : 'Đã kết thúc'}</td>
                 <td style={{ width: '280px' }}>
                   <div style={{
                     display: 'flex',
@@ -261,6 +287,7 @@ const ClassManager = () => {
                             onClick={() => handleOpenCreateStudent(item)}
                             width={'150px'}
                             customStyle={{ padding: '6px 0' }}
+                            disabled={item.status !== 0}
                     />
                     <Button title={'Sửa'}
                             onClick={() => handleOpenEdit(item)}
@@ -381,7 +408,7 @@ const ClassManager = () => {
                        placeHolder="Nhập mã lớp học"
                        errorMessage="Mã lớp học không được để trống"
                        error={false}
-                       isDisable={false}
+                       isDisable={payloadEdit?.status !== -1}
                        customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
                 />
 
@@ -394,7 +421,7 @@ const ClassManager = () => {
                        placeHolder="Nhập tên môn học"
                        errorMessage="Tên môn học không được để trống"
                        error={false}
-                       isDisable={true}
+                       isDisable={payloadEdit?.status !== -1}
                        customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
                 />
 
@@ -407,7 +434,7 @@ const ClassManager = () => {
                        placeHolder="Nhập số lượng học sinh"
                        errorMessage="Số lượng học sinh không được để trống"
                        error={false}
-                       isDisable={false}
+                       isDisable={payloadEdit?.status !== -1}
                        customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
                 />
 
@@ -420,6 +447,22 @@ const ClassManager = () => {
                           ignores={[]}
                           setSelected={(value) => {
                             setPayloadEdit({ ...payloadEdit, idUser: value });
+                          }}
+                          isRequired={false}
+                          error={false}
+                          isDisable={payloadEdit?.status !== -1}
+                          customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
+                />
+
+                <Space height={20} />
+
+                <span style={{ fontSize: '14px' }}>Trạng thái</span>
+                <Pulldown items={statusListEdit}
+                          label={'Không được để trống'}
+                          value={statusListEdit.find(item => item.value === payloadEdit?.status)}
+                          ignores={[]}
+                          setSelected={(value) => {
+                            setPayloadEdit({ ...payloadEdit, status: value.value });
                           }}
                           isRequired={false}
                           error={false}
@@ -525,11 +568,11 @@ const ClassManager = () => {
                 <Space height={20} />
 
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Button title={'Dữ liệu từ file'}
-                          onClick={() => navigate(`/admin/file-input?uploadType=${UploadType.STUDENT}`)}
-                          width={'200px'}
-                          customStyle={{ padding: '6px 0' }}
-                  />
+                  {/*<Button title={'Dữ liệu từ file'}*/}
+                  {/*        onClick={() => navigate(`/teacher/file-input?uploadType=${UploadType.STUDENT}`)}*/}
+                  {/*        width={'200px'}*/}
+                  {/*        customStyle={{ padding: '6px 0' }}*/}
+                  {/*/>*/}
                   <Button title={'Lưu'}
                           onClick={() => handleCreateStudent()}
                           width={'200px'}
@@ -545,7 +588,7 @@ const ClassManager = () => {
 
 
       <MDBModal open={loading}>
-        <MDBModalDialog size="xl" centered={true} >
+        <MDBModalDialog size="xl" centered={true}>
           <div style={{ width: '100%', height: '100%' }}>
             <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
             </LoadingOverlay>

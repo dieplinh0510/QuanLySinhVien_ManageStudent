@@ -1,4 +1,4 @@
-import route from '../../containers/route';
+import route, { getRoutes } from '../../containers/route';
 import { NavLink } from 'react-router-dom';
 import logoutIcon from '../../assets/icon/logout-icon.png';
 import userIcon from '../../assets/icon/user-icon.png';
@@ -17,7 +17,7 @@ const AppSidebar = ({handleLogout}) => (
       }}>
         <div>
           {
-            route.map((item, index) => (
+            getRoutes(JSON.parse(storageService.get(AuthKeys.CURRENT_USER))).map((item, index) => (
               <div key={index} className={'item-sidebar'}>
                 <NavLink to={item.path} className={'link-item'} activeclassname={'active'}>
                   <img src={item.icon} alt={'icon'} /> <span>{item.name}</span>

@@ -1,18 +1,18 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.dto.AuthenticationResponse;
 import com.example.demo.domain.dto.InsertFieldDTO;
+import com.example.demo.domain.dto.StudentPointInClassroomDTO;
 import com.example.demo.domain.model.ProcessFileImport;
 import com.example.demo.repo.ProcessFileImportRepo;
 import com.example.demo.service.FileService;
+import com.example.demo.service.StudentService;
+import com.example.demo.service.impl.UserPDFExporter;
+import com.lowagie.text.DocumentException;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +21,12 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import static com.example.demo.common.Const.RETURN_CODE_ERROR;
 
@@ -31,13 +36,17 @@ import static com.example.demo.common.Const.RETURN_CODE_ERROR;
 public class FileController extends CommonController{
   private final ProcessFileImportRepo processFileImportRepo;
   private final FileService fileService;
+  private final StudentService studentService;
   @Value("${upload.file.path}")
   private String filePath;
+  private final UserPDFExporter userPDFExporter;
 
   public FileController(FileService fileService,
-                        ProcessFileImportRepo processFileImportRepo) {
+                        ProcessFileImportRepo processFileImportRepo, StudentService studentService, UserPDFExporter userPDFExporter) {
     this.fileService = fileService;
     this.processFileImportRepo = processFileImportRepo;
+    this.studentService = studentService;
+    this.userPDFExporter = userPDFExporter;
   }
 
   @Operation(summary = "API lấy trạng thái các file ã upload")
@@ -96,4 +105,20 @@ public class FileController extends CommonController{
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
     }
   }
+  @GetMapping("/export/pdf")
+  public void exportToPDF(@RequestParam(name = "classroomCode") String classroomCode, HttpServletResponse response) throws DocumentException, IOException {
+    response.setContentType("application/pdf");
+    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+    String currentDateTime = dateFormatter.format(new Date());
+
+    String headerKey = "Content-Disposition";
+    String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+    response.setHeader(headerKey, headerValue);
+
+    Page<StudentPointInClassroomDTO> pageUsers = studentService.viewPointInClassroom(classroomCode, 1, 100);
+    List<StudentPointInClassroomDTO> listUsers = pageUsers.getContent();
+    userPDFExporter.export(response, listUsers);
+
+  }
+
 }

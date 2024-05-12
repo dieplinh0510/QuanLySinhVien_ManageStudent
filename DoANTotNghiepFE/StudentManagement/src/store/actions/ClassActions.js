@@ -124,3 +124,19 @@ export const addStudentToClassFailure = (error) => ({
   type: ClassTypes.ADD_STUDENT_TO_CLASS_FAILURE,
   payload: error,
 });
+
+// API get all student in class
+export const getAllStudentInClassRequest = (payload) => ({
+  type: ClassTypes.GET_ALL_STUDENT_IN_CLASS_REQUEST,
+  payload: payload,
+});
+
+export const getAllStudentInClassSuccess = (payload) => ({
+  type: ClassTypes.GET_ALL_STUDENT_IN_CLASS_SUCCESS,
+  payload: payload,
+});
+
+export const getAllStudentInClassFailure = (error) => ({
+  type: ClassTypes.GET_ALL_STUDENT_IN_CLASS_FAILURE,
+  payload: error,
+});

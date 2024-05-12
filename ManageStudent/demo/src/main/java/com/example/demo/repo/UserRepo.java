@@ -12,7 +12,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
   @Query(value = "select * from users u where u.username = :userName", nativeQuery = true)
   User getUserByUsername(String userName);
 
-  @Query(value = "select * from users u where u.name like concat('%'," + ":teacherName," + "'%')", nativeQuery = true)
+  @Query(value = "select * from users u where u.name like concat('%'," + ":teacherName," + "'%') and id_role = 2", nativeQuery = true)
   List<User> getUserByName(String teacherName);
 
   @Query(value = "select * from users where code = :studentCode and id_role = 3 limit 1", nativeQuery = true)

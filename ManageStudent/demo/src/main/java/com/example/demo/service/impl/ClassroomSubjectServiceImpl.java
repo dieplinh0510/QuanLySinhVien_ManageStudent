@@ -111,9 +111,9 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
     }
 
     if (classroomSubject!= null){
-      if (classroomSubject.getStatus() != -1){
-        throw new Exception("Không thể thay đổi thông tin lớp học");
-      }
+//      if (classroomSubject.getStatus() != -1){
+//        throw new Exception("Không thể thay đổi thông tin lớp học");
+//      }
       Assert.notNull(classroomSubjectDTO.getClassroomCode(), "Mã lớp chống");
       classroomSubject.setQuantityStudent(classroomSubjectDTO.getQuantityStudent());
       classroomSubject.setClassroomCode(classroomSubjectDTO.getClassroomCode());
@@ -137,9 +137,9 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
       throw new Exception("Tài khoản không có quyền sử dụng chức năng này");
     }
     ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByIdAndStatus(classroomId);
-    if (classroomSubject != null){
-      throw new Exception("Lớp học đã bắt đầu, không thể thêm sinh viên");
-    }
+//    if (classroomSubject != null){
+//      throw new Exception("Lớp học đã bắt đầu, không thể thêm sinh viên");
+//    }
     Long result = studentInClassroomSubjectRepo.getStudentInStudentClass(userId, subjectId);
     if (result == null){
         Long quantityStudentInClass = studentInClassroomSubjectRepo.getQuantityStudent(classroomId);

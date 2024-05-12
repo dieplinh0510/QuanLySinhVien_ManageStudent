@@ -2,9 +2,6 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import * as api from '../../api/ClassServices';
 import * as ClassActions from '../actions/ClassActions';
 import * as ClassTypes from '../types/ClassTypes';
-import { searchClassesBySubjectFailure, searchClassesBySubjectSuccess } from '../actions/ClassActions';
-import { getSubjectDetailById } from '../../api/SubjectServices';
-import { searchClassInSubject } from '../../api/ClassServices';
 
 // API get all class by subjectId
 function* getListClassBySubjectSaga(action) {
@@ -88,6 +85,16 @@ function* addStudentToClassSaga(action) {
   }
 }
 
+// API get all student in class
+function* getAllStudentInClassSaga(payload) {
+  try {
+    const data = yield call(api.getAllStudent, payload.payload);
+    yield put(ClassActions.getAllStudentInClassSuccess(data));
+  } catch (error) {
+    yield put(ClassActions.getAllStudentInClassFailure(error.message));
+  }
+}
+
 function* watchClassSaga() {
   yield takeEvery(ClassTypes.GET_CLASSES_IN_SUBJECT_REQUEST, getListClassBySubjectSaga);
   yield takeEvery(ClassTypes.GET_ALL_CLASSES_REQUEST, getAllClassSaga);
@@ -97,6 +104,7 @@ function* watchClassSaga() {
   yield takeEvery(ClassTypes.GET_CLASSES_BY_COURSE_REQUEST, getListClassByCourseSaga);
   yield takeEvery(ClassTypes.SEARCH_CLASSES_BY_SUBJECT_REQUEST, searchClassBySubjectSaga);
   yield takeEvery(ClassTypes.ADD_STUDENT_TO_CLASS_REQUEST, addStudentToClassSaga);
+  yield takeEvery(ClassTypes.GET_ALL_STUDENT_IN_CLASS_REQUEST, getAllStudentInClassSaga);
 }
 
 export default watchClassSaga;

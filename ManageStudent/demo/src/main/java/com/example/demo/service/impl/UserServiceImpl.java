@@ -66,18 +66,18 @@ public class UserServiceImpl implements UserService {
     Assert.notNull(dto.getUsername(), "Teacher username is null");
     Assert.notNull(dto.getPassword(), "Teacher password is null");
     Assert.notNull(dto.getTeacherName(), "Teacher teacher name is null");
-    Assert.notNull(dto.getTeacherCode(), "Teacher teacher code is null");
 
     Role role = roleRepo.findByNameRole(Const.ROLE_TEACHER);
     if (role == null) {
       return null;
     }
+    User user = userRepo.getUserByUsername(dto.getUsername());
+    Assert.notNull(user, "Username đã tồn tại. Vui lòng nhập username khác.");
 
-    User user = User.builder()
+    User userNew = User.builder()
         .username(dto.getUsername())
         .password(passwordEncoder.encode(dto.getPassword()))
         .name(dto.getTeacherName())
-        .code(dto.getTeacherCode())
         .email(dto.getEmail())
         .isFirstLogin(true)
         .createDatetime(LocalDateTime.now())
@@ -87,6 +87,8 @@ public class UserServiceImpl implements UserService {
         .idRole(role.getId())
         .isActive(true)
         .build();
+    userRepo.save(userNew);
+    userNew.setCode(1000000 + user.getId());
 
     // send email
     mailService.send(dto.getEmail(), "Thông tin tài khoản", "Tài khoản của bạn đã được tạo thành công!\n" +
@@ -94,7 +96,7 @@ public class UserServiceImpl implements UserService {
         "Password: " + dto.getPassword() + "\n" +
         "Vui lòng đăng nhập và thay đổi mật khẩu ngay sau khi đăng nhập thành công!");
 
-    return userRepo.save(user);
+    return userRepo.save(userNew);
   }
 
   @Override
@@ -133,7 +135,9 @@ public class UserServiceImpl implements UserService {
     Assert.notNull(studentDTO.getEmail(), "Student email is null");
     Assert.notNull(studentDTO.getIdClass(), "Class is null");
     Assert.notNull(studentDTO.getIdCourse(), "Course is null");
-    User user = User.builder()
+    User user = userRepo.getUserByUsername(studentDTO.getUsername());
+    Assert.notNull(user, "Username đã tồn tại. Vui lòng nhập username khác");
+    User userNew = User.builder()
         .createDatetime(LocalDateTime.now())
         .createUser(studentDTO.getUsername())
         .password(passwordEncoder.encode(studentDTO.getPassword()))
@@ -146,9 +150,9 @@ public class UserServiceImpl implements UserService {
         .idClass(studentDTO.getIdClass())
         .email(studentDTO.getEmail())
         .build();
-    userRepo.save(user);
-    user.setCode(studentDTO.getIdCourse() + user.getId());
-    userRepo.save(user);
-    return user;
+    userRepo.save(userNew);
+    userNew.setCode(studentDTO.getIdCourse() + userNew.getId());
+    userRepo.save(userNew);
+    return userNew;
   }
 }

@@ -27,7 +27,7 @@ export const createStudent = async (payload) => {
       'Content-Type': 'multipart/form-data',
     },
   });
-  return HttpService.checkResponseCommon(response, [], 'Create student success');
+  return HttpService.checkResponseCommon(response, [], 'Tạo mới sihn viên thành công!');
 
 
   // let response = await HttpService.post('/students', {
@@ -42,7 +42,7 @@ export const editStudent = async (payload) => {
     body: payload,
   });
 
-  return HttpService.checkResponseCommon(response, [], 'Edit student success');
+  return HttpService.checkResponseCommon(response, [], 'Sửa thông tin sinh viên thành công!');
 };
 
 export const deleteStudent = async (payload) => {
@@ -50,7 +50,7 @@ export const deleteStudent = async (payload) => {
     params: payload,
   });
 
-  return HttpService.checkResponseCommon(response, [], 'Delete student success');
+  return HttpService.checkResponseCommon(response, [], 'Xóa sinh viên thành công!');
 };
 
 export const getStudentDetailById = async (payload) => {
@@ -83,4 +83,20 @@ export const getStudentDetailByStudentCode = async (payload) => {
     params: payload,
   });
   return HttpService.checkResponseCommon(response, { studentName: '', courseName: '', classroomName: '' });
+};
+
+// Get all class to register
+export const getAllClassToRegister = async (payload) => {
+  let response = await HttpService.get(`/students/view-subject-class/register`, {
+    params: payload,
+  });
+  return HttpService.checkResponseCommon(response, []);
+};
+
+// Get all subject to register
+export const getAllSubjectToRegister = async (payload) => {
+  let response = await HttpService.get(`/students/view-subject/register`, {
+    params: payload,
+  });
+  return HttpService.checkResponseCommon(response, []);
 };

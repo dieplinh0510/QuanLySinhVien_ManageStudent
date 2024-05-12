@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.domain.dto.InsertFieldDTO;
 import com.example.demo.domain.dto.SearchProcessDTO;
+import com.example.demo.domain.dto.StudentPointInClassroomDTO;
 import com.example.demo.domain.model.ProcessFileImport;
 import com.example.demo.domain.model.User;
 import com.example.demo.repo.ClassroomRepo;
@@ -12,6 +13,10 @@ import com.example.demo.service.FileService;
 import com.example.demo.service.StudentService;
 import com.example.demo.utils.SecurityUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -35,9 +40,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
+import java.awt.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service

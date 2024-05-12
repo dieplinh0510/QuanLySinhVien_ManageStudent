@@ -97,6 +97,26 @@ function* getStudentDetailByStudentCodeSaga(payload) {
   }
 }
 
+// Get all class to register
+function* getAllClassToRegisterSaga(payload) {
+  try {
+    const data = yield call(api.getAllClassToRegister, payload.payload);
+    yield put(StudentActions.getAllClassToRegisterSuccess(data));
+  } catch (error) {
+    yield put(StudentActions.getAllClassToRegisterFailure(error.message));
+  }
+}
+
+// Get all subject to register
+function* getAllSubjectToRegisterSaga(payload) {
+  try {
+    const data = yield call(api.getAllSubjectToRegister, payload.payload);
+    yield put(StudentActions.getAllSubjectToRegisterSuccess(data));
+  } catch (error) {
+    yield put(StudentActions.getAllSubjectToRegisterFailure(error.message));
+  }
+}
+
 export default function* studentWatcherSaga() {
   yield takeLatest(StudentTypes.GET_STUDENTS_REQUEST, getAllStudentSaga);
   yield takeLatest(StudentTypes.SEARCH_STUDENTS_REQUEST, searchStudentSaga);
@@ -107,4 +127,6 @@ export default function* studentWatcherSaga() {
   yield takeLatest(StudentTypes.GET_STUDENT_MARK_BY_ID_REQUEST, getStudentMarkByIdSaga);
   yield takeLatest(StudentTypes.GET_STUDENT_ACCUMULATE_POINT_REQUEST, getAccumulatedPointSaga);
   yield takeLatest(StudentTypes.GET_STUDENT_DETAIL_BY_STUDENT_CODE_REQUEST, getStudentDetailByStudentCodeSaga);
+  yield takeLatest(StudentTypes.GET_ALL_CLASS_TO_REGISTER_REQUEST, getAllClassToRegisterSaga);
+  yield takeLatest(StudentTypes.GET_ALL_SUBJECT_TO_REGISTER_REQUEST, getAllSubjectToRegisterSaga);
 }

@@ -5,6 +5,8 @@ const initialState = {
   classes: [],
   teachers: [],
   error: null,
+  students: [],
+  studentPaging: null,
 };
 
 const classReducer = (state = initialState, action) => {
@@ -71,6 +73,30 @@ const classReducer = (state = initialState, action) => {
     case ClassTypes.ADD_STUDENT_TO_CLASS_SUCCESS:
       return { ...state, loading: false };
     case ClassTypes.ADD_STUDENT_TO_CLASS_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+
+    // API get all student in class
+    case ClassTypes.GET_ALL_STUDENT_IN_CLASS_REQUEST:
+      return { ...state, loading: true };
+    case ClassTypes.GET_ALL_STUDENT_IN_CLASS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        students: action.payload.content,
+        studentPaging: {
+          last: action.payload.last,
+          totalElements: action.payload.totalElements,
+          totalPages: action.payload.totalPages,
+          size: action.payload.size,
+          number: action.payload.number,
+          first: action.payload.first,
+          numberOfElements: action.payload.numberOfElements,
+          pageIndex: action.payload.pageable.pageNumber,
+          pageSize: action.payload.pageable.pageSize,
+          offset: action.payload.pageable.offset,
+        },
+      };
+    case ClassTypes.GET_ALL_STUDENT_IN_CLASS_FAILURE:
       return { ...state, loading: false, error: action.payload };
 
     default:

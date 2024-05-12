@@ -18,7 +18,7 @@ public class UserRepoCustomImpl implements UserRepoCustom {
     List<TeacherDTO> list = new ArrayList<>();
     StringBuilder strQuery = new StringBuilder();
     strQuery.append("select u.id , u.name , u.code \n" +
-        "from users u where u.id_role  = 2");
+        "from users u where u.id_role  = 2 and is_active = 1");
     List<Object[]> result = entityManager.createNativeQuery(strQuery.toString()).getResultList();
     if (result != null) {
       for (Object[] item : result) {

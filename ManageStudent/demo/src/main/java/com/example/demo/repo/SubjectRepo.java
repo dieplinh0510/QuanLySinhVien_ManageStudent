@@ -29,4 +29,8 @@ public interface SubjectRepo extends JpaRepository<Subject, Long> {
 
   @Query(value = "select s.* from classroom_in_subjects cis join subjects s on cis.id_subject = s.id where cis.id = :classSubjectId", nativeQuery = true)
   Subject getSubjectByClassId(Long classSubjectId);
+
+  @Query(value = "select * from subjects s where s.subject_name like concat('%'," + ":subjectName," + "'%')", nativeQuery = true)
+  List<Subject> getSubjectBySubjectName(String subjectName);
+
 }

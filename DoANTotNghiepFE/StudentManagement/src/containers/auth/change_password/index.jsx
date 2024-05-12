@@ -9,13 +9,12 @@ import * as AuthActions from '../../../store/actions/AuthActions';
 import { Loader } from '../../../components';
 import storageService from '../../../utils/storage.service';
 import { AuthKeys } from '../../../constant';
-import { changePasswordRequest } from '../../../store/actions/AuthActions';
 import { toast } from 'react-toastify';
 
 const ChangePassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {loading= false, data =  {}, error = null, navigatePath=null} = useSelector((state) => state.auth);
+  const { loading = false, data = {}, error = null, navigatePath = null } = useSelector((state) => state.auth);
   const [payload, setPayload] = React.useState({
     teacherName: 'admin',
     password: '',
@@ -27,26 +26,26 @@ const ChangePassword = () => {
       toast.error('Mật khẩu không khớp');
       return;
     }
-    dispatch(AuthActions.changePasswordRequest(payload))
-  }
+    dispatch(AuthActions.changePasswordRequest(payload));
+  };
 
   useEffect(() => {
     setPayload(
       {
         ...payload,
-        teacherName: storageService.getObject(AuthKeys.CURRENT_USER)?.teacherName
-      }
-    )
+        teacherName: storageService.getObject(AuthKeys.CURRENT_USER)?.teacherName,
+      },
+    );
   }, []);
 
   useEffect(() => {
     if (navigatePath && navigatePath !== '/change-password') {
-      navigate(navigatePath, { replace: true })
+      navigate(navigatePath, { replace: true });
     }
   }, [navigatePath]);
 
   return (
-    <Loader active={loading} >
+    <Loader active={loading}>
       <div className={'login-page'}>
         <div className={'left'}>
           <img src={banner} alt={'banner'} />
@@ -77,7 +76,7 @@ const ChangePassword = () => {
                    }}
             />
             <div className={'login-btn'}>
-              <p style={{color: 'red'}}>{error}</p>
+              <p style={{ color: 'red' }}>{error}</p>
               <Button title={'Thay đổi mật khẩu'} onClick={handleChangePassword} />
             </div>
             <div className={'other-link'}>

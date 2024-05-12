@@ -4,10 +4,12 @@ import Button from '../../../hook/button';
 import './style.scss';
 import {
   MDBBtn,
-  MDBModal, MDBModalBody,
+  MDBModal,
+  MDBModalBody,
   MDBModalContent,
   MDBModalDialog,
-  MDBModalHeader, MDBModalTitle,
+  MDBModalHeader,
+  MDBModalTitle,
   MDBTable,
   MDBTableBody,
   MDBTableHead,
@@ -24,7 +26,7 @@ import { Oval } from 'react-loader-spinner';
 const SubjectManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { subjects = [], semesters = [], loading=false } = useSelector((state) => state.subject);
+  const { subjects = [], semesters = [], loading = false } = useSelector((state) => state.subject);
   const [searchPayload, setSearchPayload] = React.useState('');
   const [showCreate, setShowCreate] = React.useState(false);
   const [payloadCreate, setPayloadCreate] = React.useState({
@@ -40,7 +42,7 @@ const SubjectManager = () => {
 
 
   useEffect(() => {
-    dispatch(SubjectActions.getSubjectsRequest());
+    dispatch(SubjectActions.getSubjectsRequest({ subjectName: searchPayload }));
     dispatch(SubjectActions.getListSemesterRequest());
   }, []);
 
@@ -114,17 +116,13 @@ const SubjectManager = () => {
   return (
     <div className={'subject-manager-page'}>
       <div className={'subject-input-box'}>
-        <p>Mã môn: </p>
+        <p>Tên môn: </p>
         <Input
           value={searchPayload}
           onChange={(value) => setSearchPayload(value)}
           onKeyPress={(e) => {
             if (e.charCode === 13) {
-              if (searchPayload !== '') {
-                dispatch(SubjectActions.getSubjectDetailRequest({ subjectCode: searchPayload }));
-              } else {
-                dispatch(SubjectActions.getSubjectsRequest());
-              }
+              dispatch(SubjectActions.getSubjectsRequest({ subjectName: searchPayload }));
             }
           }}
           label=""
@@ -142,11 +140,7 @@ const SubjectManager = () => {
         <Space width={20} />
 
         <Button title={'Tìm kiếm'} onClick={() => {
-          if (searchPayload !== '') {
-            dispatch(SubjectActions.getSubjectDetailRequest({ subjectCode: searchPayload }));
-          } else {
-            dispatch(SubjectActions.getSubjectsRequest());
-          }
+          dispatch(SubjectActions.getSubjectsRequest({ subjectName: searchPayload }));
         }} customStyle={{ width: '120px' }} />
       </div>
 
@@ -407,7 +401,7 @@ const SubjectManager = () => {
 
 
       <MDBModal open={loading}>
-        <MDBModalDialog size="xl" centered={true} >
+        <MDBModalDialog size="xl" centered={true}>
           <div style={{ width: '100%', height: '100%' }}>
             <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
             </LoadingOverlay>

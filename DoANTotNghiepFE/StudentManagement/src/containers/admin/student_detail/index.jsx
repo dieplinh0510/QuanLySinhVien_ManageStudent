@@ -39,7 +39,7 @@ const StudentDetail = () => {
       <div className="info-container">
         <StudentDetailInfo studentDetail={studentDetail} />
         <Button title={'Xem tích luỹ theo kì'}
-                onClick={() => navigate(`/admin/students/accumulated?studentId=${searchPayload.studentId}`)}
+                onClick={() => navigate(`/students/accumulated?studentId=${searchPayload.studentId}`)}
                 style={{ width: '200px', height: '40px', fontSize: '16px' }}
         />
       </div>
@@ -48,7 +48,9 @@ const StudentDetail = () => {
         <TableHeaderStudentMark />
         <MDBTableBody>
           {studentMark && studentMark.length > 0 && studentMark.map((item, index) => (
-            <tr key={index}>
+            <tr key={index} onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)} style={{
+              cursor: 'pointer',
+            }}>
               <td style={{ textAlign: 'center', lineHeight: '12px' }}>{index + 1}</td>
               <td style={{ lineHeight: '12px' }}>{item?.subjectName}</td>
               <td style={{ lineHeight: '12px' }}>{item?.classroomCode}</td>

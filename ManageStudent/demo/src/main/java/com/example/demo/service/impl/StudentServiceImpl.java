@@ -7,6 +7,7 @@ import com.example.demo.service.MailService;
 import com.example.demo.service.StudentService;
 import com.example.demo.utils.FileUtil;
 import com.example.demo.utils.SecurityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -240,27 +241,25 @@ public class StudentServiceImpl implements StudentService {
             if (semesterItem.getId() == subjectItem.getSemesterId()){
               ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByClassroomCodeAndStatus(subjectItem.getClassroomCode());
               if (classroomSubject != null){
-                sum += subjectItem.getPoint();
-                sumCredits = subjectItem.getNumberOfCredits();
+                sum += subjectItem.getPoint() * subjectItem.getNumberOfCredits();
+                sumCredits += subjectItem.getNumberOfCredits();
               }
             }
           }
-          if (sumCredits != 0){
             studentSemesterDTOS.add(StudentSemesterDTO.builder()
-                .accumulatedPoint(Math.ceil(sum/sumCredits))
+                .accumulatedPoint(sumCredits != 0 ? Math.ceil(sum/sumCredits *100)/100 : 0.0)
                 .sumCredit(sumCredits)
                 .idSemester(semesterItem.getId())
                 .build());
             StudentInSemester studentInSemester = StudentInSemester.builder()
                 .semesterId(semesterItem.getId())
-                .accumulatedPoints(Math.ceil(sum/sumCredits))
+                .accumulatedPoints(sumCredits != 0 ? Math.ceil(sum/sumCredits*100)/100 : 0.0)
                 .userId(user.getId())
                 .build();
             if (studentInSemesterRepo.getStudentSemesterByUserIdAnhSemesterId(user.getId(), semesterItem.getId()) != null){
               studentInSemesterRepo.deleteStudentIdAndSemesterId(semesterItem.getId(), user.getId());
             }
             studentInSemesterRepo.save(studentInSemester);
-          }
 
       }
       return studentSemesterDTOS;
@@ -334,7 +333,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentPointInClassroomDTO> viewPointInClassroom (String classroomCode){
+    public Page<StudentPointInClassroomDTO> viewPointInClassroom (String classroomCode, Integer pageIndex, Integer pageSize){
       List<StudentPointInClassroomDTO> listStudent = new ArrayList<>();
       List<StudentInClassroomSubject> listStudentInClass = studentInClassroomSubjectRepo.getStudentInClassroomSubjectsByClassroomCode(classroomCode);
       for (StudentInClassroomSubject item : listStudentInClass) {
@@ -363,7 +362,12 @@ public class StudentServiceImpl implements StudentService {
             .build();
         listStudent.add(studentDTO);
       }
-      return listStudent;
+      Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
+      int start = (int) pageRequest.getOffset();
+      int end = Math.min(start + pageRequest.getPageSize(), listStudent.size());
+      List<StudentPointInClassroomDTO> pageContent = listStudent.subList(start, end);
+
+      return new PageImpl<>(pageContent, pageRequest, listStudent.size());
     }
 
   @Override
@@ -474,9 +478,14 @@ public class StudentServiceImpl implements StudentService {
   }
 
   @Override
-  public Page<SubjectDTO> viewSubjectRegister(Integer pageIndex, Integer pageSize) {
+  public Page<SubjectDTO> viewSubjectRegister(String subjectName, Integer pageIndex, Integer pageSize) {
+    List<Subject> subjects ;
     List<SubjectDTO> listClass = new ArrayList<>();
-    List<Subject> subjects = subjectRepo.findAll();
+    if (subjectName != null){
+      subjects = subjectRepo.getSubjectBySubjectName(subjectName);
+    } else {
+      subjects = subjectRepo.findAll();
+    }
     for (Subject item: subjects) {
       ClassroomSubject classroomSubjects = classroomSubjectRepo.getByIdAndStatus(item.getId());
       SubjectDTO subject = SubjectDTO.builder()

@@ -17,14 +17,14 @@ public interface StudentService {
   List<StudentSemesterDTO> getAccumulatedPointByStudentCode(Long studentCode);
   User createStudent(StudentDTO studentDTO) throws Exception;
   User changeStudent(StudentDTO studentDTO) throws Exception;
-  List<StudentPointInClassroomDTO> viewPointInClassroom(String classroomCode);
+  Page<StudentPointInClassroomDTO> viewPointInClassroom(String classroomCode, Integer pageIndex, Integer pageSize);
   StudentPointInClassroomDTO sendRequestChangePointClass(String classroomCode);
   StudentPointInClassroomDTO changePointInClassroom(StudentPointInClassroomDTO studentPointInClassroomDTO) throws Exception;
   void deleteStudentInClass(Long studentClassId);
   LinkedHashMap<String, String> getColumnForInputPoint();
   LinkedHashMap<String, String> getColumnForInput();
   Page<ClassroomSubjectDTO> viewSubjectClassRegister(String subjectCode, Integer pageIndex, Integer pageSize);
-  Page<SubjectDTO> viewSubjectRegister(Integer pageIndex, Integer pageSize) throws Exception;
+  Page<SubjectDTO> viewSubjectRegister(String subjectName, Integer pageIndex, Integer pageSize) throws Exception;
 
 
 }

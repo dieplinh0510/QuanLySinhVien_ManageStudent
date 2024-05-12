@@ -81,3 +81,12 @@ export const addStudentToClass = async (payload) => {
 
   return HttpService.checkResponseCommon(response, {}, 'Thêm thành công sinh viên vào lớp học');
 };
+
+// API get all student in class
+export const getAllStudent = async (payload) => {
+  let response = await HttpService.get('/students/view-point-class', {
+    params: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, null);
+};

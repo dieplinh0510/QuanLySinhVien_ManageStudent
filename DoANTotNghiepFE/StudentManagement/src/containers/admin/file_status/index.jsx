@@ -72,9 +72,9 @@ const FileStatus = () => {
                   <td>{item.fileName}</td>
                   <td>{item.createDatetime}</td>
                   <td style={{ width: '100px', margin: '4px 25px' }}>
-                    {item.status === 2 ?
+                    {item.status === 1 ?
                       <p className={'success-message'}>Thành công</p> :
-                      (item.status === 3 || item.status === -1) ?
+                      item.status === 2 ?
                         <p className={'error-message'}>Thất bại</p> :
                         <p className={'inprocess-message'}>Đang xử lý</p>
                     }

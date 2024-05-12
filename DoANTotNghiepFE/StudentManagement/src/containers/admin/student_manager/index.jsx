@@ -4,7 +4,8 @@ import './style.scss';
 import Pulldown from '../../../hook/pulldown';
 import Button from '../../../hook/button';
 import {
-  MDBBtn, MDBFile,
+  MDBBtn,
+  MDBFile,
   MDBModal,
   MDBModalBody,
   MDBModalContent,
@@ -23,16 +24,18 @@ import Space from '../../../hook/space/space';
 import * as StudentActions from '../../../store/actions/StudentActions';
 import { toast } from 'react-toastify';
 import Pagination from '../../../components/paging';
-import { UploadType } from '../../../constant';
+import { AuthKeys, UploadType } from '../../../constant';
 import LoadingOverlay from 'react-loading-overlay';
 import { Oval } from 'react-loader-spinner';
+import storageService from '../../../utils/storage.service';
 
 const StudentManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading = false, courses = [], error = null } = useSelector((state) => state.course);
   const { classes = [] } = useSelector((state) => state.class);
-  const { students = [], paging= null} = useSelector((state) => state.student);
+  const { students = [], paging = null } = useSelector((state) => state.student);
+  const [role, setRole] = React.useState(AuthKeys.ROLE_ADMIN);
   const [lstCourse, setLstCourse] = React.useState([]);
   const [course, setCourse] = React.useState(null);
   const [clazz, setClass] = React.useState(null);
@@ -62,6 +65,7 @@ const StudentManager = () => {
   // get list course
   useEffect(() => {
     dispatch(CourseActions.getListCourseRequest({}));
+    setRole(JSON.parse(storageService.get(AuthKeys.CURRENT_USER)).roleName);
   }, []);
 
   useEffect(() => {
@@ -113,12 +117,6 @@ const StudentManager = () => {
       toast.info('Vui lòng nhập thông tin sinh viên');
       return;
     }
-
-    console.log("Create ", {
-      ...payloadCreate,
-      idClass: payloadCreate.idClass.value,
-      idCourse: payloadCreate.idCourse.value,
-    })
 
     dispatch(StudentActions.createStudentRequest({
       ...payloadCreate,
@@ -175,7 +173,7 @@ const StudentManager = () => {
       pageIndex: pageNumber,
     }));
 
-    setSearchPayload({ ...searchPayload, pageIndex: pageNumber })
+    setSearchPayload({ ...searchPayload, pageIndex: pageNumber });
   };
 
   return (
@@ -203,7 +201,7 @@ const StudentManager = () => {
                       ignores={[]}
                       setSelected={(value) => {
                         setCourse(value);
-                        setSearchPayload({ ...searchPayload, courseId: value.value, classroomId: null});
+                        setSearchPayload({ ...searchPayload, courseId: value.value, classroomId: null });
                       }}
                       isRequired={false}
                       error={false}
@@ -271,7 +269,11 @@ const StudentManager = () => {
       {/* Content */}
       <div className={'title-container'}>
         <p>Danh sách sinh viên:</p>
-        <Button title={'Thêm sinh viên'} onClick={() => setShowCreate(true)} />
+        {
+          role === AuthKeys.ROLE_ADMIN && (
+            <Button title={'Thêm sinh viên'} onClick={() => setShowCreate(true)} />
+          )
+        }
       </div>
 
       {/* Table student */}
@@ -285,44 +287,54 @@ const StudentManager = () => {
               <th>Khoá</th>
               <th>Lớp</th>
               <th>TB điểm TL</th>
-              <th></th>
+              {
+                role === AuthKeys.ROLE_ADMIN && (
+                  <th></th>
+                )
+              }
             </tr>
           </MDBTableHead>
           <MDBTableBody>
             {students && students.length > 0 && students.map((item, index) => (
-              <tr style={{cursor: 'pointer'}} key={index}>
-                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{((searchPayload.pageIndex - 1) * 10) + index + 1}</td>
-                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.studentCode}</td>
-                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.studentName}</td>
-                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.courseName}</td>
-                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.classroomName}</td>
-                <td onClick={() => navigate(`/admin/students/detail?studentId=${item.studentId}`)}>{item.accumulatedPoints}</td>
-                <td style={{ width: '120px' }}>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: '5px',
-                    alignItems: 'center',
-                    width: '120px',
-                  }}>
-                    <Button title={'Sửa'}
-                            onClick={() => {
-                              setShowEdit(true);
-                              setPayloadEdit(item);
-                            }}
-                            width={'50px'}
-                            customStyle={{ padding: '6px 0' }}
-                    />
-                    <Button title={'Xoá'}
-                            onClick={() => {
-                              setShowDelete(true);
-                              setPayloadDelete(item);
-                            }}
-                            width={'50px'}
-                            customStyle={{ padding: '6px 0' }}
-                    />
-                  </div>
-                </td>
+              <tr style={{ cursor: 'pointer' }} key={index}>
+                <td
+                  onClick={() => navigate(`/students/detail?studentId=${item.studentId}`)}>{((searchPayload.pageIndex - 1) * 10) + index + 1}</td>
+                <td onClick={() => navigate(`/students/detail?studentId=${item.studentId}`)}>{item.studentCode}</td>
+                <td onClick={() => navigate(`/students/detail?studentId=${item.studentId}`)}>{item.studentName}</td>
+                <td onClick={() => navigate(`/students/detail?studentId=${item.studentId}`)}>{item.courseName}</td>
+                <td onClick={() => navigate(`/students/detail?studentId=${item.studentId}`)}>{item.classroomName}</td>
+                <td
+                  onClick={() => navigate(`/students/detail?studentId=${item.studentId}`)}>{item.accumulatedPoints}</td>
+                {
+                  role === AuthKeys.ROLE_ADMIN && (
+                    <td style={{ width: '120px' }}>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '5px',
+                        alignItems: 'center',
+                        width: '120px',
+                      }}>
+                        <Button title={'Sửa'}
+                                onClick={() => {
+                                  setShowEdit(true);
+                                  setPayloadEdit(item);
+                                }}
+                                width={'50px'}
+                                customStyle={{ padding: '6px 0' }}
+                        />
+                        <Button title={'Xoá'}
+                                onClick={() => {
+                                  setShowDelete(true);
+                                  setPayloadDelete(item);
+                                }}
+                                width={'50px'}
+                                customStyle={{ padding: '6px 0' }}
+                        />
+                      </div>
+                    </td>
+                  )
+                }
               </tr>
             ))}
           </MDBTableBody>
@@ -331,7 +343,7 @@ const StudentManager = () => {
       </div>
 
       {/* Paging */}
-      <div style={{position: 'absolute', bottom: '20px', right: '20px'}}>
+      <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
         {
           paging && (
             <Pagination
@@ -386,7 +398,7 @@ const StudentManager = () => {
                           value={payloadCreate.idCourse}
                           ignores={[]}
                           setSelected={(value) => {
-                            setPayloadCreate({ ...payloadCreate, idCourse: value, idClass: 0});
+                            setPayloadCreate({ ...payloadCreate, idCourse: value, idClass: 0 });
                             setCourse(value);
                           }}
                           isRequired={false}
@@ -421,13 +433,14 @@ const StudentManager = () => {
                 {/*       isDisable={false}*/}
                 {/*       customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}*/}
                 {/*/>*/}
-                <MDBFile label='Hình ảnh' id='customFile' onChange={(e) => setPayloadCreate({ ...payloadCreate, studentImage: e.target.files[0] })} />
+                <MDBFile label="Hình ảnh" id="customFile"
+                         onChange={(e) => setPayloadCreate({ ...payloadCreate, studentImage: e.target.files[0] })} />
 
                 <Space height={20} />
 
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Button title={'Thêm dữ liệu từ file'}
-                          onClick={() => navigate(`/admin/file-input?uploadType=${UploadType.STUDENT}`)}
+                          onClick={() => navigate(`/teacher/file-input?uploadType=${UploadType.STUDENT}`)}
                           width={'200px'}
                           customStyle={{ padding: '6px 0' }}
                   />
@@ -553,19 +566,19 @@ const StudentManager = () => {
               <MDBBtn className="btn-close" color="none" onClick={() => setShowDelete(false)}></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-                <p style={{textAlign: 'center'}}>Bạn có chắc muốn xoá sinh viên này không?</p>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Button title={'Có'}
-                          onClick={() => handleDeleteStudent()}
-                          width={'200px'}
-                          customStyle={{ padding: '6px 0' }}
-                  />
-                  <Button title={'Không'}
-                          onClick={() => setShowDelete(false)}
-                          width={'200px'}
-                          customStyle={{ padding: '6px 0' }}
-                  />
-                </div>
+              <p style={{ textAlign: 'center' }}>Bạn có chắc muốn xoá sinh viên này không?</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button title={'Có'}
+                        onClick={() => handleDeleteStudent()}
+                        width={'200px'}
+                        customStyle={{ padding: '6px 0' }}
+                />
+                <Button title={'Không'}
+                        onClick={() => setShowDelete(false)}
+                        width={'200px'}
+                        customStyle={{ padding: '6px 0' }}
+                />
+              </div>
             </MDBModalBody>
           </MDBModalContent>
         </MDBModalDialog>
@@ -573,7 +586,7 @@ const StudentManager = () => {
 
 
       <MDBModal open={loading}>
-        <MDBModalDialog size="xl" centered={true} >
+        <MDBModalDialog size="xl" centered={true}>
           <div style={{ width: '100%', height: '100%' }}>
             <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
             </LoadingOverlay>
