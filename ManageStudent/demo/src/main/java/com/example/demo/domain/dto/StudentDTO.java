@@ -1,5 +1,7 @@
 package com.example.demo.domain.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,4 +27,15 @@ public class StudentDTO {
   private String username;
   private String password;
   private String email;
+  @Override
+  public String toString() {
+    try {
+      this.password = "";
+
+      return new ObjectMapper().writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      return "{}";
+    }
+  }
+
 }

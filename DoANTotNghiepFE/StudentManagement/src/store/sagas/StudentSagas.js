@@ -117,6 +117,28 @@ function* getAllSubjectToRegisterSaga(payload) {
   }
 }
 
+// API register subject class
+function* registerSubjectClassSaga(payload) {
+  try {
+    const data = yield call(api.registerSubjectClass, payload.payload);
+    yield put(StudentActions.registerSubjectClassSuccess(data));
+    yield put(StudentActions.getAllClassToRegisterRequest(payload.payload.searchPayload));
+  } catch (error) {
+    yield put(StudentActions.registerSubjectClassFailure(error.message));
+  }
+}
+
+// API cancel register subject class
+function* cancelRegisterSubjectClassSaga(payload) {
+  try {
+    const data = yield call(api.cancelRegisterSubjectClass, payload.payload);
+    yield put(StudentActions.cancelRegisterSubjectClassSuccess(data));
+    yield put(StudentActions.getAllClassToRegisterRequest(payload.payload.searchPayload));
+  } catch (error) {
+    yield put(StudentActions.cancelRegisterSubjectClassFailure(error.message));
+  }
+}
+
 export default function* studentWatcherSaga() {
   yield takeLatest(StudentTypes.GET_STUDENTS_REQUEST, getAllStudentSaga);
   yield takeLatest(StudentTypes.SEARCH_STUDENTS_REQUEST, searchStudentSaga);
@@ -129,4 +151,6 @@ export default function* studentWatcherSaga() {
   yield takeLatest(StudentTypes.GET_STUDENT_DETAIL_BY_STUDENT_CODE_REQUEST, getStudentDetailByStudentCodeSaga);
   yield takeLatest(StudentTypes.GET_ALL_CLASS_TO_REGISTER_REQUEST, getAllClassToRegisterSaga);
   yield takeLatest(StudentTypes.GET_ALL_SUBJECT_TO_REGISTER_REQUEST, getAllSubjectToRegisterSaga);
+  yield takeLatest(StudentTypes.REGISTER_SUBJECT_CLASS_REQUEST, registerSubjectClassSaga);
+  yield takeLatest(StudentTypes.CANCEL_REGISTER_SUBJECT_CLASS_REQUEST, cancelRegisterSubjectClassSaga);
 }

@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import './style.scss';
-import Input from '../../../hook/input';
 import * as StudentActions from '../../../store/actions/StudentActions';
 import Space from '../../../hook/space/space';
 import Button from '../../../hook/button';
-import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
+import { MDBModal, MDBModalDialog, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import Pagination from '../../../components/paging';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import * as ClassActions from '../../../store/actions/ClassActions';
-import * as SubjectActions from '../../../store/actions/SubjectActions';
 import { toast } from 'react-toastify';
+import { cancelRegisterSubjectClassRequest } from '../../../store/actions/StudentActions';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const StudentClassRegister = () => {
   const dispatch = useDispatch();
@@ -39,6 +39,22 @@ const StudentClassRegister = () => {
 
     setSearchPayload({ ...searchPayload, pageIndex: pageNumber });
   };
+
+  const handleToggleRegister = (item) => {
+    if (item.checkStudent === 1) {
+      dispatch(StudentActions.cancelRegisterSubjectClassRequest({
+        classroomCode: item.classroomCode,
+        subjectId: item.subjectId,
+        searchPayload
+      }));
+    } else {
+      dispatch(StudentActions.registerSubjectClassRequest({
+        classroomCode: item.classroomCode,
+        subjectId: item.subjectId,
+        searchPayload
+      }));
+    }
+  }
 
   return (
     <div className={'subject-manager-page'}>
@@ -73,16 +89,17 @@ const StudentClassRegister = () => {
                 <td>{`${item.quantityStudentNow}/${item.quantityStudent}`}</td>
                 <td>{item.teacher}</td>
                 <td>
-                  <Button title={'Đăng ký'} onClick={() => {
-                    toast.info("Chưa code phần đăng ký :)")
+                  <Button title={item.checkStudent === 1 ? 'Hủy đăng ký' : 'Đăng ký'} onClick={() => {
+                    handleToggleRegister(item);
                   }} customStyle={{
-                    width: '100px',
+                    width: item.checkStudent === 1 ? '120px' : "100px",
                     color: 'white',
                     fontSize: '14px',
                     padding: '5px',
                     borderRadius: '5px',
                     textAlign: 'center',
                     cursor: 'pointer',
+                    backgroundColor: item.checkStudent === 1 ? 'red' : '#386bc0',
                   }}
                   />
                   <Space height={'6px'} />
@@ -105,6 +122,15 @@ const StudentClassRegister = () => {
           }
         </div>
       </div>
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true}>
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
+        </MDBModalDialog>
+      </MDBModal>
     </div>
   );
 };

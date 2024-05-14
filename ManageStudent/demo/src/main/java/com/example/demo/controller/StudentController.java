@@ -187,24 +187,6 @@ public class StudentController extends CommonController {
     }
   }
 
-//  @Operation(summary = "API xóa sinh viên trong màn nhập điểm")
-//  @ApiResponses(value = {
-//      @ApiResponse(responseCode = "200", description = "Success",
-//          content = {@Content(mediaType = "application/json",
-//              schema = @Schema(implementation = AuthenticationResponse.class))}),
-//      @ApiResponse(responseCode = "400", description = "Invalid id username/password",
-//          content = @Content)
-//  })
-//  @DeleteMapping("/delete-point-class")
-//  public ResponseEntity<?> deleteStudentInClass(@RequestParam(value = "studentClassId") Long studentClassId){
-//    try {
-//      studentService.deleteStudentInClass(studentClassId);
-//      return toSuccessResult(RETURN_CODE_SUCCESS);
-//    } catch (Exception e) {
-//      log.error(e.getMessage(), e);
-//      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
-//    }
-//  }
 
   @Operation(summary = "API lấy các field để mapping trong màn nhập điểm - teacher")
   @GetMapping("/get-column/point")
@@ -228,7 +210,7 @@ public class StudentController extends CommonController {
     }
   }
 
-  @Operation(summary = "API man dang ky lop hoc - student")
+  @Operation(summary = "API man dang ky lop hoc xem cac lop hoc trong mon hoc - student")
   @GetMapping("/view-subject-class/register")
   public ResponseEntity<?> viewSubjectClassRegister(@RequestParam (name = "subjectCode") String subjectCode,
                                                     @RequestParam(value = "pageIndex") Integer pageIndex,
@@ -241,6 +223,7 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API man dang ky lop hoc xem cac mon hoc- student")
   @GetMapping("/view-subject/register")
   public ResponseEntity<?> viewSubjectRegister(@RequestParam(value = "subjectName") String subjectName,
                                               @RequestParam(value = "pageIndex") Integer pageIndex,
@@ -253,4 +236,27 @@ public class StudentController extends CommonController {
     }
   }
 
+  @Operation(summary = "API man dang ky lop hoc - student")
+  @PostMapping("/register-class")
+  public ResponseEntity<?> registerClassSubject(@RequestParam(value = "classroomCode") String classroomCode,
+                                                @RequestParam(value = "subjectId") Long subjectId){
+    try {
+      return toSuccessResult(studentService.registerClassSubject(classroomCode, subjectId));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @Operation(summary = "API man huy dang ky lop hoc - student")
+  @DeleteMapping("/cancel-register-class")
+  public ResponseEntity<?> cancelRegisterClassSubject(@RequestParam(value = "classroomCode") String classroomCode,
+                                                @RequestParam(value = "subjectId") Long subjectId){
+    try {
+      return toSuccessResult(studentService.cancelRegisterClassSubject(classroomCode,  subjectId));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
 }

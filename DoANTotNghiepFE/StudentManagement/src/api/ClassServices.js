@@ -90,3 +90,9 @@ export const getAllStudent = async (payload) => {
 
   return HttpService.checkResponseCommon(response, null);
 };
+
+// API get detail class by classroomCode
+export const getDetailClass = async (payload) => {
+  let response = await HttpService.get(`/classroom-subject/detail/${payload.classroomCode}`);
+  return response?.data?.data;
+};

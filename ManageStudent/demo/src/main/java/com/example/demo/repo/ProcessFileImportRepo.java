@@ -13,4 +13,7 @@ public interface ProcessFileImportRepo extends JpaRepository<ProcessFileImport, 
   List<ProcessFileImport> findAllByStatusInOrderByCreateDatetimeDesc(List<Integer> statusList);
   @Query(value = "select * from process_file_import where id = :idFile", nativeQuery = true)
   ProcessFileImport getProcessFileById(Long idFile);
+
+  @Query(value = "select * from process_file_import pfi where `schema` = :classroomCode and type = 3", nativeQuery = true)
+  List<ProcessFileImport> getListFileByClassroomCode(String classroomCode);
 }

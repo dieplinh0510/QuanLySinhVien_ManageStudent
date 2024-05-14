@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.example.demo.common.Const.RETURN_CODE_ERROR;
 
@@ -105,4 +106,61 @@ public class ClassroomSubjectController extends CommonController{
     }
   }
 
+
+  @Operation(summary = "API thong ke diem - giang vien")
+  @GetMapping("/statistical-point")
+  ResponseEntity<?> statisticalPoint(@RequestParam(name = "classroomCode") String classroomCode){
+    try {
+      return toSuccessResult(classroomSubjectService.statisticalPoint(classroomCode));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @Operation(summary = "API thong ke diem danh sach sinh vien - giang vien")
+  @GetMapping("/statistical-point/student")
+  ResponseEntity<?> statisticalPointStudent(@RequestParam(name = "classroomCode") String classroomCode){
+    try {
+      return toSuccessResult(classroomSubjectService.statisticalPointStudent(classroomCode));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @Operation(summary = "API xem tai lieu theo lop hoc- giang vien - student")
+  @GetMapping("/view-document")
+  ResponseEntity<?> viewDocumentInClassroom(@RequestParam(name = "classroomCode") String classroomCode,
+                                            @RequestParam(value = "pageIndex") Integer pageIndex,
+                                            @RequestParam(value = "pageSize") Integer pageSize){
+    try {
+      return toSuccessResult(classroomSubjectService.viewDocumentInClassroom(classroomCode, pageIndex, pageSize));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @Operation(summary = "API upload tai lieu theo lop hoc- giang vien")
+  @PostMapping("/upload-document")
+  ResponseEntity<?> uploadDocumentInClassroom(@RequestParam(name = "classroomCode") String classroomCode, @RequestBody MultipartFile file){
+    try {
+      return toSuccessResult(classroomSubjectService.uploadDocumentInClassroom(classroomCode, file, file.getBytes()));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
+
+  @Operation(summary = "API lấy classroom trong môn học by classroomCode")
+  @GetMapping("/detail/{classroomCode}")
+  ResponseEntity<?> getClassroomSubjectByCode(@PathVariable String classroomCode){
+    try {
+      return toSuccessResult(classroomSubjectService.getClassroomSubjectByCode(classroomCode));
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
+    }
+  }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.dto.*;
+import com.example.demo.domain.model.StudentInClassroomSubject;
 import com.example.demo.domain.model.User;
 import org.springframework.data.domain.Page;
 
@@ -23,8 +24,9 @@ public interface StudentService {
   void deleteStudentInClass(Long studentClassId);
   LinkedHashMap<String, String> getColumnForInputPoint();
   LinkedHashMap<String, String> getColumnForInput();
-  Page<ClassroomSubjectDTO> viewSubjectClassRegister(String subjectCode, Integer pageIndex, Integer pageSize);
+  Page<ClassroomSubjectDTO> viewSubjectClassRegister(String subjectCode, Integer pageIndex, Integer pageSize) throws Exception;
   Page<SubjectDTO> viewSubjectRegister(String subjectName, Integer pageIndex, Integer pageSize) throws Exception;
 
-
+  StudentInClassroomSubject registerClassSubject(String classroomCode,  Long subjectId) throws Exception;
+  Boolean cancelRegisterClassSubject(String classroomCode, Long subjectId) throws Exception;
 }

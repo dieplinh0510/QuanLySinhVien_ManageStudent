@@ -1,4 +1,4 @@
-import { CButton, CSpinner } from '@coreui/react';
+import { CSpinner } from '@coreui/react';
 import React from 'react';
 import { MDBBtn } from 'mdb-react-ui-kit';
 
@@ -10,7 +10,7 @@ const Button = ({
                   width,
                   isLoading,
                   customStyle,
-                  disabled
+                  disabled,
                 }) => {
   return (
     <MDBBtn
@@ -18,7 +18,7 @@ const Button = ({
         width: width ? width : '220px',
         backgroundColor: bgColor,
         color: color,
-        ...customStyle
+        ...customStyle,
       }}
       color={'primary'}
       onClick={onClick}

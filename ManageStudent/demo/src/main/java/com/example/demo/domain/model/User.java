@@ -1,5 +1,8 @@
 package com.example.demo.domain.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 
 import javax.persistence.*;
@@ -46,4 +49,15 @@ public class User {
   private String updateUser;
   @Column(name = "update_datetime")
   private LocalDateTime updateDatetime;
+
+  @Override
+  public String toString() {
+    try {
+      this.password = "";
+
+      return new ObjectMapper().writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      return "{}";
+    }
+  }
 }

@@ -92,4 +92,24 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
     }
     return list;
   }
+
+  @Override
+  public List<ClassroomSubjectDTO> getClassroomSubject(String classroomCode) {
+    List<ClassroomSubjectDTO> list = new ArrayList<>();
+    StringBuilder strQuery = new StringBuilder();
+    strQuery.append("select cis.classroom_code , s.subject_name from classroom_in_subjects cis join subjects s on cis.id_subject = s.id  where classroom_code = :classroomCode");
+    Query query = entityManager.createNativeQuery(strQuery.toString());
+    query.setParameter("classroomCode", classroomCode);
+    List<Object[]> result = query.getResultList();
+    if (result!=null){
+      for (Object[] item: result) {
+        ClassroomSubjectDTO classroomSubjectDTO = ClassroomSubjectDTO.builder()
+            .classroomCode(item[0] != null ? item[0].toString() : null)
+            .subjectName(item[1] != null ? item[1].toString() : null)
+            .build();
+        list.add(classroomSubjectDTO);
+      }
+    }
+    return list;
+  }
 }

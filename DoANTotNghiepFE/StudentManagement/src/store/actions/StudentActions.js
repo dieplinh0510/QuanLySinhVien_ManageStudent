@@ -173,3 +173,36 @@ export const getAllSubjectToRegisterFailure = (error) => ({
   type: StudentTypes.GET_ALL_SUBJECT_TO_REGISTER_FAILURE,
   payload: error
 });
+
+
+// API register subject class
+export const registerSubjectClassRequest = (payload) => ({
+  type: StudentTypes.REGISTER_SUBJECT_CLASS_REQUEST,
+  payload: payload,
+});
+
+export const registerSubjectClassSuccess = (payload) => ({
+  type: StudentTypes.REGISTER_SUBJECT_CLASS_SUCCESS,
+  payload: payload,
+});
+
+export const registerSubjectClassFailure = (error) => ({
+  type: StudentTypes.REGISTER_SUBJECT_CLASS_FAILURE,
+  payload: error
+});
+
+// API cancel register subject class
+export const cancelRegisterSubjectClassRequest = (payload) => ({
+  type: StudentTypes.CANCEL_REGISTER_SUBJECT_CLASS_REQUEST,
+  payload: payload,
+});
+
+export const cancelRegisterSubjectClassSuccess = (payload) => ({
+  type: StudentTypes.CANCEL_REGISTER_SUBJECT_CLASS_SUCCESS,
+  payload: payload,
+});
+
+export const cancelRegisterSubjectClassFailure = (error) => ({
+  type: StudentTypes.CANCEL_REGISTER_SUBJECT_CLASS_FAILURE,
+  payload: error
+});

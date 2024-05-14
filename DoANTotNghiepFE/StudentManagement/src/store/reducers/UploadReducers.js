@@ -8,6 +8,8 @@ const initialState = {
   uploadId: null,
   fileStatus: [],
   paging: null,
+  documents: [],
+  pagingDocuments: null,
 };
 
 const uploadReducer = (state = initialState, action) => {
@@ -131,6 +133,55 @@ const uploadReducer = (state = initialState, action) => {
         loading: false,
       };
     case UploadTypes.DOWNLOAD_FILE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // API get all documents
+    case UploadTypes.GET_ALL_DOCUMENTS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UploadTypes.GET_ALL_DOCUMENTS_SUCCESS:
+      return {
+        ...state,
+        documents: action.payload.content,
+        pagingDocuments: {
+          last: action.payload.last,
+          totalElements: action.payload.totalElements,
+          totalPages: action.payload.totalPages,
+          size: action.payload.size,
+          number: action.payload.number,
+          first: action.payload.first,
+          numberOfElements: action.payload.numberOfElements,
+          pageIndex: action.payload.pageable.pageNumber,
+          pageSize: action.payload.pageable.pageSize,
+          offset: action.payload.pageable.offset,
+        },
+        loading: false,
+      };
+    case UploadTypes.GET_ALL_DOCUMENTS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // API upload document
+    case UploadTypes.UPLOAD_DOCUMENT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UploadTypes.UPLOAD_DOCUMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case UploadTypes.UPLOAD_DOCUMENT_FAILURE:
       return {
         ...state,
         loading: false,

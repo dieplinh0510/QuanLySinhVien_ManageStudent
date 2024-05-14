@@ -7,6 +7,7 @@ const initialState = {
   error: null,
   students: [],
   studentPaging: null,
+  classDetail: {},
 };
 
 const classReducer = (state = initialState, action) => {
@@ -97,6 +98,14 @@ const classReducer = (state = initialState, action) => {
         },
       };
     case ClassTypes.GET_ALL_STUDENT_IN_CLASS_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+
+    // API get detail class by classroomCode
+    case ClassTypes.GET_DETAIL_CLASS_REQUEST:
+      return { ...state, loading: true };
+    case ClassTypes.GET_DETAIL_CLASS_SUCCESS:
+      return { ...state, loading: false, classDetail: action.payload };
+    case ClassTypes.GET_DETAIL_CLASS_FAILURE:
       return { ...state, loading: false, error: action.payload };
 
     default:

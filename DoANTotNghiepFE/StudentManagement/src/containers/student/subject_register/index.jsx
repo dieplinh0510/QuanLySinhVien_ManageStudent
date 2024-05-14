@@ -4,13 +4,13 @@ import Input from '../../../hook/input';
 import * as StudentActions from '../../../store/actions/StudentActions';
 import Space from '../../../hook/space/space';
 import Button from '../../../hook/button';
-import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
+import { MDBModal, MDBModalDialog, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import Pagination from '../../../components/paging';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import * as CourseActions from '../../../store/actions/CourseActions';
-import * as ClassActions from '../../../store/actions/ClassActions';
 import { toast } from 'react-toastify';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const StudentSubjectRegister = () => {
   const dispatch = useDispatch();
@@ -23,6 +23,7 @@ const StudentSubjectRegister = () => {
   const [searchPayload, setSearchPayload] = React.useState({
     pageIndex: 1,
     pageSize: 10,
+    subjectName: '',
   });
 
   useEffect(() => {
@@ -107,7 +108,7 @@ const StudentSubjectRegister = () => {
                 <td style={{
                   textDecoration: item.status === -1 ? 'none' : 'underline',
                   color: item.status === -1 ? 'black' : 'blue',
-                }} >{item.subjectName}</td>
+                }}>{item.subjectName}</td>
                 <td>{item.numberOfCredits}</td>
                 <td>{item.idSemester}</td>
                 <td>{item.status === -1 ? 'Chưa mở đăng ký' : 'Đã mở đăng ký'}</td>
@@ -129,6 +130,15 @@ const StudentSubjectRegister = () => {
           }
         </div>
       </div>
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true}>
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
+        </MDBModalDialog>
+      </MDBModal>
     </div>
   );
 };

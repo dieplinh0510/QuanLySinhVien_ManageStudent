@@ -63,3 +63,18 @@ export const searchMyClassesFailure = (error) => ({
   type: TeacherTypes.SEARCH_MY_CLASSES_FAILURE,
   payload: error,
 });
+
+// API update class
+export const updateClassRequest = (payload) => ({
+  type: TeacherTypes.UPDATE_CLASS_REQUEST,
+  payload: payload,
+});
+
+export const updateClassSuccess = () => ({
+  type: TeacherTypes.UPDATE_CLASS_SUCCESS,
+});
+
+export const updateClassFailure = (error) => ({
+  type: TeacherTypes.UPDATE_CLASS_FAILURE,
+  payload: error,
+});

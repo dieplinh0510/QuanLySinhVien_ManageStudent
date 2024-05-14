@@ -131,3 +131,47 @@ export const downloadFileFailure = (error) => {
     payload: error,
   };
 };
+
+// API get all documents
+export const getAllDocumentsRequest = (payload) => {
+  return {
+    type: UploadTypes.GET_ALL_DOCUMENTS_REQUEST,
+    payload: payload,
+  };
+};
+
+export const getAllDocumentsSuccess = (payload) => {
+  return {
+    type: UploadTypes.GET_ALL_DOCUMENTS_SUCCESS,
+    payload: payload,
+  };
+};
+
+export const getAllDocumentsFailure = (error) => {
+  return {
+    type: UploadTypes.GET_ALL_DOCUMENTS_FAILURE,
+    payload: error,
+  };
+};
+
+// API upload document
+export const uploadDocumentRequest = (payload) => {
+  return {
+    type: UploadTypes.UPLOAD_DOCUMENT_REQUEST,
+    payload: payload,
+  };
+};
+
+export const uploadDocumentSuccess = (payload) => {
+  return {
+    type: UploadTypes.UPLOAD_DOCUMENT_SUCCESS,
+    payload: payload,
+  };
+};
+
+export const uploadDocumentFailure = (error) => {
+  return {
+    type: UploadTypes.UPLOAD_DOCUMENT_FAILURE,
+    payload: error,
+  };
+};

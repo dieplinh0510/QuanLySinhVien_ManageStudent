@@ -20,5 +20,8 @@ public class ClassroomSubjectDTO {
   private Long idUser;
 
   private Long idClassroom;
+  private Integer checkStudent;
+  private Long subjectId;
+
 
 }

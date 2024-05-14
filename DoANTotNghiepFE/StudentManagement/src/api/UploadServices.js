@@ -67,3 +67,30 @@ export const downloadFile = async (payload) => {
   document.body.appendChild(link);
   link.click();
 };
+
+// API get all documents
+export const getAllDocuments = async (payload) => {
+  let response = await HttpService.get('/classroom-subject/view-document', {
+    params: payload,
+  });
+  return response?.data?.data;
+};
+
+// API upload document
+export const uploadDocument = async (payload) => {
+  const formData = new FormData();
+
+  formData.append('file', payload.file);
+
+  let response = await HttpService.post('/classroom-subject/upload-document', {
+    body: formData,
+    params: {
+      classroomCode: payload.classroomCode,
+    },
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return HttpService.checkResponseCommon(response, null, "Tải tài liệu thành công!");
+};
+

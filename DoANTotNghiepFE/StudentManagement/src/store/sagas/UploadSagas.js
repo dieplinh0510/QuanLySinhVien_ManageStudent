@@ -61,6 +61,28 @@ function* downloadFileSaga(payload) {
   }
 }
 
+// API get all documents
+function* getAllDocumentsSaga(payload) {
+  try {
+    const data = yield call(api.getAllDocuments, payload.payload);
+    yield put(UploadActions.getAllDocumentsSuccess(data));
+  } catch (error) {
+    yield put(UploadActions.getAllDocumentsFailure(error.message));
+  }
+}
+
+// API upload document
+function* uploadDocumentSaga(payload) {
+  try {
+    const data = yield call(api.uploadDocument, payload.payload);
+    yield put(UploadActions.uploadDocumentSuccess(data));
+    yield put(UploadActions.getAllDocumentsRequest(payload.payload.searchPayload));
+  } catch (error) {
+    yield put(UploadActions.uploadDocumentFailure(error.message));
+  }
+}
+
+
 export default function* uploadWatcherSaga() {
   yield takeLatest(UploadTypes.GET_STUDENT_COLUMN_REQUEST, getStudentColumnSaga);
   yield takeLatest(UploadTypes.GET_POINT_COLUMN_REQUEST, getPointColumnSaga);
@@ -68,4 +90,6 @@ export default function* uploadWatcherSaga() {
   yield takeLatest(UploadTypes.POST_MAPPING_COLUMN_REQUEST, postMappingColumnSaga);
   yield takeLatest(UploadTypes.GET_FILE_STATUS_REQUEST, getFileStatusSaga);
   yield takeLatest(UploadTypes.DOWNLOAD_FILE_REQUEST, downloadFileSaga);
+  yield takeLatest(UploadTypes.GET_ALL_DOCUMENTS_REQUEST, getAllDocumentsSaga);
+  yield takeLatest(UploadTypes.UPLOAD_DOCUMENT_REQUEST, uploadDocumentSaga);
 }

@@ -21,16 +21,22 @@ import { useNavigate } from 'react-router-dom';
 import { UploadType } from '../../../constant';
 import LoadingOverlay from 'react-loading-overlay';
 import { Oval } from 'react-loader-spinner';
+import Pagination from '../../../components/paging';
+import * as UploadActions from '../../../store/actions/UploadActions';
 
 const InputMark = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { students = [], loading = false, error, classrooms = [] } = useSelector((state) => state.pointInput);
+  const { students = [], loading = false, error, classrooms = [], pagingStudents = null } = useSelector((state) => state.pointInput);
   const [classroomCode, setClassroomCode] = React.useState('');
   const [openModalClassroomCode, setOpenModalClassroomCode] = useState(false);
   const [openModalEditPoint, setOpenModalEditPoint] = useState(false);
   const [openModalDeletePoint, setOpenModalDeletePoint] = useState(false);
   const [payload, setPayload] = useState(null);
+  const [searchPayload, setSearchPayload] = useState({
+    pageIndex: 1,
+    pageSize: 10,
+  });
 
   const handleImportFile = () => {
     navigate(`/teacher/file-input?uploadType=${UploadType.POINT}`);
@@ -41,7 +47,9 @@ const InputMark = () => {
     let classroomCodeParam = queryParams.get('classroomCode');
     if (classroomCodeParam || classroomCodeParam !== '') {
       setClassroomCode(classroomCodeParam);
-      dispatch(PointInputActions.getStudentColumnRequest({ classroomCode: classroomCodeParam }));
+      let search = { ...searchPayload, classroomCode: classroomCodeParam };
+      dispatch(PointInputActions.getStudentColumnRequest(search));
+      setSearchPayload(search);
     }
     dispatch(PointInputActions.getAllClassroomRequest());
   }, []);
@@ -50,7 +58,15 @@ const InputMark = () => {
     setOpenModalClassroomCode(!openModalClassroomCode);
   };
 
-  console.log(loading);
+  const handlePageChange = (pageNumber) => {
+    dispatch(PointInputActions.getStudentColumnRequest({
+      ...searchPayload,
+      pageIndex: pageNumber,
+    }));
+
+    setSearchPayload({ ...searchPayload, pageIndex: pageNumber });
+  };
+
 
   return (
     // <Loader active={loading} >
@@ -132,6 +148,19 @@ const InputMark = () => {
 
       <Space height={20} />
       <Button title={'Thêm dữ liệu từ file'} onClick={handleImportFile} />
+
+      {/* Paging */}
+      <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+        {
+          pagingStudents && (
+            <Pagination
+              totalPages={pagingStudents?.totalPages}
+              currentPage={pagingStudents?.pageIndex + 1}
+              onPageChange={handlePageChange}
+            />
+          )
+        }
+      </div>
 
       {/* Modal show classroom */}
       <MDBModal

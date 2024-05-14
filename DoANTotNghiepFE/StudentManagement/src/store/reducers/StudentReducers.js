@@ -260,6 +260,40 @@ const studentsReducer = (state = initialState, action) => {
         loading: true,
       };
 
+    // API register subject class
+    case StudentTypes.REGISTER_SUBJECT_CLASS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case StudentTypes.REGISTER_SUBJECT_CLASS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case StudentTypes.REGISTER_SUBJECT_CLASS_FAILURE:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    // API cancel register subject class
+    case StudentTypes.CANCEL_REGISTER_SUBJECT_CLASS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case StudentTypes.CANCEL_REGISTER_SUBJECT_CLASS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case StudentTypes.CANCEL_REGISTER_SUBJECT_CLASS_FAILURE:
+      return {
+        ...state,
+        loading: true,
+      };
+
     default:
       return state;
   }

@@ -5,10 +5,12 @@ import './style.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import Pulldown from '../../../hook/pulldown';
 import Space from '../../../hook/space/space';
-import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
+import { MDBModal, MDBModalDialog, MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import { toast } from 'react-toastify';
 import * as TeacherActions from '../../../store/actions/TeacherActions';
 import { useNavigate } from 'react-router-dom';
+import LoadingOverlay from 'react-loading-overlay';
+import { Oval } from 'react-loader-spinner';
 
 const statusList = [
   { value: 0, label: 'Chưa bắt đầu' },
@@ -16,6 +18,7 @@ const statusList = [
   { value: 2, label: 'Đã kết thúc' },
 ];
 const statusListEdit = [
+  { value: 0, label: 'Chưa bắt đầu' },
   { value: 1, label: 'Đã bắt đầu' },
   { value: 2, label: 'Đã kết thúc' },
 ];
@@ -26,21 +29,27 @@ const TeacherClass = () => {
   const { myClasses = [], loading = false } = useSelector((state) => state.teacher);
   const [searchPayload, setSearchPayload] = React.useState({
     subjectName: '',
-    status: { value: 1, label: 'Chưa bắt đầu' },
+    status: { value: 1, label: 'Đã bắt đầu' },
+    pageIndex: 1,
+    pageSize: 10,
   });
 
   useEffect(() => {
-    dispatch(TeacherActions.searchMyClassesRequest({}));
+    handleSearch();
   }, []);
 
+  const handleSearch = () => {
+    dispatch(TeacherActions.searchMyClassesRequest({
+      searchPayload
+    }));
+  }
+
   const handleClickItem = (item) => {
-    console.log('item', item);
-    navigate(`/teacher/input-mark?classroomCode=${item.classroomCode}`);
-    // if (item.status === 1 || item.status === 2) {
-    //   navigate(`/teacher/input-mark?classroomCode=${item.classroomCode}`);
-    // } else {
-    //   toast.info("Lớp học chưa bắt đầu")
-    // }
+    if (item.status === 1 || item.status === 2) {
+      navigate(`/teacher/input-mark?classroomCode=${item.classroomCode}`);
+    } else {
+      toast.info("Lớp học chưa bắt đầu")
+    }
   };
 
   return (
@@ -68,7 +77,12 @@ const TeacherClass = () => {
               items={statusList}
               value={searchPayload.status}
               setSelected={(value) => {
-                setSearchPayload({ ...searchPayload, status: value });
+                let payload = { ...searchPayload, status: value };
+                setSearchPayload(payload);
+
+                dispatch(TeacherActions.searchMyClassesRequest({
+                  searchPayload: payload
+                }));
               }}
               ignores={[]}
               customStyle={{ width: '200px' }}
@@ -78,7 +92,7 @@ const TeacherClass = () => {
           <Button
             title={'Tìm kiếm'}
             onClick={() => {
-
+              handleSearch();
             }}
             customStyle={{ width: '100px' }}
           />
@@ -94,6 +108,8 @@ const TeacherClass = () => {
               <th>Tên môn</th>
               <th>Số lượng</th>
               <th>Trạng thái</th>
+              <th>Tài liệu</th>
+              <th>Thống kê</th>
             </tr>
           </MDBTableHead>
           <MDBTableBody>
@@ -121,13 +137,47 @@ const TeacherClass = () => {
                   }}>{item.quantityStudent}</td>
                 <td style={{ lineHeight: 0, padding: '4px 0', margin: '4px 0' }}>
                   <Pulldown
-                    items={statusListEdit}
+                    items={[{ value: 2, label: 'Đã kết thúc' }]}
                     value={statusListEdit.filter(i => i.value === item.status)[0]}
                     setSelected={(value) => {
-                      toast.info('Chưa code phần cập nhật trạng thái :)');
+                      dispatch(TeacherActions.updateClassRequest({
+                        ...item,
+                        status: value.value,
+                        searchPayload
+                      }));
                     }}
                     ignores={[]}
-                    customStyle={{ width: '200px' }}
+                    customStyle={{ width: '160px' }}
+                    isDisable={item.status === 0 || item.status === 2}
+                  />
+
+                </td>
+                <td style={{
+                  lineHeight: 0,
+                  padding: '4px 0',
+                  margin: '4px 0',
+                }}>
+                  <Button
+                    title={'Xem tài liệu'}
+                    onClick={() => {
+                      navigate(`/teacher/documents?classroomCode=${item.classroomCode}`);
+                    }}
+                    customStyle={{ width: '120px', height: '40px' }}
+                    disabled={!(item.status === 1 || item.status === 2)}
+                  />
+                </td>
+                <td style={{
+                  lineHeight: 0,
+                  padding: '4px 0',
+                  margin: '4px 0',
+                }}>
+                  <Button
+                    title={'Xem thống kê'}
+                    onClick={() => {
+                      navigate(`/teacher/dashboard?classroomCode=${item.classroomCode}`);
+                    }}
+                    customStyle={{ width: '140px', height: '40px' }}
+                    disabled={!(item.status === 1 || item.status === 2)}
                   />
                 </td>
               </tr>
@@ -136,6 +186,16 @@ const TeacherClass = () => {
         </MDBTable>
 
       </div>
+
+
+      <MDBModal open={loading}>
+        <MDBModalDialog size="xl" centered={true}>
+          <div style={{ width: '100%', height: '100%' }}>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
+            </LoadingOverlay>
+          </div>
+        </MDBModalDialog>
+      </MDBModal>
     </div>
   );
 };

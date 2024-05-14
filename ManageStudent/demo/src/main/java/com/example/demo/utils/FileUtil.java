@@ -28,4 +28,19 @@ public class FileUtil {
     return "images/" + fileName;
   }
 
+  public static String saveDocument(MultipartFile multipartFile) throws IOException {
+    Path path = new File("document/").toPath();
+    if (!Files.exists(path)) {
+      Files.createDirectories(path);
+    }
+    String fileName = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) + "_" + multipartFile.getOriginalFilename();
+    try (InputStream inputStream = multipartFile.getInputStream()) {
+      Path filePath = path.resolve(fileName);
+      Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+    } catch (IOException ioe) {
+      throw new IOException("Could not save file: " + fileName);
+    }
+    return "document/" + fileName;
+  }
+
 }

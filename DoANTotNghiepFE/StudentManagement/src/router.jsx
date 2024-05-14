@@ -20,6 +20,8 @@ import storageService from './utils/storage.service';
 import StudentClassRegister from './containers/student/class_register';
 import StudentSubjectRegister from './containers/student/subject_register';
 import TeacherClass from './containers/teacher/class';
+import Dashboard from './containers/teacher/dashboard';
+import Documents from './containers/teacher/document';
 
 export const adminRole = [
   AuthKeys.ROLE_ADMIN,
@@ -160,6 +162,21 @@ function getRoutes() {
             {
               path: 'student/classes',
               element: <StudentClassRegister />,
+              allowedRoles: studentRole,
+            },
+            {
+              path: 'teacher/dashboard',
+              element: <Dashboard />,
+              allowedRoles: teacherRole,
+            },
+            {
+              path: 'teacher/documents',
+              element: <Documents />,
+              allowedRoles: teacherRole,
+            },
+            {
+              path: 'student/documents',
+              element: <Documents />,
               allowedRoles: studentRole,
             },
           ],

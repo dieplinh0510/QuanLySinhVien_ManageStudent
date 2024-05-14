@@ -140,3 +140,20 @@ export const getAllStudentInClassFailure = (error) => ({
   type: ClassTypes.GET_ALL_STUDENT_IN_CLASS_FAILURE,
   payload: error,
 });
+
+// API get detail class by classroomCode
+export const getDetailClassRequest = (payload) => ({
+  type: ClassTypes.GET_DETAIL_CLASS_REQUEST,
+  payload: payload,
+});
+
+export const getDetailClassSuccess = (payload) => ({
+  type: ClassTypes.GET_DETAIL_CLASS_SUCCESS,
+  payload: payload,
+});
+
+export const getDetailClassFailure = (error) => ({
+  type: ClassTypes.GET_DETAIL_CLASS_FAILURE,
+  payload: error,
+});
+

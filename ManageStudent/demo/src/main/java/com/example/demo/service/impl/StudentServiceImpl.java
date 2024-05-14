@@ -449,22 +449,30 @@ public class StudentServiceImpl implements StudentService {
     }
 
   @Override
-  public Page<ClassroomSubjectDTO> viewSubjectClassRegister(String subjectCode, Integer pageIndex, Integer pageSize) {
+  public Page<ClassroomSubjectDTO> viewSubjectClassRegister(String subjectCode, Integer pageIndex, Integer pageSize) throws Exception {
+    User userStudent = SecurityUtil.getCurrentUserLogin();
+    if (userStudent == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
     List<ClassroomSubjectDTO> listClass = new ArrayList<>();
     Subject subject = subjectRepo.getSubjectBySubjectCode(subjectCode);
-    List<ClassroomSubject> classroomSubjects = classroomSubjectRepo.getByIdSubject(subject.getId());
+    List<ClassroomSubject> classroomSubjects = classroomSubjectRepo.getByIdSubjectAndStatus(subject.getId());
     for (ClassroomSubject item: classroomSubjects) {
       List<StudentInClassroomSubject> listStudent = studentInClassroomSubjectRepo.getStudentInClassroomSubjectsByClassroomCode(item.getClassroomCode());
-      User user = userRepo.getById(item.getIdUser());
+      StudentInClassroomSubject student = studentInClassroomSubjectRepo.getStudentInClassroomSubjectByClassCodeAndStudentId(item.getClassroomCode(), userStudent.getId());
+
+      User userTeacher = userRepo.getById(item.getIdUser());
       ClassroomSubjectDTO classroom = ClassroomSubjectDTO.builder()
-          .classroomCode(subjectCode)
+          .subjectCode(subjectCode)
           .subjectName(subject.getSubjectName())
           .numberOfCredits(subject.getNumberOfCredits())
           .classroomCode(item.getClassroomCode())
           .quantityStudent(item.getQuantityStudent())
           .quantityStudentNow(listStudent!=null ? Long.parseLong(listStudent.size()+"") : 0)
-          .teacher(user!=null ? user.getName() : null)
+          .teacher(userTeacher!=null ? userTeacher.getName() : null)
           .status(item.getStatus())
+          .checkStudent(student!= null ? 1 : 0)
+          .subjectId(subject.getId())
           .build();
       listClass.add(classroom);
     }
@@ -503,5 +511,48 @@ public class StudentServiceImpl implements StudentService {
     List<SubjectDTO> pageContent = listClass.subList(start, end);
 
     return new PageImpl<>(pageContent, pageRequest, listClass.size());
+  }
+
+  @Override
+  public StudentInClassroomSubject registerClassSubject(String classroomCode, Long subjectId) throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
+    Long result = studentInClassroomSubjectRepo.getStudentInStudentClass(user.getId(), subjectId);
+    if (result == null){
+      ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByClassroomCode(classroomCode);
+      Long quantityStudentInClass = studentInClassroomSubjectRepo.getQuantityStudent(classroomSubject.getId());
+      if (quantityStudentInClass <= classroomSubject.getQuantityStudent()){
+        StudentInClassroomSubject studentInClassroomSubject = StudentInClassroomSubject.builder()
+            .idClassroomInSubject(classroomSubject.getId())
+            .idUser(user.getId())
+            .createUser(user.getUsername())
+            .createDatetime(LocalDateTime.now())
+            .createDatetime(LocalDateTime.now())
+            .build();
+        studentInClassroomSubjectRepo.save(studentInClassroomSubject);
+        return studentInClassroomSubject;
+      } else {
+        throw new Exception("Lớp đã đầy.");
+      }
+    } else {
+      throw new Exception("Bạn đang học môn học này hoặc đã đăng ký môn học này");
+    }
+  }
+
+  @Override
+  public Boolean cancelRegisterClassSubject(String classroomCode, Long subjectId) throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
+    Long result = studentInClassroomSubjectRepo.getStudentByIdAndClassroomCode(classroomCode, user.getId());
+    if (result != null){
+      ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByClassroomCode(classroomCode);
+      studentInClassroomSubjectRepo.deleteStudentInClassSubject(user.getId(), classroomSubject.getId());
+      return true;
+    }
+    return false;
   }
 }

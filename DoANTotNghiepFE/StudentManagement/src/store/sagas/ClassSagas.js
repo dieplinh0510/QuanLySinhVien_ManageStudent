@@ -95,6 +95,16 @@ function* getAllStudentInClassSaga(payload) {
   }
 }
 
+// API get detail class by classroomCode
+function* getDetailClassSaga(payload) {
+  try {
+    const data = yield call(api.getDetailClass, payload.payload);
+    yield put(ClassActions.getDetailClassSuccess(data));
+  } catch (error) {
+    yield put(ClassActions.getDetailClassFailure(error.message));
+  }
+}
+
 function* watchClassSaga() {
   yield takeEvery(ClassTypes.GET_CLASSES_IN_SUBJECT_REQUEST, getListClassBySubjectSaga);
   yield takeEvery(ClassTypes.GET_ALL_CLASSES_REQUEST, getAllClassSaga);
@@ -105,6 +115,7 @@ function* watchClassSaga() {
   yield takeEvery(ClassTypes.SEARCH_CLASSES_BY_SUBJECT_REQUEST, searchClassBySubjectSaga);
   yield takeEvery(ClassTypes.ADD_STUDENT_TO_CLASS_REQUEST, addStudentToClassSaga);
   yield takeEvery(ClassTypes.GET_ALL_STUDENT_IN_CLASS_REQUEST, getAllStudentInClassSaga);
+  yield takeEvery(ClassTypes.GET_DETAIL_CLASS_REQUEST, getDetailClassSaga);
 }
 
 export default watchClassSaga;

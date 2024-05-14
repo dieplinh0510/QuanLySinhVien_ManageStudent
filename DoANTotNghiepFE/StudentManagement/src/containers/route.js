@@ -33,7 +33,6 @@ const routes = [
   { path: 'admin/students', name: 'Quản lý sinh viên', exact: true, icon: insertIcon, allowedRoles: adminRole },
   { path: 'admin/subject-manager', name: 'Quản lý môn học', exact: true, icon: statusIcon, allowedRoles: adminRole },
   { path: 'admin/teachers', name: 'Quản lý giảng viên', exact: true, icon: insertIcon, allowedRoles: adminRole },
-
   { path: 'teacher/students', name: 'Thông tin sinh viên', exact: true, icon: statusIcon, allowedRoles: teacherRole },
   {
     path: 'teacher/file-status',
@@ -43,7 +42,6 @@ const routes = [
     allowedRoles: teacherRole,
   },
   { path: 'teacher/classes', name: 'Thông tin lớp học', exact: true, icon: statusIcon, allowedRoles: teacherRole },
-
   {
     path: 'students/detail?studentId=:studentId',
     name: 'Thông tin cá nhân',

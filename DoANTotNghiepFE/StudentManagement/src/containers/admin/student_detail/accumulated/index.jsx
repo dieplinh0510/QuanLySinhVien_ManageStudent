@@ -11,7 +11,7 @@ import LineChartData from './LineChartData';
 const StudentAccumulated = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { studentDetail = null, accumulatedPoint = []} = useSelector((state) => state.student);
+  const { studentDetail = null, accumulatedPoint = [] } = useSelector((state) => state.student);
   const [studentId, setStudentId] = useState(null);
 
   useEffect(() => {
@@ -49,8 +49,11 @@ const StudentAccumulated = () => {
               {accumulatedPoint && accumulatedPoint.length > 0 && accumulatedPoint.map((item, index) => (
                 <tr key={index}>
                   <td style={{ lineHeight: '0px', textAlign: 'center' }}>{item?.idSemester}</td>
-                  <td style={{ lineHeight: '0px', textAlign: 'center'  }}>{item?.sumCredit}</td>
-                  <td style={{ lineHeight: '0px', textAlign: 'center'  }}>{item?.accumulatedPoint === 'NaN' ? '' : item?.accumulatedPoint}</td>
+                  <td style={{ lineHeight: '0px', textAlign: 'center' }}>{item?.sumCredit}</td>
+                  <td style={{
+                    lineHeight: '0px',
+                    textAlign: 'center',
+                  }}>{item?.accumulatedPoint === 'NaN' ? '' : item?.accumulatedPoint}</td>
                 </tr>
               ))}
 
@@ -65,6 +68,6 @@ const StudentAccumulated = () => {
 
     </div>
   );
-}
+};
 
 export default StudentAccumulated;

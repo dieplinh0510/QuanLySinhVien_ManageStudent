@@ -48,23 +48,31 @@ const StudentDetail = () => {
         <TableHeaderStudentMark />
         <MDBTableBody>
           {studentMark && studentMark.length > 0 && studentMark.map((item, index) => (
-            <tr key={index} onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)} style={{
+            <tr key={index} style={{
               cursor: 'pointer',
             }}>
-              <td style={{ textAlign: 'center', lineHeight: '12px' }}>{index + 1}</td>
-              <td style={{ lineHeight: '12px' }}>{item?.subjectName}</td>
-              <td style={{ lineHeight: '12px' }}>{item?.classroomCode}</td>
-              <td style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.regularPointOne}</td>
-              <td style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.regularPointTwo}</td>
-              <td style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.midtermPointOne}</td>
-              <td
-                style={{ lineHeight: '12px' }}>{(
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ textAlign: 'center', lineHeight: '12px' }}>{index + 1}</td>
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{item?.subjectName}</td>
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{item?.classroomCode}</td>
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.regularPointOne}</td>
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.regularPointTwo}</td>
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.midtermPointOne}</td>
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}
+                  style={{ lineHeight: '12px' }}>{(
                 item?.studentInClassroomSubject?.regularPointOne
                 && item?.studentInClassroomSubject?.regularPointTwo
                 && item?.studentInClassroomSubject?.midtermPointOne) ? item?.mediumPoint : ''}</td>
-              <td style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.testPointOne}</td>
-              <td style={{ lineHeight: '12px' }}>{(item?.studentInClassroomSubject?.testPointOne) ? item?.point : ''}</td>
-              <td style={{ lineHeight: '12px' }}>{(item?.studentInClassroomSubject?.testPointOne) ? item?.accumulated_point : ''}</td>
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.testPointOne}</td>
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{(item?.studentInClassroomSubject?.testPointOne) ? item?.point : ''}</td>
+              <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{(item?.studentInClassroomSubject?.testPointOne) ? item?.accumulated_point : ''}</td>
+              <td onClick={() => navigate(`/student/documents?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>
+                <span style={{
+                  color: 'blue',
+                  textDecoration: 'underline',
+                }}>
+                  Xem
+                </span>
+              </td>
             </tr>
           ))}
 
@@ -108,6 +116,7 @@ const TableHeaderStudentMark = () => {
       <th rowSpan={2} style={{ lineHeight: '26px', fontWeight: 'bold' }}>TB KTTX</th>
       <th rowSpan={2} style={{ lineHeight: '26px', fontWeight: 'bold' }}>Điểm thi</th>
       <th colSpan={2} style={{ lineHeight: '0px', textAlign: 'center', fontWeight: 'bold' }}>Điểm TL</th>
+      <th rowSpan={2} style={{ lineHeight: '26px', textAlign: 'center', fontWeight: 'bold' }}>Tài liệu</th>
     </tr>
     <tr>
       <th style={{ lineHeight: '0px', fontWeight: 'bold' }}>1</th>

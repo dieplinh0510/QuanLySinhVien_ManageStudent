@@ -24,14 +24,31 @@ export const updateTeacher = async (payload) => {
     body: payload,
   });
 
-  return HttpService.checkResponseCommon(response, null, "Cập nhật giảng viên thành công");
+  return HttpService.checkResponseCommon(response, null, "Cập nhật giảng viên thành công!");
 };
 
 // API get all my class
 export const searchMyClasses = async (payload) => {
   let response = await HttpService.get('/classroom-subject/user', {
-    params: payload,
+    params: {
+      subjectName: payload?.searchPayload?.subjectName,
+      pageIndex: payload?.searchPayload?.pageIndex,
+      pageSize: payload?.searchPayload?.pageSize,
+      status: payload?.searchPayload?.status?.value
+    },
   });
 
   return HttpService.checkResponseCommon(response, null);
+};
+
+// API update class
+export const updateClass = async (payload) => {
+  let response = await HttpService.put('/classroom-subject', {
+    body: payload,
+    params: {
+      classroomId: payload.idClassroom,
+    }
+  });
+
+  return HttpService.checkResponseCommon(response, null, "Cập nhật lớp học thành công!");
 };

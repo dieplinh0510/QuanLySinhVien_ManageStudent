@@ -100,3 +100,25 @@ export const getAllSubjectToRegister = async (payload) => {
   });
   return HttpService.checkResponseCommon(response, []);
 };
+
+// API register subject class
+export const registerSubjectClass = async (payload) => {
+  let response = await HttpService.post(`/students/register-class`, {
+    params: {
+      classroomCode: payload.classroomCode,
+      subjectId: payload.subjectId,
+    },
+  });
+  return HttpService.checkResponseCommon(response, [], 'Đăng ký môn học thành công!');
+};
+
+// API cancel register subject class
+export const cancelRegisterSubjectClass = async (payload) => {
+  let response = await HttpService.delete(`/students/cancel-register-class`, {
+    params: {
+      classroomCode: payload.classroomCode,
+      subjectId: payload.subjectId,
+    },
+  });
+  return HttpService.checkResponseCommon(response, [], 'Hủy đăng ký môn học thành công!');
+};
