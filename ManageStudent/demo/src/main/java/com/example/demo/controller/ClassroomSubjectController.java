@@ -38,9 +38,12 @@ public class ClassroomSubjectController extends CommonController{
 
   @Operation(summary = "API lấy tất cả lớp học màn quan ly lop hoc theo user - teacher")
   @GetMapping("/user")
-  ResponseEntity<?> getClassroomSubjectByUser(){
+  ResponseEntity<?> getClassroomSubjectByUser(@RequestParam(name = "subjectName", required = false) String subjectName,
+                                              @RequestParam(name = "status", required = false) Integer status,
+                                              @RequestParam(name = "pageSize") Integer pageSize,
+                                              @RequestParam(name = "pageIndex") Integer pageIndex){
     try {
-      return toSuccessResult(classroomSubjectService.getClassroomSubjectByUser());
+      return toSuccessResult(classroomSubjectService.getClassroomSubjectByUser(subjectName, status,pageIndex, pageSize ));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

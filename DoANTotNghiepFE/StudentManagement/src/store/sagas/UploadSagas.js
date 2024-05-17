@@ -82,6 +82,15 @@ function* uploadDocumentSaga(payload) {
   }
 }
 
+// API download Document
+function* downloadDocument(payload) {
+  try {
+    const data = yield call(api.downloadDocument, payload.payload);
+    yield put(UploadActions.downloadDocumentSuccess(data));
+  } catch (error) {
+    yield put(UploadActions.downloadDocumentFailure(error.message));
+  }
+}
 
 export default function* uploadWatcherSaga() {
   yield takeLatest(UploadTypes.GET_STUDENT_COLUMN_REQUEST, getStudentColumnSaga);
@@ -92,4 +101,5 @@ export default function* uploadWatcherSaga() {
   yield takeLatest(UploadTypes.DOWNLOAD_FILE_REQUEST, downloadFileSaga);
   yield takeLatest(UploadTypes.GET_ALL_DOCUMENTS_REQUEST, getAllDocumentsSaga);
   yield takeLatest(UploadTypes.UPLOAD_DOCUMENT_REQUEST, uploadDocumentSaga);
+  yield takeLatest(UploadTypes.DOWNLOAD_DOCUMENT_REQUEST, downloadDocument);
 }

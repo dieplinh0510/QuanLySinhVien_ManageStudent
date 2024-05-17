@@ -129,6 +129,8 @@
 						<exclude>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<encoding>UTF-8</encoding>
+							<propertiesEncoding>ISO-8859-1</propertiesEncoding>
 						</exclude>
 					</excludes>
 				</configuration>

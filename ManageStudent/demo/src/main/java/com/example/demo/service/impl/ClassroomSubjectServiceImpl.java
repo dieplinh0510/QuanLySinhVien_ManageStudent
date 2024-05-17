@@ -62,13 +62,18 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
   }
 
   @Override
-  public List<ClassroomSubjectDTO> getClassroomSubjectByUser() throws Exception {
+  public Page<ClassroomSubjectDTO> getClassroomSubjectByUser(String subjectName, Integer status, Integer pageIndex, Integer pageSize) throws Exception {
     User user = SecurityUtil.getCurrentUserLogin();
     if (user == null){
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
     }
-    List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(null, null, user.getId());
-    return list;
+    List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getClassroomSubjectBySubjectNameAndStatus(subjectName, status, user.getId());
+    Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
+    int start = (int) pageRequest.getOffset();
+    int end = Math.min(start + pageRequest.getPageSize(), list.size());
+    List<ClassroomSubjectDTO> pageContent = list.subList(start, end);
+
+    return new PageImpl<>(pageContent, pageRequest, list.size());
   }
 
   @Override

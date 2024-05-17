@@ -6,6 +6,7 @@ const initialState = {
   teachers: [],
   paging: null,
   myClasses: [],
+  pagingMyClass: null
 };
 
 const teacherReducer = (state = initialState, action) => {
@@ -52,7 +53,24 @@ const teacherReducer = (state = initialState, action) => {
     case TeacherTypes.SEARCH_MY_CLASSES_REQUEST:
       return { ...state, loading: true };
     case TeacherTypes.SEARCH_MY_CLASSES_SUCCESS:
-      return { ...state, loading: false, myClasses: action.payload };
+
+
+      return { ...state, 
+        loading: false, 
+        myClasses: action.payload.content,
+        pagingMyClass: {
+          last: action.payload.last,
+          totalElements: action.payload.totalElements,
+          totalPages: action.payload.totalPages,
+          size: action.payload.size,
+          number: action.payload.number,
+          first: action.payload.first,
+          numberOfElements: action.payload.numberOfElements,
+          pageIndex: action.payload.pageable.pageNumber,
+          pageSize: action.payload.pageable.pageSize,
+          offset: action.payload.pageable.offset,
+        }
+       };
     case TeacherTypes.SEARCH_MY_CLASSES_FAILURE:
       return { ...state, loading: false, error: action.payload };
 

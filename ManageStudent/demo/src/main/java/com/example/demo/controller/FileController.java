@@ -33,13 +33,13 @@ import static com.example.demo.common.Const.RETURN_CODE_ERROR;
 @RestController
 @RequestMapping("/file")
 @Slf4j
-public class FileController extends CommonController{
+public class FileController extends CommonController {
   private final ProcessFileImportRepo processFileImportRepo;
   private final FileService fileService;
   private final StudentService studentService;
+  private final UserPDFExporter userPDFExporter;
   @Value("${upload.file.path}")
   private String filePath;
-  private final UserPDFExporter userPDFExporter;
 
   public FileController(FileService fileService,
                         ProcessFileImportRepo processFileImportRepo, StudentService studentService, UserPDFExporter userPDFExporter) {
@@ -63,22 +63,22 @@ public class FileController extends CommonController{
 
   @Operation(summary = "API download file")
   @GetMapping("/download-file")
-  public ResponseEntity<?> downloadFile(@RequestParam(value = "idFile") Long idFile){
+  public ResponseEntity<?> downloadFile(@RequestParam(value = "idFile") Long idFile) {
     try {
       HttpHeaders httpHeaders = new HttpHeaders();
       httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
       InputStream inputStream;
-      byte[] data ;
+      byte[] data;
       ProcessFileImport processFileImport = processFileImportRepo.getProcessFileById(idFile);
       Assert.notNull(processFileImport, "File download does not exits");
       data = processFileImport.getDiscription();
-      String path = filePath+"/"+processFileImport.getKeyResponse();
+      String path = filePath + "/" + processFileImport.getKeyResponse();
       httpHeaders.set("Content-disposition", "attachment; filename=" + processFileImport.getKeyResponse());
       httpHeaders.setContentLength(data.length);
-      inputStream= new BufferedInputStream(new ByteArrayInputStream(data));
+      inputStream = new BufferedInputStream(new ByteArrayInputStream(data));
       InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
       return new ResponseEntity<>(inputStreamResource, httpHeaders, HttpStatus.OK);
-    } catch (Exception ex){
+    } catch (Exception ex) {
       log.error(ex.getMessage(), ex);
       return toExceptionResult(ex.getMessage(), RETURN_CODE_ERROR);
     }
@@ -86,10 +86,10 @@ public class FileController extends CommonController{
 
   @Operation(summary = "API upload file")
   @PostMapping(value = "/upload-file")
-  ResponseEntity<?> uploadFile(@RequestBody MultipartFile file){
-    try{
+  ResponseEntity<?> uploadFile(@RequestBody MultipartFile file) {
+    try {
       return toSuccessResult(fileService.uploadFile(file, file.getBytes()));
-    } catch (Exception e){
+    } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
     }
@@ -97,14 +97,15 @@ public class FileController extends CommonController{
 
   @Operation(summary = "API insert field mapping")
   @PostMapping(value = "/insert-field")
-  ResponseEntity<?> insertField(@RequestBody InsertFieldDTO insertFieldDTO, @RequestParam(value = "typeInsert") Integer typeInsert){
-    try{
+  ResponseEntity<?> insertField(@RequestBody InsertFieldDTO insertFieldDTO, @RequestParam(value = "typeInsert") Integer typeInsert) {
+    try {
       return toSuccessResult(fileService.insertField(insertFieldDTO, typeInsert));
-    } catch (Exception e){
+    } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);
     }
   }
+
   @GetMapping("/export/pdf")
   public void exportToPDF(@RequestParam(name = "classroomCode") String classroomCode, HttpServletResponse response) throws DocumentException, IOException {
     response.setContentType("application/pdf");
@@ -118,7 +119,27 @@ public class FileController extends CommonController{
     Page<StudentPointInClassroomDTO> pageUsers = studentService.viewPointInClassroom(classroomCode, 1, 100);
     List<StudentPointInClassroomDTO> listUsers = pageUsers.getContent();
     userPDFExporter.export(response, listUsers);
+  }
 
+  @GetMapping("/download-document")
+  public ResponseEntity<?> downloadDocument(@RequestParam("idFile") Long fileId) {
+    try {
+      ProcessFileImport processFileImport = processFileImportRepo.getProcessFileById(fileId);
+      Assert.notNull(processFileImport, "File download does not exits");
+      File file = new File(processFileImport.getFilePath());
+      HttpHeaders httpHeaders = new HttpHeaders();
+      httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+      httpHeaders.set("Content-disposition", "attachment; filename=" + processFileImport.getKeyResponse());
+      httpHeaders.setContentLength(file.length());
+
+      InputStreamReader i = new InputStreamReader(new FileInputStream(file));
+      System.out.println("The length of the file is : " + file.length());
+
+      return new ResponseEntity<>(i , httpHeaders, HttpStatus.OK);
+    } catch (Exception ex) {
+      log.error(ex.getMessage(), ex);
+      return toExceptionResult(ex.getMessage(), RETURN_CODE_ERROR);
+    }
   }
 
 }

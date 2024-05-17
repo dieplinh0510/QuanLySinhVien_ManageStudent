@@ -11,6 +11,7 @@ import * as TeacherActions from '../../../store/actions/TeacherActions';
 import { useNavigate } from 'react-router-dom';
 import LoadingOverlay from 'react-loading-overlay';
 import { Oval } from 'react-loader-spinner';
+import Pagination from '../../../components/paging';
 
 const statusList = [
   { value: 0, label: 'Chưa bắt đầu' },
@@ -26,10 +27,10 @@ const statusListEdit = [
 const TeacherClass = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { myClasses = [], loading = false } = useSelector((state) => state.teacher);
+  const { myClasses = [], loading = false, pagingMyClass = null } = useSelector((state) => state.teacher);
   const [searchPayload, setSearchPayload] = React.useState({
     subjectName: '',
-    status: { value: 1, label: 'Đã bắt đầu' },
+    status: { value: null, label: 'Tất cả' },
     pageIndex: 1,
     pageSize: 10,
   });
@@ -185,6 +186,17 @@ const TeacherClass = () => {
           </MDBTableBody>
         </MDBTable>
 
+      </div>
+
+            {/* Paging */}
+            <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+        {pagingMyClass && (
+          <Pagination
+            totalPages={pagingMyClass?.totalPages}
+            currentPage={pagingMyClass?.pageIndex + 1}
+            onPageChange={pagingMyClass}
+          />
+        )}
       </div>
 
 

@@ -35,7 +35,6 @@ function* updateTeacherSaga(action) {
 // API get all my class
 function* searchMyClassesSaga(action) {
   try {
-    console.log(action);
     const response = yield call(api.searchMyClasses, action?.payload);
     yield put(TeacherActions.searchMyClassesSuccess(response));
   } catch (error) {

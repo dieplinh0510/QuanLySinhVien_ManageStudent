@@ -112,4 +112,55 @@ public class ClassroomSubjectRepoCustomImpl implements ClassroomSubjectRepoCusto
     }
     return list;
   }
+
+  @Override
+  public List<ClassroomSubjectDTO> getClassroomSubjectBySubjectNameAndStatus(String subjectName, Integer status, Long userId) {
+    List<ClassroomSubjectDTO> listResult = new ArrayList<>();
+    StringBuilder str = new StringBuilder();
+    str.append("select cis.id, cis.classroom_code , s.subject_name , cis.quantity_student , cis.status from users u join classroom_in_subjects cis on u.id = cis.id_user join subjects s on s.id = cis.id_subject ");
+    if (subjectName.trim() != null || status != null || userId != null){
+      str.append("  where  ");
+    }
+    if (subjectName.trim() != null){
+      str.append(" s.subject_name like CONCAT('%'," );
+      str.append(":subjectName,");
+      str.append("'%')");
+    }
+    if (status != null && subjectName.trim() == null){
+      str.append(" cis.status = :status ");
+    }
+    if (status != null && subjectName.trim()!= null){
+      str.append(" and ");
+      str.append(" cis.status = :status ");
+    }
+    if ((userId != null && subjectName.trim() != null) || userId!= null && status != null){
+      str.append(" and ");
+      str.append(" u.id = :userId ");
+    } else str.append(" u.id = :userId ");
+
+    Query query = entityManager.createNativeQuery(str.toString());
+    if (subjectName!=null){
+      query.setParameter("subjectName", subjectName);
+    }
+    if (status != null){
+      query.setParameter("status", status);
+    }
+    if (userId!=null){
+      query.setParameter("userId", userId);
+    }
+    List<Objects[]> result = query.getResultList();
+    if (result!=null){
+      for (Object[] item: result) {
+        ClassroomSubjectDTO classroomSubjectDTO = ClassroomSubjectDTO.builder()
+            .idClassroom(item[0] != null ? Long.parseLong(item[0].toString()) : null)
+            .classroomCode(item[1] != null ? item[1].toString() : null)
+            .subjectName(item[2] != null ? item[2].toString() : null)
+            .quantityStudent(item[3] != null ? Long.parseLong(item[3].toString()) : null)
+            .status(item[4] != null ? Integer.parseInt(item[4].toString()) : null)
+            .build();
+        listResult.add(classroomSubjectDTO);
+      }
+    }
+    return listResult;
+  }
 }

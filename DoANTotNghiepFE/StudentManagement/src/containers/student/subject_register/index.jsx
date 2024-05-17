@@ -58,7 +58,7 @@ const StudentSubjectRegister = () => {
           onChange={(value) => setSearchPayload({ ...searchPayload, subjectName: value })}
           onKeyPress={(e) => {
             if (e.charCode === 13) {
-              dispatch(StudentActions.getAllClassToRegisterRequest(searchPayload));
+              dispatch(StudentActions.getAllSubjectToRegisterRequest(searchPayload));
             }
           }}
           label=""
@@ -76,7 +76,7 @@ const StudentSubjectRegister = () => {
         <Space width={20} />
 
         <Button title={'Tìm kiếm'} onClick={() => {
-          dispatch(StudentActions.getAllClassToRegisterRequest(searchPayload));
+          dispatch(StudentActions.getAllSubjectToRegisterRequest(searchPayload));
         }} customStyle={{ width: '120px' }} />
       </div>
 

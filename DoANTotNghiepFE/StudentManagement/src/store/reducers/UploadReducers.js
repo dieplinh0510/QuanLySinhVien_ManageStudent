@@ -188,6 +188,24 @@ const uploadReducer = (state = initialState, action) => {
         error: action.payload,
       };
 
+    // API download file
+    case UploadTypes.DOWNLOAD_DOCUMENT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UploadTypes.DOWNLOAD_DOCUMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case UploadTypes.DOWNLOAD_DOCUMENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
     default:
       return state;
   }

@@ -2,6 +2,7 @@ import * as SubjectTypes from '../types/SubjectTypes';
 
 const initialState = {
   subjects: [],
+  pagging: null,
   subject: null,
   loading: false,
   error: null,
@@ -19,7 +20,19 @@ const subjectReducer = (state = initialState, action) => {
     case SubjectTypes.GET_SUBJECTS_SUCCESS:
       return {
         ...state,
-        subjects: action.payload,
+        subjects: action.payload.content,
+        paging: {
+          last: action.payload.last,
+          totalElements: action.payload.totalElements,
+          totalPages: action.payload.totalPages,
+          size: action.payload.size,
+          number: action.payload.number,
+          first: action.payload.first,
+          numberOfElements: action.payload.numberOfElements,
+          pageIndex: action.payload.pageable.pageNumber,
+          pageSize: action.payload.pageable.pageSize,
+          offset: action.payload.pageable.offset,
+        },
         loading: false,
       };
     case SubjectTypes.GET_SUBJECTS_FAILURE:

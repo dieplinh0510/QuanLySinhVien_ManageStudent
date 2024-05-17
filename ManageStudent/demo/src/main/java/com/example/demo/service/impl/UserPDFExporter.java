@@ -12,12 +12,14 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.sound.sampled.AudioFormat;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Encoding;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,7 +37,7 @@ public class UserPDFExporter {
 
     FontFactoryImp factory = new FontFactoryImp();
 
-    Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN);
+    Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN, "UTF-8");
     font.setColor(Color.WHITE);
 
     cell.setPhrase(new Phrase("Mã sinh viên", font));
@@ -92,7 +94,7 @@ public class UserPDFExporter {
     PdfWriter.getInstance(document, response.getOutputStream());
 
     document.open();
-    Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN);
+    Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN, "UTF-8");
     font.setSize(18);
     font.setColor(Color.BLUE);
 

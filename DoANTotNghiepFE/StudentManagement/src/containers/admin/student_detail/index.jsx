@@ -9,6 +9,8 @@ import StudentDetailInfo from './info';
 import Pagination from '../../../components/paging';
 import LoadingOverlay from 'react-loading-overlay';
 import { Oval } from 'react-loader-spinner';
+import StorageService from '../../../utils/storage.service';
+import { AuthKeys } from '../../../constant';
 
 const StudentDetail = () => {
   const dispatch = useDispatch();
@@ -65,14 +67,19 @@ const StudentDetail = () => {
               <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{item?.studentInClassroomSubject?.testPointOne}</td>
               <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{(item?.studentInClassroomSubject?.testPointOne) ? item?.point : ''}</td>
               <td onClick={() => navigate(`/students/class?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>{(item?.studentInClassroomSubject?.testPointOne) ? item?.accumulated_point : ''}</td>
+              
+              {
+                JSON.parse(StorageService.get(AuthKeys.CURRENT_USER)).roleName === AuthKeys.ROLE_STUDENT && 
+              
               <td onClick={() => navigate(`/student/documents?classroomCode=${item.classroomCode}`)}  style={{ lineHeight: '12px' }}>
                 <span style={{
-                  color: 'blue',
-                  textDecoration: 'underline',
-                }}>
-                  Xem
-                </span>
+                    color: 'blue',
+                    textDecoration: 'underline',
+                  }}>
+                    Xem
+                  </span>
               </td>
+              }
             </tr>
           ))}
 
@@ -116,7 +123,10 @@ const TableHeaderStudentMark = () => {
       <th rowSpan={2} style={{ lineHeight: '26px', fontWeight: 'bold' }}>TB KTTX</th>
       <th rowSpan={2} style={{ lineHeight: '26px', fontWeight: 'bold' }}>Điểm thi</th>
       <th colSpan={2} style={{ lineHeight: '0px', textAlign: 'center', fontWeight: 'bold' }}>Điểm TL</th>
-      <th rowSpan={2} style={{ lineHeight: '26px', textAlign: 'center', fontWeight: 'bold' }}>Tài liệu</th>
+      
+      {
+        JSON.parse(StorageService.get(AuthKeys.CURRENT_USER)).roleName === AuthKeys.ROLE_STUDENT && <th rowSpan={2} style={{ lineHeight: '26px', textAlign: 'center', fontWeight: 'bold' }}>Tài liệu</th> 
+      }
     </tr>
     <tr>
       <th style={{ lineHeight: '0px', fontWeight: 'bold' }}>1</th>

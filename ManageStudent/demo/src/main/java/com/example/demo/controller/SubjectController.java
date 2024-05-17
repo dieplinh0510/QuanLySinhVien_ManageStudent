@@ -39,9 +39,11 @@ public class SubjectController extends CommonController{
 
   @Operation(summary = "API lấy tất car môn học - admin")
   @GetMapping()
-  public ResponseEntity<?> getAllSubject(@RequestParam(name = "subjectName") String subjectName){
+  public ResponseEntity<?> getAllSubject(@RequestParam(name = "subjectName") String subjectName,
+                                         @RequestParam(value = "pageIndex") Integer pageIndex,
+                                         @RequestParam(value = "pageSize") Integer pageSize){
     try {
-      return toSuccessResult(subjectService.getAllSubject(subjectName));
+      return toSuccessResult(subjectService.getAllSubject(subjectName, pageIndex, pageSize));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

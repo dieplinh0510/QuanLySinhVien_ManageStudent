@@ -33,7 +33,7 @@ const authReducer = (state = initialState, action) => {
       if (user?.roleName === AuthKeys.ROLE_ADMIN) {
         return { ...state, loading: false, data: user, navigatePath: '/admin/students' };
       } else if (user?.roleName === AuthKeys.ROLE_TEACHER) {
-        return { ...state, loading: false, data: user, navigatePath: '/teacher/dashboard' };
+        return { ...state, loading: false, data: user, navigatePath: '/teacher/students' };
       }
 
       return {

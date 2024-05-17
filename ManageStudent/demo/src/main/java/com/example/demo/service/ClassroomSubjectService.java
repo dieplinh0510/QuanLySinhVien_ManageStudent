@@ -14,7 +14,7 @@ import java.util.Map;
 
 public interface ClassroomSubjectService {
   List<ClassroomSubjectDTO> getClassroomSubject() throws Exception;
-  List<ClassroomSubjectDTO> getClassroomSubjectByUser() throws Exception;
+  Page<ClassroomSubjectDTO> getClassroomSubjectByUser(String subjectName, Integer status, Integer pageIndex, Integer pageSize) throws Exception;
   List<ClassroomSubjectDTO> getAllClassroomSubject(Long subjectId);
   ClassroomSubjectDTO getClassroomByClassroomCode(Long subjectId, String classroomCode) throws Exception;
   ClassroomSubject createClassroomSubject(ClassroomSubjectDTO classroomSubjectDTO, Long subjectId) throws Exception;

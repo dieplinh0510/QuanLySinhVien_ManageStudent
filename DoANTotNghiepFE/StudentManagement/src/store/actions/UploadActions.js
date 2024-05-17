@@ -175,3 +175,26 @@ export const uploadDocumentFailure = (error) => {
     payload: error,
   };
 };
+
+
+// API download document
+export const downloadDocumentRequest = (payload) => {
+  return {
+    type: UploadTypes.DOWNLOAD_DOCUMENT_REQUEST,
+    payload: payload,
+  };
+};
+
+export const downloadDocumentSuccess = (payload) => {
+  return {
+    type: UploadTypes.DOWNLOAD_DOCUMENT_SUCCESS,
+    payload: payload,
+  };
+};
+
+export const downloadDocumentFailure = (error) => {
+  return {
+    type: UploadTypes.DOWNLOAD_DOCUMENT_FAILURE,
+    payload: error,
+  };
+};

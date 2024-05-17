@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.domain.dto.ClassroomDTO;
+import com.example.demo.domain.dto.ClassroomSubjectDTO;
 import com.example.demo.domain.dto.SubjectDTO;
 import com.example.demo.domain.model.ClassroomSubject;
 import com.example.demo.domain.model.Subject;
@@ -10,6 +11,10 @@ import com.example.demo.repo.SubjectRepo;
 import com.example.demo.repo.UserRepo;
 import com.example.demo.service.SubjectService;
 import com.example.demo.utils.SecurityUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -37,12 +42,17 @@ public class SubjectServiceImpl implements SubjectService {
   }
 
   @Override
-  public List<Subject> getAllSubject(String subjectName) {
+  public Page<Subject> getAllSubject(String subjectName , Integer pageIndex, Integer pageSize) {
     List<Subject> subjects;
     if (subjectName!=null){
        subjects = subjectRepo.getSubjectBySubjectName(subjectName);
     } else subjects = subjectRepo.findAll();
-    return subjects;
+    Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
+    int start = (int) pageRequest.getOffset();
+    int end = Math.min(start + pageRequest.getPageSize(), subjects.size());
+    List<Subject> pageContent = subjects.subList(start, end);
+
+    return new PageImpl<>(pageContent, pageRequest, subjects.size());
   }
 
   @Override
