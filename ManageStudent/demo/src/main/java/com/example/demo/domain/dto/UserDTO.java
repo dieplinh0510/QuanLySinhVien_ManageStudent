@@ -25,4 +25,6 @@ public class UserDTO {
 
   private Boolean isActive = true;
 
+  private String name;
+
 }

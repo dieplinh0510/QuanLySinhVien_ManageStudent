@@ -21,4 +21,6 @@ public class StudentPointDTO {
   private String studentImage;
   private Long idClass;
   private Long idCourse;
+  private String username;
+  private String email;
 }

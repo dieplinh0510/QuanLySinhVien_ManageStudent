@@ -3,12 +3,10 @@ package com.example.demo.service.impl;
 import com.example.demo.domain.dto.InsertFieldDTO;
 import com.example.demo.domain.dto.SearchProcessDTO;
 import com.example.demo.domain.dto.StudentPointInClassroomDTO;
+import com.example.demo.domain.model.ClassroomSubject;
 import com.example.demo.domain.model.ProcessFileImport;
 import com.example.demo.domain.model.User;
-import com.example.demo.repo.ClassroomRepo;
-import com.example.demo.repo.CourseRepo;
-import com.example.demo.repo.ProcessFileImportRepo;
-import com.example.demo.repo.UserRepo;
+import com.example.demo.repo.*;
 import com.example.demo.service.FileService;
 import com.example.demo.service.StudentService;
 import com.example.demo.utils.SecurityUtil;
@@ -47,9 +45,12 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.demo.config.DataUtil.validateColumnType;
+
 @Service
 @Slf4j
 public class FileServiceImpl implements FileService {
+  private final ClassroomSubjectRepo classroomSubjectRepo;
   private final ProcessFileImportRepo processFileImportRepo;
   private final StudentService studentService;
   private final CourseRepo courseRepo;
@@ -63,12 +64,14 @@ public class FileServiceImpl implements FileService {
   @Value("${upload.file.path}")
   private String filePath;
 
-  public FileServiceImpl(ProcessFileImportRepo processFileImportRepo, StudentService studentService, CourseRepo courseRepo, ClassroomRepo classroomRepo, UserRepo userRepo) {
+  public FileServiceImpl(ProcessFileImportRepo processFileImportRepo, StudentService studentService, CourseRepo courseRepo, ClassroomRepo classroomRepo, UserRepo userRepo,
+                         ClassroomSubjectRepo classroomSubjectRepo) {
     this.processFileImportRepo = processFileImportRepo;
     this.studentService = studentService;
     this.courseRepo = courseRepo;
     this.classroomRepo = classroomRepo;
     this.userRepo = userRepo;
+    this.classroomSubjectRepo = classroomSubjectRepo;
   }
 
   @Override
@@ -93,7 +96,7 @@ public class FileServiceImpl implements FileService {
 
 
   @Override
-  public Long uploadFile(MultipartFile file, byte[] fileContent) throws Exception {
+  public Long uploadFile(MultipartFile file, byte[] fileContent, String classroomCode) throws Exception {
     User user = SecurityUtil.getCurrentUserLogin();
     if (user == null) {
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
@@ -102,6 +105,7 @@ public class FileServiceImpl implements FileService {
     String filename = String.format("%s(%s).%s", Arrays.stream(str).filter(item -> !item.equals(str[str.length - 1])).collect(Collectors.joining(".")),
         UUID.randomUUID(), str[str.length - 1]);
     try {
+      ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByClassroomCode(classroomCode);
       ProcessFileImport process = ProcessFileImport.builder()
           .createDatetime(LocalDateTime.now())
           .fileContent(fileContent)
@@ -109,6 +113,7 @@ public class FileServiceImpl implements FileService {
           .status(0)
           .keyRequest(filename)
           .createUser(user.getUsername())
+          .classroomId(classroomSubject.getId())
           .build();
       processFileImportRepo.save(process);
       FileCopyUtils.copy(fileContent, new File(filePath, filename));
@@ -162,7 +167,7 @@ public class FileServiceImpl implements FileService {
     String fileName = "result_" + processFileImport.getKeyRequest();
     byte[] data = processFileImport.getFileContent();
     Long type = processFileImport.getType();
-    StringBuilder insertQuery = new StringBuilder("insert into " + schema + "." + table);
+
     InputStream is = new BufferedInputStream(new ByteArrayInputStream(data));
     XSSFWorkbook wb = new XSSFWorkbook(is);
 
@@ -174,6 +179,7 @@ public class FileServiceImpl implements FileService {
     HashMap<Integer, String> columnFile = new HashMap<>();
     HashSet<String> mapFieldFile = new HashSet<>(mapFields.values());
     if (type == 1) {
+      StringBuilder insertQuery = new StringBuilder("insert into " + schema + "." + table);
       try {
         for (Row row : sheet) {
           Long courseId = null;
@@ -296,10 +302,13 @@ public class FileServiceImpl implements FileService {
     }
 
     if (type == 2){
+      StringBuilder update = new StringBuilder("update " + schema + "." + table + "  set  ");
+      Long classroomId = processFileImport.getClassroomId();
       try {
         for (Row row : sheet) {
           Long studentId = null;
           String student = null;
+          String studentName = null;
           if (checkField) {
             for (int i = 0; i < row.getLastCellNum(); i++) {
               Cell cell = row.getCell(i);
@@ -307,13 +316,13 @@ public class FileServiceImpl implements FileService {
                 columnFile.put(i, row.getCell(i).getStringCellValue());
 
             }
-            row.createCell(row.getLastCellNum()).setCellValue("Import result");
-            row.createCell(row.getLastCellNum()).setCellValue("Description");
+            row.createCell(row.getLastCellNum()).setCellValue("Nhập kết quả");
+            row.createCell(row.getLastCellNum()).setCellValue("Sự miêu tả");
             checkField = false;
             continue;
           }
-          StringBuilder columnQuery = new StringBuilder(" ( ");
-          StringBuilder valuesQuery = new StringBuilder(" value ( ");
+          StringBuilder columnQuery = new StringBuilder(" ");
+          StringBuilder whereQuery = new StringBuilder(" ");
           boolean checkFirst = true;
           int i;
           for (i = 0; i < row.getLastCellNum(); i++) {
@@ -327,60 +336,56 @@ public class FileServiceImpl implements FileService {
                       studentId = userRepo.getStudentIdByStudentCode(Long.parseLong(df.formatCellValue(cell)));
                       student = itemCode.getValue();
                     }
+                  if (itemCode.getKey().equals("name")){
+                    studentName = itemCode.getValue();
+                  }
                 }
               }
 
-              if (!fileColumn.equals(student)) {
+              if (!fileColumn.equals(student) && !fileColumn.equals(studentName)) {
                 String valueStr = df.formatCellValue(cell);
                 if (StringUtils.hasText(valueStr)) {
                   if (checkFirst) {
                     for (Map.Entry<String, String> item : mapFields.entrySet()) {
                       if (item.getValue().equals(fileColumn)) {
-                        columnQuery.append(item.getKey());
+                        columnQuery.append(item.getKey()).append(" = ").append("").append(valueStr).append("");
                       }
                     }
-                    valuesQuery.append("'").append(valueStr).append("'");
                     checkFirst = false;
-                    continue;
-                  }
-                  boolean checkColumn = true;
-                  for (Map.Entry<String, String> item : mapFields.entrySet()) {
-                    if (item.getValue().equals(fileColumn)) {
-                      columnQuery.append(", ").append(item.getKey());
-                      checkColumn = false;
-                      break;
+                  } else {
+                    for(Map.Entry<String, String> item : mapFields.entrySet()){
+                      if (item.getValue().equals(fileColumn)) {
+                        columnQuery.append(" , ").append(item.getKey()).append(" = ").append("").append(valueStr).append("");
+                      }
                     }
                   }
-                  if (checkColumn) {
-                    columnQuery.append(", ").append(mapFields.get(fileColumn));
-                  }
-
-                  valuesQuery.append(", '").append(valueStr).append("'");
                 }
               }
             }
 
           }
-          columnQuery.append(" , id_user , create_user, create_datetime)");
-          valuesQuery.append(", ").append(studentId).append(" , ").append("'PROCESS' , '").append(LocalDateTime.now()).append("')");
-
+          columnQuery.append(" ,   update_datetime = '").append(LocalDateTime.now()).append("' ,   update_user = ").append("'PROCESS'");
+          whereQuery.append("  where id_user = ").append(studentId).append(" and id_class_sbject = ").append(classroomId);
           try {
             EntityManager entityManager = entityManagerFactory.createEntityManager();
             entityManager.getTransaction().begin();
-            entityManager.createNativeQuery(insertQuery.toString() + columnQuery + valuesQuery).executeUpdate();
+            Integer rowColumnUpdate = entityManager.createNativeQuery(update.toString() + columnQuery + whereQuery).executeUpdate();
             entityManager.flush();
             entityManager.getTransaction().commit();
             entityManager.close();
-            row.createCell(i).setCellValue("Import data success");
+            if (rowColumnUpdate == 0){
+              throw new Exception("Không tồn tại bản ghi này");
+            }
+            row.createCell(i).setCellValue("Nhập dữ liệu thành công");
           } catch (Exception ex) {
-            row.createCell(i++).setCellValue("Import date fail");
+            row.createCell(i++).setCellValue("Nhập dữ liệu không thành công");
             row.createCell(i).setCellValue(ex.getMessage());
           }
         }
         is.close();
         String[] validateName = fileName.replaceAll(" ", "").split("\\.+\\w+$");
         log.info("File name {} ", Arrays.toString(validateName));
-        Assert.isTrue(validateName.length != 0, "Filename is null");
+        Assert.isTrue(validateName.length != 0, "Tên tệp là null");
         StringBuilder name = new StringBuilder(fileName);
         ByteArrayOutputStream boas = new ByteArrayOutputStream();
         wb.write(boas);

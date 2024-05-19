@@ -86,9 +86,9 @@ public class FileController extends CommonController {
 
   @Operation(summary = "API upload file")
   @PostMapping(value = "/upload-file")
-  ResponseEntity<?> uploadFile(@RequestBody MultipartFile file) {
+  ResponseEntity<?> uploadFile(@RequestBody MultipartFile file, @RequestParam("classroomCode") String classroomCode) {
     try {
-      return toSuccessResult(fileService.uploadFile(file, file.getBytes()));
+      return toSuccessResult(fileService.uploadFile(file, file.getBytes(), classroomCode));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       return toExceptionResult(e.getMessage(), RETURN_CODE_ERROR);

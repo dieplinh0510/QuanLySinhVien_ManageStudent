@@ -10,13 +10,17 @@ import java.util.List;
 
 @Repository
 public interface StudentInSemesterRepo extends JpaRepository<StudentInSemester, Long> {
-  @Query(value = "select sum(accumulated_points) from student_semester where user_id = :userId", nativeQuery = true)
+  @Query(value = "select sum(accumulated_points) from student_semester ss join student_in_classroom_subjects sics on ss.user_id = sics.id_user \n" +
+      "join classroom_in_subjects cis on cis.id = sics.id_class_sbject \n" +
+      "where user_id = :userId and cis.status = 2", nativeQuery = true)
   Double getAccumulatedPointsByStudentId(Long userId);
 
   @Query(value = "select * from student_semester where user_id = :userId and semester_id = :semesterId", nativeQuery = true)
   StudentInSemester getStudentSemesterByUserIdAnhSemesterId(Long userId, Long semesterId);
 
-  @Query(value = "select count(accumulated_points) from student_semester where user_id = :userId", nativeQuery = true)
+  @Query(value = "select count(*) from student_semester ss join student_in_classroom_subjects sics on ss.user_id = sics.id_user \n" +
+      "join classroom_in_subjects cis on cis.id = sics.id_class_sbject \n" +
+      "where user_id = :userId and cis.status = 2 and accumulated_points != 0", nativeQuery = true)
   Integer countAccumulatedPointsByStudentId(Long userId);
 
   @Query(value = "with datas as (\n" +

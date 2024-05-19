@@ -27,7 +27,7 @@ export const createStudent = async (payload) => {
       'Content-Type': 'multipart/form-data',
     },
   });
-  return HttpService.checkResponseCommon(response, [], 'Tạo mới sihn viên thành công!');
+  return HttpService.checkResponseCommon(response, [], 'Tạo mới sinh viên thành công!');
 
 
   // let response = await HttpService.post('/students', {
@@ -38,11 +38,28 @@ export const createStudent = async (payload) => {
 };
 
 export const editStudent = async (payload) => {
-  let response = await HttpService.put('/students', {
-    body: payload,
-  });
+  const formData = new FormData();
 
+  for (let key in payload) {
+    if (key === 'accumulatedPoints') {
+      continue;
+    }
+    formData.set(key, payload[key]);
+  }
+
+  let response = await HttpService.put('/students', {
+    body: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return HttpService.checkResponseCommon(response, [], 'Sửa thông tin sinh viên thành công!');
+  
+  // let response = await HttpService.put('/students', {
+  //   body: payload,
+  // });
+
+  // return HttpService.checkResponseCommon(response, [], 'Sửa thông tin sinh viên thành công!');
 };
 
 export const deleteStudent = async (payload) => {

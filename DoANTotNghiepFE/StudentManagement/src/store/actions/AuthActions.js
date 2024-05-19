@@ -63,3 +63,56 @@ export const registerFailure = (error) => ({
   type: AuthTypes.REGISTER_FAILURE,
   payload: error,
 });
+
+// API forgot password
+export const forgotPasswordRequest = (payload) => ({
+  type: AuthTypes.FORGOT_PASSWORD_REQUEST,
+  payload: payload,
+});
+
+export const forgotPasswordSuccess = (data) => ({
+  type: AuthTypes.FORGOT_PASSWORD_SUCCESS,
+  payload: { data },
+});
+
+export const forgotPasswordFailure = (error) => ({
+  type: AuthTypes.FORGOT_PASSWORD_FAILURE,
+  payload: error,
+});
+
+// API OTP
+export const otpRequest = (payload) => ({
+  type: AuthTypes.OTP_REQUEST,
+  payload: payload,
+});
+
+export const otpSuccess = (data) => ({
+  type: AuthTypes.OTP_SUCCESS,
+  payload: { data },
+});
+
+export const otpFailure = (error) => ({
+  type: AuthTypes.OTP_FAILURE,
+  payload: error,
+});
+
+export const otpChange = (data) => ({
+  type: AuthTypes.OTP_CHANGE,
+  payload: { data },
+});
+
+// API change password with OTP
+export const changePasswordOtpRequest = (payload) => ({
+  type: AuthTypes.CHANGE_PASSWORD_OTP_REQUEST,
+  payload: payload,
+});
+
+export const changePasswordOtpSuccess = (data) => ({
+  type: AuthTypes.CHANGE_PASSWORD_OTP_SUCCESS,
+  payload: { data },
+});
+
+export const changePasswordOtpFailure = (error) => ({
+  type: AuthTypes.CHANGE_PASSWORD_OTP_FAILURE,
+  payload: error,
+});

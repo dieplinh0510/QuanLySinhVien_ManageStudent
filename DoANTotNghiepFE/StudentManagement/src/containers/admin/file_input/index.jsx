@@ -29,6 +29,7 @@ const FileInput = () => {
   const [columnsInFile, setColumnsInFile] = React.useState([]);
   const [columnsIgnore, setColumnsIgnore] = React.useState([]);
   const [payloadMapping, setPayloadMapping] = React.useState([]);
+  const [classroomCode, setClassrommCode] = React.useState('');
 
   const getColumnType = () => {
     if (+uploadType === UploadType.STUDENT) {
@@ -41,6 +42,8 @@ const FileInput = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     let type = queryParams.get('uploadType');
+    setClassrommCode(queryParams.get('classroomCode'));
+
     setUploadType(type);
 
     if (+type === UploadType.STUDENT) {
@@ -66,12 +69,14 @@ const FileInput = () => {
   }
 
   useEffect(() => {
-    console.log("-----------------------------------" + uploadId)
+    const queryParams = new URLSearchParams(window.location.search);
+
     if (uploadId !== null) {
       dispatch(UploadActions.postMappingColumnRequest({
         id: uploadId,
         mapFields: Object.fromEntries(buildMap()),
-        type: uploadType
+        type: uploadType, 
+        classroomCode: queryParams.get('classroomCode')
       }));
 
       // clear all state
@@ -119,7 +124,7 @@ const FileInput = () => {
       return;
     }
 
-    dispatch(UploadActions.uploadFileRequest({ file }));
+    dispatch(UploadActions.uploadFileRequest({ file, classroomCode }));
   }
 
   return (

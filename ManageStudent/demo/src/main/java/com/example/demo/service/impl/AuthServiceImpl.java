@@ -1,19 +1,20 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.domain.dto.AuthenticationPayload;
-import com.example.demo.domain.dto.AuthenticationResponse;
-import com.example.demo.domain.dto.ChangePasswordPayload;
+import com.example.demo.domain.dto.*;
 import com.example.demo.domain.model.Role;
 import com.example.demo.domain.model.User;
 import com.example.demo.repo.RoleRepo;
 import com.example.demo.repo.UserRepo;
 import com.example.demo.service.AuthService;
+import com.example.demo.service.MailService;
 import com.example.demo.service.MyUserDetailsService;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -22,14 +23,16 @@ public class AuthServiceImpl implements AuthService {
   private final JwtUtil jwtUtil;
   private final MyUserDetailsService myUserDetailsService;
   private final RoleRepo roleRepo;
+  private final MailService mailService;
 
   public AuthServiceImpl(UserRepo userRepo, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, MyUserDetailsService myUserDetailsService,
-                         RoleRepo roleRepo) {
+                         RoleRepo roleRepo, MailService mailService) {
     this.userRepo = userRepo;
     this.passwordEncoder = passwordEncoder;
     this.jwtUtil = jwtUtil;
     this.myUserDetailsService = myUserDetailsService;
     this.roleRepo = roleRepo;
+    this.mailService = mailService;
   }
 
   @Override
@@ -66,5 +69,64 @@ public class AuthServiceImpl implements AuthService {
         jwtUtil.generateToken(myUserDetailsService.loadUserByUsername(user.getUsername())),
         user, role != null ? role.getNameRole() : null
     );
+  }
+
+  @Override
+  public UserDTO forgotPasswordOTP(String userName) throws Exception {
+    User user = userRepo.getUserByUsername(userName);
+
+    if (ObjectUtils.isEmpty(user)) {
+      throw new Exception("Tên đăng nhập không tồn tại.");
+    }
+
+
+    String otp = String.valueOf((int) ((Math.random()) * ((9999 - 1000) + 1) + 1000));
+
+    user.setOtp(otp);
+    user.setOtpExpiredTime(LocalDateTime.now().plusMinutes(1));
+
+    // send email
+    mailService.send(user.getEmail(), "OTP quên password ", "" +
+        "Dưới đây là mã OTP để lấy lại mật khẩu, vui lòng không cung cấp cho bất kỳ ai : " + otp);
+    UserDTO userDTO = new UserDTO();
+    userDTO.setName(user.getName());
+    userDTO.setEmail(user.getEmail());
+    userDTO.setUsername(user.getUsername());
+
+    userRepo.save(user);
+    return userDTO;
+  }
+
+  @Override
+  public UserDTO validOtp(String otp) {
+    User user = userRepo.findByOtp(otp);
+    if (ObjectUtils.isEmpty(user)) {
+      return null;
+    }
+
+    if (LocalDateTime.now().isAfter(user.getOtpExpiredTime())) {
+      return null;
+    }
+
+    UserDTO userDTO = new UserDTO();
+    userDTO.setName(user.getName());
+    userDTO.setEmail(user.getEmail());
+
+    return userDTO;
+  }
+
+  @Override
+  public UserDTO changePasswordWithOtp(ChangePasswordWithOTPPayload payload) {
+    User user = userRepo.findByOtp(payload.getOtp());
+    if (ObjectUtils.isEmpty(user)) {
+      return null;
+    }
+
+    user.setPassword(passwordEncoder.encode(payload.getPassword()));
+    user.setUpdateDatetime(LocalDateTime.now());
+
+    userRepo.save(user);
+
+    return new UserDTO();
   }
 }

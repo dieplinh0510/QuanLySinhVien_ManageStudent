@@ -88,7 +88,7 @@ public class StudentController extends CommonController {
 
   @Operation(summary = "API tìm kiếm sinh viên - admin - teacher")
   @GetMapping("/search")
-  public ResponseEntity<?> searchStudent(@RequestParam(name = "studentCode", required = false) String studentCode,
+  public ResponseEntity<?> searchStudent(@RequestParam(name = "studentCode", required = false) Long studentCode,
                                           @RequestParam(name = "courseId", required = false) Long courseId,
                                           @RequestParam(name = "classroomId", required = false) Long classroomId,
                                           @RequestParam(name = "pointStart", required = false) Double pointStart,

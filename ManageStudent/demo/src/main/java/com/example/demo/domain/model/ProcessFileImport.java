@@ -30,6 +30,8 @@ public class ProcessFileImport {
   private byte[] fileContent;
   @Column(name = "status")
   private Integer status;
+  @Column(name = "id_class_sbject")
+  private Long classroomId;
   @Column(name = "key_request")
   private String keyRequest;
   @Column(name = "file_path")

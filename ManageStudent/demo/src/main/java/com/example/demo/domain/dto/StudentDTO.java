@@ -30,7 +30,7 @@ public class StudentDTO {
   @Override
   public String toString() {
     try {
-      this.password = "";
+//      this.password = "";
 
       return new ObjectMapper().writeValueAsString(this);
     } catch (JsonProcessingException e) {

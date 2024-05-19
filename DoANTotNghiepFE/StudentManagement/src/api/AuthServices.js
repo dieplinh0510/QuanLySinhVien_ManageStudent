@@ -40,3 +40,30 @@ export const changePassword = async (payload) => {
 
   return HttpService.checkResponseCommon(response, null, 'Thay đổi mật khẩu thành công!');
 };
+
+// API forgot password
+export const forgotPassword = async (payload) => {
+  let response = await HttpService.post('/auth/forgot-password/otp', {
+    params: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, null, 'Mã OTP đã được gửi vào email của bạn!');
+};
+
+// API OTP
+export const otp = async (payload) => {
+  let response = await HttpService.post('/auth/valid-otp', {
+    params: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, null, 'Xác thực thành công!');
+};
+
+// API change password with OTP
+export const changePasswordWithOtp = async (payload) => {
+  let response = await HttpService.post('/auth/change-password/otp', {
+    body: payload,
+  });
+
+  return HttpService.checkResponseCommon(response, null, 'Thay đổi mật khẩu thành công!');
+};

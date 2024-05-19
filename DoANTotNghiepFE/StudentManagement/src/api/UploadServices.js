@@ -19,7 +19,9 @@ export const getPointColumn = async () => {
 export const uploadFile = async (payload) => {
   console.log(payload.payload.file);
   const formData = new FormData();
+  console.log(payload)
   formData.append('file', payload?.payload?.file);
+  formData.append('classroomCode', payload?.payload?.classroomCode);
   let response = await HttpService.post('/file/upload-file', {
     body: formData,
     headers: {

@@ -14,10 +14,10 @@ public class StudentRepoCustomImpl implements StudentRepoCustom{
   @PersistenceContext
   private EntityManager entityManager;
   @Override
-  public List<StudentPointDTO> getStudent(String studentCode, Long courseId, Long classroomId) {
+  public List<StudentPointDTO> getStudent(Long studentCode, Long courseId, Long classroomId) {
     List<StudentPointDTO> listResult = new ArrayList<>();
     StringBuilder strQuery = new StringBuilder();
-    strQuery.append("select u.id, u.code, u.name, c.name_class , c2.name_course  \n" +
+    strQuery.append("select u.id, u.code, u.name, c.name_class , c2.name_course , u.username , u.email  \n" +
         "from  users u  join classroomes c on u.id_class = c.id \n" +
         "join courses c2 on c.id_course = c2.id ");
     if (studentCode != null || courseId!=null || classroomId!=null){
@@ -62,6 +62,8 @@ public class StudentRepoCustomImpl implements StudentRepoCustom{
         student.setStudentName(item[2].toString());
         student.setClassroomName(item[3].toString());
         student.setCourseName(item[4].toString());
+        student.setUsername(item[5].toString());
+        student.setEmail(item[6].toString());
         listResult.add(student);
       }
     }

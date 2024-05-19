@@ -264,7 +264,8 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
 
   @Override
   public Page<ProcessFileImport> viewDocumentInClassroom(String classroomCode, Integer pageIndex, Integer pageSize) {
-    List<ProcessFileImport> listFile = processFileImportRepo.getListFileByClassroomCode(classroomCode);
+    ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByClassroomCode(classroomCode);
+    List<ProcessFileImport> listFile = processFileImportRepo.getListFileByClassroomId(classroomSubject.getId());
     Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
     int start = (int) pageRequest.getOffset();
     int end = Math.min(start + pageRequest.getPageSize(), listFile.size());
@@ -280,12 +281,13 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
     }
     try {
+      ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByClassroomCode(classroomCode);
       String filePath = FileUtil.saveDocument(file);
       ProcessFileImport process = ProcessFileImport.builder()
           .createDatetime(LocalDateTime.now())
           .filePath(filePath)
           .type(3L)
-          .schema(classroomCode)
+          .classroomId(classroomSubject.getId())
           .keyResponse(file.getOriginalFilename())
           .createUser(user.getUsername())
           .build();

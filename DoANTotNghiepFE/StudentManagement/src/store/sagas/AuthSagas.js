@@ -38,11 +38,51 @@ function* registerSaga(action) {
   }
 }
 
+// API forgot password
+function* forgotPasswordSaga(action) {
+  try {
+    const response = yield call(api.forgotPassword, action.payload);
+    yield put(AuthActions.forgotPasswordSuccess(response));
+  } catch (error) {
+    yield put(AuthActions.forgotPasswordFailure(error.message));
+  }
+}
+
+// API OTP
+function* otpSaga(action) {
+  try {
+    const response = yield call(api.otp, action.payload);
+    yield put(AuthActions.otpSuccess(response));
+  } catch (error) {
+    yield put(AuthActions.otpFailure(error.message));
+  }
+}
+
+// OTP change
+function* otpChangeSaga(action) {
+  yield put(AuthActions.otpChange(action.payload));
+}
+
+// API change password with OTP
+function* changePasswordWithOtpSaga(action) {
+  try {
+    const response = yield call(api.changePasswordWithOtp, action.payload);
+    yield put(AuthActions.changePasswordOtpSuccess(response));
+  } catch (error) {
+    yield put(AuthActions.changePasswordOtpFailure(error.message));
+  }
+}
+
+
 function* watchAuthSaga() {
   yield takeEvery(AuthTypes.LOGIN_REQUEST, loginSaga);
   yield takeEvery(AuthTypes.LOGOUT_REQUEST, logoutSaga);
   yield takeEvery(AuthTypes.CHANGE_PASSWORD_REQUEST, changePasswordSaga);
   yield takeEvery(AuthTypes.REGISTER_REQUEST, registerSaga);
+  yield takeEvery(AuthTypes.FORGOT_PASSWORD_REQUEST, forgotPasswordSaga);
+  yield takeEvery(AuthTypes.OTP_REQUEST, otpSaga);
+  yield takeEvery(AuthTypes.OTP_CHANGE, otpChangeSaga);
+  yield takeEvery(AuthTypes.CHANGE_PASSWORD_OTP_REQUEST, changePasswordWithOtpSaga);
 }
 
 export default watchAuthSaga;

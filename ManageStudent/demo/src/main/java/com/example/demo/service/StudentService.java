@@ -13,7 +13,7 @@ public interface StudentService {
   StudentPointDTO getStudentByStudentId(Long userId) throws Exception;
 //  List<StudentPointDTO> getStudentByClassroom(Long courseId, Long classroomId);
 //  List<StudentPointDTO> getStudentByPoint(Double pointStart, Double pointEnd);
-  Page<StudentPointDTO> searchStudent(String studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd, Integer pageIndex, Integer pageSize) throws Exception;
+  Page<StudentPointDTO> searchStudent(Long studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd, Integer pageIndex, Integer pageSize) throws Exception;
   Page<DetailStudentDTO> getSubjectInStudent(Long studentId, Integer pageIndex, Integer pageSize);
   List<StudentSemesterDTO> getAccumulatedPointByStudentCode(Long studentCode);
   User createStudent(StudentDTO studentDTO) throws Exception;

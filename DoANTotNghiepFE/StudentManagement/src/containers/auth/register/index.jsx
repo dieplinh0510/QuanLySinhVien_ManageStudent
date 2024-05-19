@@ -14,7 +14,7 @@ import Title from '../../../hook/title/Title';
 import { MDBFile } from 'mdb-react-ui-kit';
 import { toast } from 'react-toastify';
 
-const Index = () => {
+const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading = false, data = {}, error = null, navigatePathRegister = null } = useSelector((state) => state.auth);
@@ -212,4 +212,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Register;

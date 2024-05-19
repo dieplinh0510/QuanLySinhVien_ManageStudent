@@ -1,7 +1,6 @@
 package com.example.demo.domain.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 
@@ -49,6 +48,12 @@ public class User {
   private String updateUser;
   @Column(name = "update_datetime")
   private LocalDateTime updateDatetime;
+
+  @Column(name = "otp")
+  private String otp;
+
+  @Column(name = "otp_expired_time")
+  private LocalDateTime otpExpiredTime;
 
   @Override
   public String toString() {

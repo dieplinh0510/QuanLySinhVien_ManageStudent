@@ -28,9 +28,8 @@ function* editPointSaga(payload) {
     yield call(api.editPoint, payload.payload);
     yield put(PointInputActions.editPointSuccess());
     // Call get all student in class
-    yield put(PointInputActions.getStudentColumnRequest({
-      classroomCode: payload.payload.classroomCode
-    }));
+    console.log(payload.payload.searchPayload)
+    yield put(PointInputActions.getStudentColumnRequest(payload.payload.searchPayload));
   } catch (error) {
     yield put(PointInputActions.editPointFailure(error.message));
   }

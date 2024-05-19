@@ -39,7 +39,7 @@ const InputMark = () => {
   });
 
   const handleImportFile = () => {
-    navigate(`/teacher/file-input?uploadType=${UploadType.POINT}`);
+    navigate(`/teacher/file-input?uploadType=${UploadType.POINT}&classroomCode=${classroomCode}`);
   };
 
   useEffect(() => {
@@ -114,7 +114,7 @@ const InputMark = () => {
               <td style={{lineHeight: 0}} >{item.regularPointOne}</td>
               <td style={{lineHeight: 0}} >{item.regularPointTwo}</td>
               <td style={{lineHeight: 0}} >{item.midtermPointOne}</td>
-              <td style={{lineHeight: 0}} >{(item.midtermPointOne == null || item.regularPointOne || item.regularPointTwo) ? '' : item.mediumPoint}</td>
+              <td style={{lineHeight: 0}} >{(item.midtermPointOne === null || item.regularPointOne === null || item.regularPointTwo === null) ? '' : item.mediumPoint}</td>
               <td style={{lineHeight: 0}} >{item.testPointOne}</td>
               <td style={{lineHeight: 0}} >{(item.testPointOne == null) ? '' : item.accumulated_point}</td>
               <td style={{lineHeight: 0, padding: '4px'}} >
@@ -282,6 +282,7 @@ const InputMark = () => {
                           dispatch(PointInputActions.editPointRequest({
                             ...payload,
                             classroomCode,
+                            searchPayload
                           }));
                           setOpenModalEditPoint(false);
                           setPayload(null);

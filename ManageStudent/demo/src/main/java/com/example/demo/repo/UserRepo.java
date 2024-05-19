@@ -20,4 +20,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
   @Query(value = "select id from users where code = :studentCode and id_role = 3 limit 1", nativeQuery = true)
   Long getStudentIdByStudentCode(Long studentCode);
+
+  @Query(value = "select * from users u where u.otp = ?1 LIMIT 1", nativeQuery = true)
+  User findByOtp(String otp);
+
 }

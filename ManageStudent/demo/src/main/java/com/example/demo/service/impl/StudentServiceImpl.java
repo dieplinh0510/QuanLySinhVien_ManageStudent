@@ -135,9 +135,8 @@ public class StudentServiceImpl implements StudentService {
 //  }
 
   @Override
-  public Page<StudentPointDTO> searchStudent(String studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd, Integer pageIndex, Integer pageSize) throws Exception {
+  public Page<StudentPointDTO> searchStudent(Long studentCode, Long courseId, Long classroomId, Double pointStart, Double pointEnd, Integer pageIndex, Integer pageSize) throws Exception {
     List<StudentPointDTO> listStudentPoint = studentRepoCustom.getStudent(studentCode, courseId, classroomId);
-
     for (int i = 0 ; i <listStudentPoint.size(); i++) {
       Double point = studentInSemesterRepo.getAccumulatedPointsByStudentId(listStudentPoint.get(i).getStudentId());
       Integer countPoint = studentInSemesterRepo.countAccumulatedPointsByStudentId(listStudentPoint.get(i).getStudentId());
@@ -177,6 +176,8 @@ public class StudentServiceImpl implements StudentService {
           i--;
         }
       }
+
+      List<StudentSemesterDTO> studentPointDTOList = getAccumulatedPointByStudentCode(listStudentPoint.get(i).getStudentCode());
     }
       Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
       int start = (int) pageRequest.getOffset();
@@ -301,7 +302,7 @@ public class StudentServiceImpl implements StudentService {
           "Password: " + studentDTO.getPassword() + "\n" +
           "Vui lòng đăng nhập và thay đổi mật khẩu ngay sau khi đăng nhập thành công!");
       userRepo.save(userNew);
-      user.setCode(studentDTO.getIdCourse() + user.getId());
+      userNew.setCode(studentDTO.getIdCourse() + userNew.getId());
       userRepo.save(userNew);
       return userNew;
     }
@@ -312,7 +313,7 @@ public class StudentServiceImpl implements StudentService {
       if (user == null){
         throw new Exception(HttpStatus.UNAUTHORIZED.toString());
       }
-      Assert.notNull(studentDTO.getUsername(), "Student username is null");
+      Assert.notNull(studentDTO.getUsername(), "Tên đăng nhập đang null");
       Assert.notNull(studentDTO.getStudentImage(), "Student image is null");
       Assert.notNull(studentDTO.getStudentName(), "Student name is null");
       Assert.notNull(studentDTO.getEmail(), "Student email is null");
@@ -320,7 +321,6 @@ public class StudentServiceImpl implements StudentService {
       Assert.notNull(studentDTO.getIdCourse(), "Course is null");
 
       User user1 = userRepo.getStudentByStudentCode(studentDTO.getStudentCode());
-      Assert.notNull(user1, "Student does not exits");
 
       user1.setName(studentDTO.getStudentName());
       user1.setImage(FileUtil.saveImage(studentDTO.getStudentImage()));
@@ -328,7 +328,6 @@ public class StudentServiceImpl implements StudentService {
       user1.setUpdateDatetime(LocalDateTime.now());
       user1.setUpdateUser(user.getUsername());
       user1.setEmail(studentDTO.getEmail());
-      user1.setUsername(studentDTO.getUsername());
       return userRepo.save(user1);
     }
 
