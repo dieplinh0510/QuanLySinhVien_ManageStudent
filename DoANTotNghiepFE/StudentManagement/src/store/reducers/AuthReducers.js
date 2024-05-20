@@ -13,6 +13,7 @@ const initialState = {
   timeout: 0,
   navigatePathChangePassword: null,
   otp: null,
+  myInfo: {},
 };
 
 const authReducer = (state = initialState, action) => {
@@ -45,7 +46,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         data: user,
-        navigatePath: `/students/detail?studentId=${user.information.id}`,
+        navigatePath: `/students/detail`,
       };
     case AuthTypes.LOGIN_FAILURE:
       return { ...state, loading: false, error: action.payload };
@@ -113,7 +114,7 @@ const authReducer = (state = initialState, action) => {
 
     // API OTP
     case AuthTypes.OTP_REQUEST:
-      return { ...state, loading: true, otp: action.payload.otp};
+      return { ...state, loading: true, otp: action.payload.otp };
     case AuthTypes.OTP_SUCCESS:
       if (action.payload.data === null) {
         return { ...state, loading: false, error: 'Xác thực OTP thất bại!' };
@@ -132,6 +133,21 @@ const authReducer = (state = initialState, action) => {
     case AuthTypes.CHANGE_PASSWORD_OTP_FAILURE:
       return { ...state, loading: false, error: action.payload };
 
+    // API get user info
+    case AuthTypes.GET_USER_INFO_REQUEST:
+      return { ...state, loading: true };
+    case AuthTypes.GET_USER_INFO_SUCCESS:
+      return { ...state, loading: false, myInfo: action.payload.data };
+    case AuthTypes.GET_USER_INFO_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+
+    // API update my info
+    case AuthTypes.UPDATE_MY_INFO_REQUEST:
+      return { ...state, loading: true };
+    case AuthTypes.UPDATE_MY_INFO_SUCCESS:
+      return { ...state, loading: false };
+    case AuthTypes.UPDATE_MY_INFO_FAILURE:
+      return { ...state, loading: false, error: action.payload };
 
     default:
       return state;

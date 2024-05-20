@@ -67,3 +67,27 @@ export const changePasswordWithOtp = async (payload) => {
 
   return HttpService.checkResponseCommon(response, null, 'Thay đổi mật khẩu thành công!');
 };
+
+// API get user info
+export const getMyInfo = async () => {
+  let response = await HttpService.get('/auth/me');
+
+  return response?.data?.data;
+};
+
+// API update my info
+export const updateMyInfo = async (payload) => {
+  const formData = new FormData();
+
+  for (let key in payload) {
+    formData.set(key, payload[key]);
+  }
+
+  let response = await HttpService.put('/students/me', {
+    body: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return HttpService.checkResponseCommon(response, null, 'Cập nhật thông tin thành công!');
+};

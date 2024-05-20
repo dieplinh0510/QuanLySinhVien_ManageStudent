@@ -7,7 +7,6 @@ import { AuthKeys } from '../../../constant';
 
 const DefaultLayout = () => {
   const handleLogout = () => {
-    console.log('Logout');
     storageService.remove(AuthKeys.CURRENT_USER);
     storageService.remove(AuthKeys.ACCESS_TOKEN);
     storageService.set(AuthKeys.LOGGED_IN, false);

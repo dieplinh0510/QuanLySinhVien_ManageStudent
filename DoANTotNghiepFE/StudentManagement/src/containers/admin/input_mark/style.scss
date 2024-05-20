@@ -1,14 +1,25 @@
 .input-mark-page {
   .form-box {
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
 
-    .label {
-      margin: 20px;
-      font-weight: bold;
+    .form-box-left {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+
+      .label {
+        margin: 20px;
+        font-weight: bold;
+      }
+    }
+
+    .form-box-right {
+
     }
   }
+
 
   th {
     padding: 0;

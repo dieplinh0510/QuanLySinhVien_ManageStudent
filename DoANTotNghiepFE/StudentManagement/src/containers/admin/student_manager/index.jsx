@@ -142,7 +142,7 @@ const StudentManager = () => {
 
   const handleEditStudent = () => {
     // validate input not blank
-    if (!payloadEdit.studentName && !payloadEdit.idCourse && !payloadEdit.idClass) {
+    if (!payloadEdit?.studentName && !payloadEdit?.idCourse && !payloadEdit?.idClass) {
       toast.info('Vui lòng nhập thông tin sinh viên');
       return;
     }
@@ -151,8 +151,8 @@ const StudentManager = () => {
       StudentActions.editStudentRequest({
         payload: {
           ...payloadEdit,
-          idClass: payloadEdit.idClass.value,
-          idCourse: payloadEdit.idCourse.value,
+          idClass: payloadEdit?.idClass?.value,
+          idCourse: payloadEdit?.idCourse?.value,
         },
         payloadSearch: searchPayload,
       }),
@@ -325,7 +325,7 @@ const StudentManager = () => {
                   <td onClick={() => navigate(`/students/detail?studentId=${item.studentId}`)}>{item.courseName}</td>
                   <td onClick={() => navigate(`/students/detail?studentId=${item.studentId}`)}>{item.classroomName}</td>
                   <td onClick={() => navigate(`/students/detail?studentId=${item.studentId}`)}>
-                    {item.accumulatedPoints}
+                    {item.accumulatedPoints === 'NaN' ? '' : item.accumulatedPoints}
                   </td>
                   {role === AuthKeys.ROLE_ADMIN && (
                     <td style={{ width: '120px' }}>
@@ -342,7 +342,11 @@ const StudentManager = () => {
                           title={'Sửa'}
                           onClick={() => {
                             setShowEdit(true);
-                            setPayloadEdit(item);
+                            setPayloadEdit({
+                              ...item,
+                              idCourse: lstCourse.filter((course) => course.id = item?.idCourse)[0],
+                              idClass: lstClass.filter((clazz) => clazz.id = item?.idClass)[0]
+                            });
                           }}
                           width={'50px'}
                           customStyle={{ padding: '6px 0' }}
@@ -597,19 +601,6 @@ const StudentManager = () => {
                 />
 
                 <Space height={20} />
-{/* 
-                <Input
-                  value={payloadEdit?.studentImage}
-                  onChange={(value) => setPayloadEdit({ ...payloadEdit, studentImage: value })}
-                  label="Hình ảnh"
-                  isRequired={false}
-                  placeHolder="Chọn hình ảnh"
-                  errorMessage=""
-                  error={false}
-                  isDisable={false}
-                  customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
-
-                /> */}
 
                 <MDBFile
                   label="Hình ảnh"

@@ -29,13 +29,20 @@ export const updateTeacher = async (payload) => {
 
 // API get all my class
 export const searchMyClasses = async (payload) => {
+  if (payload?.pageSize === undefined) {
+    let response = await HttpService.get('/classroom-subject/user', {
+      params: {
+        subjectName: payload?.searchPayload?.subjectName,
+        pageIndex: payload?.searchPayload?.pageIndex,
+        pageSize: payload?.searchPayload?.pageSize,
+        status: payload?.searchPayload?.status?.value
+      },
+    });
+    return HttpService.checkResponseCommon(response, null);
+  }
+
   let response = await HttpService.get('/classroom-subject/user', {
-    params: {
-      subjectName: payload?.searchPayload?.subjectName,
-      pageIndex: payload?.searchPayload?.pageIndex,
-      pageSize: payload?.searchPayload?.pageSize,
-      status: payload?.searchPayload?.status?.value
-    },
+    params: payload,
   });
 
   return HttpService.checkResponseCommon(response, null);

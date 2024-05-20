@@ -73,6 +73,27 @@ function* changePasswordWithOtpSaga(action) {
   }
 }
 
+// API get user info
+function* getUserInfoSaga() {
+  try {
+    const response = yield call(api.getMyInfo);
+    yield put(AuthActions.getUserInfoSuccess(response));
+  } catch (error) {
+    yield put(AuthActions.getUserInfoFailure(error.message));
+  }
+}
+
+// API update my info
+function* updateMyInfoSaga(action) {
+  try {
+    const response = yield call(api.updateMyInfo, action.payload);
+    yield put(AuthActions.updateMyInfoSuccess(response));
+    yield put(AuthActions.getUserInfoRequest());
+  } catch (error) {
+    yield put(AuthActions.updateMyInfoFailure(error.message));
+  }
+}
+
 
 function* watchAuthSaga() {
   yield takeEvery(AuthTypes.LOGIN_REQUEST, loginSaga);
@@ -83,6 +104,8 @@ function* watchAuthSaga() {
   yield takeEvery(AuthTypes.OTP_REQUEST, otpSaga);
   yield takeEvery(AuthTypes.OTP_CHANGE, otpChangeSaga);
   yield takeEvery(AuthTypes.CHANGE_PASSWORD_OTP_REQUEST, changePasswordWithOtpSaga);
+  yield takeEvery(AuthTypes.GET_USER_INFO_REQUEST, getUserInfoSaga);
+  yield takeEvery(AuthTypes.UPDATE_MY_INFO_REQUEST, updateMyInfoSaga);
 }
 
 export default watchAuthSaga;

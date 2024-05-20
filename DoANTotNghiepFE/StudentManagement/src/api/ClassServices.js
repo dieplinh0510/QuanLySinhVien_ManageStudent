@@ -37,7 +37,6 @@ export const createClassInSubject = async (payload) => {
 
 // API edit class in subject
 export const editClassInSubject = async (payload) => {
-  console.log(payload)
   let response = await HttpService.put(`/classroom-subject?classroomId=${payload.id}`, {
     body: payload,
   });

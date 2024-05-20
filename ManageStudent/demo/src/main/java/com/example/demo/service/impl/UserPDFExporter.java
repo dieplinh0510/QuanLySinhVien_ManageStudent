@@ -11,19 +11,30 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
+import javax.persistence.Embedded;
 import javax.servlet.http.HttpServletResponse;
 import javax.sound.sampled.AudioFormat;
 import java.awt.*;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jms.artemis.ArtemisProperties;
 import org.springframework.boot.web.servlet.server.Encoding;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+
+import static javax.tools.JavaFileObject.Kind.HTML;
 
 @Service
 public class UserPDFExporter {
+  private static final Logger log = LoggerFactory.getLogger(UserPDFExporter.class);
   @Autowired
   private CourseRepo courseRepo;
   @Autowired
@@ -37,11 +48,10 @@ public class UserPDFExporter {
 
     FontFactoryImp factory = new FontFactoryImp();
 
-    Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN, "UTF-8");
+    Font font = FontFactory.getFont("/font/vuArial.ttf",BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
     font.setColor(Color.WHITE);
 
     cell.setPhrase(new Phrase("Mã sinh viên", font));
-
     table.addCell(cell);
 
     cell.setPhrase(new Phrase("Họ tên", font));
@@ -77,16 +87,16 @@ public class UserPDFExporter {
   private void writeTableData(PdfPTable table, List<StudentPointInClassroomDTO> listUser) {
     for (StudentPointInClassroomDTO student : listUser) {
       table.addCell(String.valueOf(student.getStudentCode()));
-      table.addCell(student.getStudentName());
+      table.addCell(new Phrase(student.getStudentName(), FontFactory.getFont("/font/vuArial.ttf",BaseFont.IDENTITY_H, BaseFont.EMBEDDED)));
       table.addCell(courseRepo.getCourseNameByStudentCode(student.getStudentCode()));
       table.addCell(classroomRepo.getNameClassByStudentCode(student.getStudentCode()));
-      table.addCell(String.valueOf(student.getRegularPointOne()));
-      table.addCell(String.valueOf(student.getRegularPointTwo()));
-      table.addCell(String.valueOf(student.getMidtermPointOne()));
-      table.addCell(String.valueOf(student.getMediumPoint()));
-      table.addCell(String.valueOf(student.getTestPointOne()));
-      table.addCell(String.valueOf(student.getAccumulated_point()));
-      table.addCell(String.valueOf(student.getPoint()));
+      table.addCell(student.getRegularPointOne() != null ? String.valueOf(student.getRegularPointOne()) : "");
+      table.addCell(student.getRegularPointTwo() != null ? String.valueOf(student.getRegularPointTwo()) : "");
+      table.addCell(student.getMidtermPointOne() != null ? String.valueOf(student.getMidtermPointOne()) : "");
+      table.addCell(student.getMediumPoint() != 0.0 ? String.valueOf(student.getMediumPoint()) : "");
+      table.addCell(student.getTestPointOne() != null ? String.valueOf(student.getTestPointOne()) : "");
+      table.addCell(student.getMediumPoint() != 0.0 ? String.valueOf(student.getMediumPoint()) : "");
+      table.addCell(student.getPoint() != 0.0 ? String.valueOf(student.getPoint()) : "");
     }
   }
   public void export(HttpServletResponse response, List<StudentPointInClassroomDTO> listUser) throws DocumentException, IOException {
@@ -94,7 +104,7 @@ public class UserPDFExporter {
     PdfWriter.getInstance(document, response.getOutputStream());
 
     document.open();
-    Font font = FontFactory.getFont(FontFactory.TIMES_ROMAN, "UTF-8");
+    Font font = FontFactory.getFont("/font/vuArial.ttf",BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
     font.setSize(18);
     font.setColor(Color.BLUE);
 

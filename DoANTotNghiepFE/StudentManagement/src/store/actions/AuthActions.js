@@ -116,3 +116,36 @@ export const changePasswordOtpFailure = (error) => ({
   type: AuthTypes.CHANGE_PASSWORD_OTP_FAILURE,
   payload: error,
 });
+
+// API get user info
+export const getUserInfoRequest = () => ({
+  type: AuthTypes.GET_USER_INFO_REQUEST,
+  payload: {},
+});
+
+export const getUserInfoSuccess = (data) => ({
+  type: AuthTypes.GET_USER_INFO_SUCCESS,
+  payload: { data },
+});
+
+export const getUserInfoFailure = (error) => ({
+  type: AuthTypes.GET_USER_INFO_FAILURE,
+  payload: error,
+});
+
+// API update my info
+export const updateMyInfoRequest = (payload) => ({
+  type: AuthTypes.UPDATE_MY_INFO_REQUEST,
+  payload: payload,
+});
+
+export const updateMyInfoSuccess = (data) => ({
+  type: AuthTypes.UPDATE_MY_INFO_SUCCESS,
+  payload: { data },
+});
+
+export const updateMyInfoFailure = (error) => ({
+  type: AuthTypes.UPDATE_MY_INFO_FAILURE,
+  payload: error,
+});
+

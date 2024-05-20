@@ -51,11 +51,9 @@ const Documents = () => {
   };
 
   const handleDownload = (item) => {
-    console.log(item);
     if (!(item.status !== 1 || item.status !== 2)) {
       return;
     }
-    console.log(item);
     dispatch(
       UploadActions.downloadDocumentRequest({
         idFile: item.id,

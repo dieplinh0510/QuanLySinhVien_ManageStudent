@@ -27,7 +27,13 @@ import * as UploadActions from '../../../store/actions/UploadActions';
 const InputMark = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { students = [], loading = false, error, classrooms = [], pagingStudents = null } = useSelector((state) => state.pointInput);
+  const {
+    students = [],
+    loading = false,
+    error,
+    classrooms = [],
+    pagingStudents = null,
+  } = useSelector((state) => state.pointInput);
   const [classroomCode, setClassroomCode] = React.useState('');
   const [openModalClassroomCode, setOpenModalClassroomCode] = useState(false);
   const [openModalEditPoint, setOpenModalEditPoint] = useState(false);
@@ -68,38 +74,49 @@ const InputMark = () => {
   };
 
 
+  const handleExportFile = () => {
+    dispatch(UploadActions.exportFilePdfRequest({ classroomCode, fileName: `${classroomCode}.pdf` }));
+  };
+
   return (
     // <Loader active={loading} >
     <div className={'input-mark-page'}>
       <Title text="NHẬP ĐIỂM THEO MÔN HỌC" />
 
       <div className={'form-box'}>
-        <p className={'label'}>Mã lớp:</p>
-        <Input
-          value={classroomCode}
-          onChange={(value) => setClassroomCode(value)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              dispatch(PointInputActions.getStudentColumnRequest({ classroomCode }));
-            }
-          }}
-          onBlur={() => dispatch(PointInputActions.getStudentColumnRequest({ classroomCode }))}
-          label=""
-          isRequired={false}
-          placeHolder="Nhập mã lớp"
-          errorMessage=""
-          error={false}
-          isDisable={false}
-          customStyle={{
-            minWidth: '300px',
-            backgroundColor: '#f5f5f5',
-          }}
-        />
+        <div className={'form-box-left'}>
+          <p className={'label'}>Mã lớp:</p>
+          <Input
+            value={classroomCode}
+            onChange={(value) => setClassroomCode(value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                dispatch(PointInputActions.getStudentColumnRequest({ classroomCode }));
+              }
+            }}
+            onBlur={() => dispatch(PointInputActions.getStudentColumnRequest({ classroomCode }))}
+            label=""
+            isRequired={false}
+            placeHolder="Nhập mã lớp"
+            errorMessage=""
+            error={false}
+            isDisable={false}
+            customStyle={{
+              minWidth: '300px',
+              backgroundColor: '#f5f5f5',
+            }}
+          />
 
-        <Space width={50} />
+          <Space width={50} />
 
-        <Button title={'Xem mã lớp'}
-                onClick={() => handleToggleModelClassroomCode()} />
+          <Button title={'Xem mã lớp'}
+                  onClick={() => handleToggleModelClassroomCode()} />
+        </div>
+
+        <div className={'form-box-right'}>
+          <Button title={'Xuất file PDF'}
+                  onClick={() => handleExportFile()} />
+        </div>
       </div>
 
       <p>Danh sách sinh viên trong lớp:</p>
@@ -108,20 +125,26 @@ const InputMark = () => {
         <MDBTableBody>
           {students && students.map((item, index) => (
             <tr key={index}>
-              <td style={{lineHeight: 0}} >{index + 1}</td>
-              <td style={{lineHeight: 0}} >{item.studentCode}</td>
-              <td style={{lineHeight: 0}} >{item.studentName}</td>
-              <td style={{lineHeight: 0}} >{item.regularPointOne}</td>
-              <td style={{lineHeight: 0}} >{item.regularPointTwo}</td>
-              <td style={{lineHeight: 0}} >{item.midtermPointOne}</td>
-              <td style={{lineHeight: 0}} >{(item.midtermPointOne === null || item.regularPointOne === null || item.regularPointTwo === null) ? '' : item.mediumPoint}</td>
-              <td style={{lineHeight: 0}} >{item.testPointOne}</td>
-              <td style={{lineHeight: 0}} >{(item.testPointOne == null) ? '' : item.accumulated_point}</td>
-              <td style={{lineHeight: 0, padding: '4px'}} >
-                <div style={{ display: 'flex', justifyContent: 'center', padding: '0px', margin: '0px', alignItems: 'center' }}>
+              <td style={{ lineHeight: 0 }}>{index + 1}</td>
+              <td style={{ lineHeight: 0 }}>{item.studentCode}</td>
+              <td style={{ lineHeight: 0 }}>{item.studentName}</td>
+              <td style={{ lineHeight: 0 }}>{item.regularPointOne}</td>
+              <td style={{ lineHeight: 0 }}>{item.regularPointTwo}</td>
+              <td style={{ lineHeight: 0 }}>{item.midtermPointOne}</td>
+              <td
+                style={{ lineHeight: 0 }}>{(item.midtermPointOne === null || item.regularPointOne === null || item.regularPointTwo === null) ? '' : item.mediumPoint}</td>
+              <td style={{ lineHeight: 0 }}>{item.testPointOne}</td>
+              <td style={{ lineHeight: 0 }}>{(item.testPointOne == null) ? '' : item.accumulated_point}</td>
+              <td style={{ lineHeight: 0, padding: '4px' }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  padding: '0px',
+                  margin: '0px',
+                  alignItems: 'center',
+                }}>
                   <Button title={'Sửa'}
                           onClick={() => {
-                            console.log(item);
                             setOpenModalEditPoint(true);
                             setPayload(item);
                           }}
@@ -131,7 +154,6 @@ const InputMark = () => {
                   <Space width={10} />
                   <Button title={'Xoá'}
                           onClick={() => {
-                            console.log(item);
                             setOpenModalDeletePoint(true);
                             setPayload(item);
                           }}
@@ -188,7 +210,16 @@ const InputMark = () => {
                       }}
                       onClick={() => {
                         setClassroomCode(item.classroomCode);
-                        dispatch(PointInputActions.getStudentColumnRequest({ classroomCode: item.classroomCode }));
+                        setSearchPayload({
+                          classroomCode: item.classroomCode,
+                          pageIndex: 1,
+                          pageSize: 10,
+                        });
+                        dispatch(PointInputActions.getStudentColumnRequest({
+                          classroomCode: item.classroomCode,
+                          pageIndex: 1,
+                          pageSize: 10,
+                        }));
                       }}
                     >
                       <td style={{ lineHeight: '0' }}>{item.classroomCode}</td>
@@ -282,7 +313,7 @@ const InputMark = () => {
                           dispatch(PointInputActions.editPointRequest({
                             ...payload,
                             classroomCode,
-                            searchPayload
+                            searchPayload,
                           }));
                           setOpenModalEditPoint(false);
                           setPayload(null);
@@ -335,7 +366,7 @@ const InputMark = () => {
 
 
       <MDBModal open={loading}>
-        <MDBModalDialog size="xl" centered={true} >
+        <MDBModalDialog size="xl" centered={true}>
           <div style={{ width: '100%', height: '100%' }}>
             <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
             </LoadingOverlay>

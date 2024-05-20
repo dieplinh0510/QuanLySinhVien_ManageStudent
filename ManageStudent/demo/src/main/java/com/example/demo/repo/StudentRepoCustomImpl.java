@@ -17,7 +17,7 @@ public class StudentRepoCustomImpl implements StudentRepoCustom{
   public List<StudentPointDTO> getStudent(Long studentCode, Long courseId, Long classroomId) {
     List<StudentPointDTO> listResult = new ArrayList<>();
     StringBuilder strQuery = new StringBuilder();
-    strQuery.append("select u.id, u.code, u.name, c.name_class , c2.name_course , u.username , u.email  \n" +
+    strQuery.append("select u.id, u.code, u.name, c.name_class , c2.name_course , u.username , u.email , u.id_class , c2.id as id_course \n" +
         "from  users u  join classroomes c on u.id_class = c.id \n" +
         "join courses c2 on c.id_course = c2.id ");
     if (studentCode != null || courseId!=null || classroomId!=null){
@@ -64,6 +64,8 @@ public class StudentRepoCustomImpl implements StudentRepoCustom{
         student.setCourseName(item[4].toString());
         student.setUsername(item[5].toString());
         student.setEmail(item[6].toString());
+        student.setIdClass(Long.parseLong(item[7].toString()));
+        student.setIdCourse(Long.parseLong(item[8].toString()));
         listResult.add(student);
       }
     }

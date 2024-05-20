@@ -92,6 +92,16 @@ function* downloadDocument(payload) {
   }
 }
 
+// API export file pdf
+function* exportFilePdfSaga(payload) {
+  try {
+    const data = yield call(api.exportFilePdf, payload.payload);
+    yield put(UploadActions.exportFilePdfSuccess(data));
+  } catch (error) {
+    yield put(UploadActions.exportFilePdfFailure(error.message));
+  }
+}
+
 export default function* uploadWatcherSaga() {
   yield takeLatest(UploadTypes.GET_STUDENT_COLUMN_REQUEST, getStudentColumnSaga);
   yield takeLatest(UploadTypes.GET_POINT_COLUMN_REQUEST, getPointColumnSaga);
@@ -102,4 +112,5 @@ export default function* uploadWatcherSaga() {
   yield takeLatest(UploadTypes.GET_ALL_DOCUMENTS_REQUEST, getAllDocumentsSaga);
   yield takeLatest(UploadTypes.UPLOAD_DOCUMENT_REQUEST, uploadDocumentSaga);
   yield takeLatest(UploadTypes.DOWNLOAD_DOCUMENT_REQUEST, downloadDocument);
+  yield takeLatest(UploadTypes.EXPORT_FILE_PDF_REQUEST, exportFilePdfSaga);
 }

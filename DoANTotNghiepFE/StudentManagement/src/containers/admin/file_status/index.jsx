@@ -42,7 +42,6 @@ const FileStatus = () => {
     if (item.status !== 1 && item.status !== 2) {
       return;
     }
-    console.log(item)
     dispatch(UploadActions.downloadFileRequest({
       idFile: item.id,
       fileName: item.fileName

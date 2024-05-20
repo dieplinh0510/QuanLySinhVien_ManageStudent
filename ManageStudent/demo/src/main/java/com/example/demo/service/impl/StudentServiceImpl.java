@@ -314,7 +314,7 @@ public class StudentServiceImpl implements StudentService {
         throw new Exception(HttpStatus.UNAUTHORIZED.toString());
       }
       Assert.notNull(studentDTO.getUsername(), "Tên đăng nhập đang null");
-      Assert.notNull(studentDTO.getStudentImage(), "Student image is null");
+//      Assert.notNull(studentDTO.getStudentImage(), "Student image is null");
       Assert.notNull(studentDTO.getStudentName(), "Student name is null");
       Assert.notNull(studentDTO.getEmail(), "Student email is null");
       Assert.notNull(studentDTO.getIdClass(), "Class is null");
@@ -331,7 +331,24 @@ public class StudentServiceImpl implements StudentService {
       return userRepo.save(user1);
     }
 
-    @Override
+  @Override
+  public User changeStudentByStudent(StudentDTO studentDTO) throws Exception {
+    User user = SecurityUtil.getCurrentUserLogin();
+    if (user == null){
+      throw new Exception(HttpStatus.UNAUTHORIZED.toString());
+    }
+//    Assert.notNull(studentDTO.getStudentImage(), "Student image is null");
+    Assert.notNull(studentDTO.getStudentName(), "Student name is null");
+    Assert.notNull(studentDTO.getEmail(), "Student email is null");
+    user.setName(studentDTO.getStudentName());
+    user.setEmail(studentDTO.getEmail());
+    user.setImage(studentDTO.getStudentImage() != null ? FileUtil.saveImage(studentDTO.getStudentImage()) : user.getImage());
+    user.setUpdateDatetime(LocalDateTime.now());
+    userRepo.save(user);
+    return user;
+  }
+
+  @Override
     public Page<StudentPointInClassroomDTO> viewPointInClassroom (String classroomCode, Integer pageIndex, Integer pageSize){
       List<StudentPointInClassroomDTO> listStudent = new ArrayList<>();
       List<StudentInClassroomSubject> listStudentInClass = studentInClassroomSubjectRepo.getStudentInClassroomSubjectsByClassroomCode(classroomCode);

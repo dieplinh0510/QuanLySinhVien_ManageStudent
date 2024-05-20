@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.dto.*;
+import com.example.demo.domain.model.User;
 
 public interface AuthService {
   AuthenticationResponse login(AuthenticationPayload payload);
@@ -11,4 +12,5 @@ public interface AuthService {
   UserDTO validOtp(String otp);
 
   UserDTO changePasswordWithOtp(ChangePasswordWithOTPPayload payload);
+  StudentDTO getUserInfo();
 }

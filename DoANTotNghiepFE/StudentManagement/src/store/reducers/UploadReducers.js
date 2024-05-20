@@ -76,8 +76,6 @@ const uploadReducer = (state = initialState, action) => {
         loading: true,
       };
     case UploadTypes.POST_MAPPING_COLUMN_SUCCESS:
-      console.log('action.payload', action.payload);
-      console.log('Case: ', UploadTypes.POST_MAPPING_COLUMN_SUCCESS);
       return {
         ...state,
         loading: false,
@@ -200,6 +198,24 @@ const uploadReducer = (state = initialState, action) => {
         loading: false,
       };
     case UploadTypes.DOWNLOAD_DOCUMENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // API export file pdf
+    case UploadTypes.EXPORT_FILE_PDF_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UploadTypes.EXPORT_FILE_PDF_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case UploadTypes.EXPORT_FILE_PDF_FAILURE:
       return {
         ...state,
         loading: false,

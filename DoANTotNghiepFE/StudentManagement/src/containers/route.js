@@ -43,14 +43,16 @@ const routes = [
   },
   { path: 'teacher/classes', name: 'Thông tin lớp học', exact: true, icon: statusIcon, allowedRoles: teacherRole },
   {
-    path: 'students/detail?studentId=:studentId',
+    // path: 'students/detail?studentId=:studentId',
+    path: 'students/detail',
     name: 'Thông tin cá nhân',
     exact: true,
     icon: statusIcon,
     allowedRoles: studentRole,
   },
   {
-    path: 'student/subjects?studentId=:studentId',
+    // path: 'student/subjects?studentId=:studentId',
+    path: 'student/subjects',
     name: 'Đăng ký học phần',
     exact: true,
     icon: statusIcon,
@@ -60,12 +62,6 @@ const routes = [
 
 export const getRoutes = (user) => {
   const role = user?.roleName;
-  if (role === AuthKeys.ROLE_STUDENT) {
-    return routes.filter(route => route.allowedRoles.includes(role)).map(route => ({
-      ...route,
-      path: route.path.replace(':studentId', user.id),
-    }));
-  }
   return routes.filter(route => route.allowedRoles.includes(role));
 };
 

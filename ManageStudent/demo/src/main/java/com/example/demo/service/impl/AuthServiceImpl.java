@@ -3,11 +3,14 @@ package com.example.demo.service.impl;
 import com.example.demo.domain.dto.*;
 import com.example.demo.domain.model.Role;
 import com.example.demo.domain.model.User;
+import com.example.demo.repo.ClassroomRepo;
+import com.example.demo.repo.CourseRepo;
 import com.example.demo.repo.RoleRepo;
 import com.example.demo.repo.UserRepo;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.MailService;
 import com.example.demo.service.MyUserDetailsService;
+import com.example.demo.utils.FileUtil;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,15 +27,21 @@ public class AuthServiceImpl implements AuthService {
   private final MyUserDetailsService myUserDetailsService;
   private final RoleRepo roleRepo;
   private final MailService mailService;
+  private final CourseRepo courseRepo;
+  private final ClassroomRepo classroomRepo;
 
   public AuthServiceImpl(UserRepo userRepo, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, MyUserDetailsService myUserDetailsService,
-                         RoleRepo roleRepo, MailService mailService) {
+                         RoleRepo roleRepo, MailService mailService,
+                         CourseRepo courseRepo,
+                         ClassroomRepo classroomRepo) {
     this.userRepo = userRepo;
     this.passwordEncoder = passwordEncoder;
     this.jwtUtil = jwtUtil;
     this.myUserDetailsService = myUserDetailsService;
     this.roleRepo = roleRepo;
     this.mailService = mailService;
+    this.courseRepo = courseRepo;
+    this.classroomRepo = classroomRepo;
   }
 
   @Override
@@ -128,5 +137,19 @@ public class AuthServiceImpl implements AuthService {
     userRepo.save(user);
 
     return new UserDTO();
+  }
+
+  @Override
+  public StudentDTO getUserInfo() {
+    User user = SecurityUtil.getCurrentUserLogin();
+    return StudentDTO.builder()
+        .studentId(user.getId())
+        .studentCode(user.getCode())
+        .image(user.getImage())
+        .courseName(courseRepo.getCourseNameByStudentCode(user.getCode()))
+        .classroomName(classroomRepo.getClassroomByClassroomId(user.getIdClass()).getNameClass())
+        .email(user.getEmail())
+        .username(user.getUsername())
+        .studentName(user.getName()).build();
   }
 }

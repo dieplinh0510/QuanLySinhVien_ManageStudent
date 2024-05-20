@@ -2,7 +2,7 @@ import React from 'react';
 import DefaultLayout from './containers/admin/layout/DefaultLayout';
 import InputMark from './containers/admin/input_mark';
 import Login from './containers/auth/login';
-import StudentDetail from './containers/admin/student_detail';
+import StudentDetail from './containers/student/student_detail';
 import FileInput from './containers/admin/file_input';
 import SubjectManager from './containers/admin/subject_manager';
 import ClassManager from './containers/admin/class_manager';
@@ -10,12 +10,11 @@ import FileStatus from './containers/admin/file_status';
 import { createBrowserRouter } from 'react-router-dom';
 import { isAuthenticated } from './utils/authentication-util';
 import StudentManager from './containers/admin/student_manager';
-import StudentAccumulated from './containers/admin/student_detail/accumulated';
+import StudentAccumulated from './containers/student/student_detail/accumulated';
 import ChangePasswordFirstLogin from './containers/auth/change_password_first_login';
 import TeacherManager from './containers/admin/teacher_manager';
 import StudentClass from './containers/admin/student_manager/student_class';
 import { AuthKeys } from './constant';
-import Index from './containers/auth/register';
 import storageService from './utils/storage.service';
 import StudentClassRegister from './containers/student/class_register';
 import StudentSubjectRegister from './containers/student/subject_register';
@@ -91,6 +90,8 @@ function getRoutes() {
       },
     ];
   }
+
+  // After login
   return [
     {
       path: '/',

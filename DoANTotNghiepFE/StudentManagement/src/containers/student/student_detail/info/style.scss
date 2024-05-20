@@ -9,6 +9,8 @@
       height: 140px;
       border-radius: 50%;
       margin: 0 20px;
+      border: 2px solid gray;
+      box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -24,6 +26,20 @@
 
       .detail-value {
         color: #333;
+      }
+
+      .edit-icon {
+        width: 20px;
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.5s;
+      }
+    }
+
+    :hover {
+      .edit-icon {
+        opacity: 1;
+        transition: all 0.5s;
       }
     }
   }

@@ -76,7 +76,6 @@ const teacherReducer = (state = initialState, action) => {
 
     // API update class
     case TeacherTypes.UPDATE_CLASS_REQUEST:
-      console.log('UPDATE_CLASS_REQUEST');
       return { ...state, loading: true };
     case TeacherTypes.UPDATE_CLASS_SUCCESS:
       return { ...state, loading: false };

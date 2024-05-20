@@ -131,14 +131,17 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
     }
     ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectById(classroomId);
-    if ( classroomSubject != null && classroomSubject.getIdUser() == user.getId()){
-      classroomSubject.setStatus(2);
+    if ( classroomSubject != null && classroomSubject.getIdUser() == user.getId() && user.getIdRole() == 2){
+      classroomSubject.setStatus(classroomSubjectDTO.getStatus());
+      classroomSubject.setUpdateUser(user.getUsername());
+      classroomSubject.setUpdateDatetime(LocalDateTime.now());
       classroomSubjectRepo.save(classroomSubject);
+      return classroomSubject;
     } else if (user.getIdRole() != 1){
       throw new Exception("Tài khoản không có quyền sử dụng chức năng này");
     }
 
-    if (classroomSubject!= null){
+    if (classroomSubject!= null && user.getIdRole() == 1){
 //      if (classroomSubject.getStatus() != -1){
 //        throw new Exception("Không thể thay đổi thông tin lớp học");
 //      }

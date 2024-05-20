@@ -198,3 +198,25 @@ export const downloadDocumentFailure = (error) => {
     payload: error,
   };
 };
+
+// API export file pdf
+export const exportFilePdfRequest = (payload) => {
+  return {
+    type: UploadTypes.EXPORT_FILE_PDF_REQUEST,
+    payload: payload,
+  };
+};
+
+export const exportFilePdfSuccess = (payload) => {
+  return {
+    type: UploadTypes.EXPORT_FILE_PDF_SUCCESS,
+    payload: payload,
+  };
+};
+
+export const exportFilePdfFailure = (error) => {
+  return {
+    type: UploadTypes.EXPORT_FILE_PDF_FAILURE,
+    payload: error,
+  };
+};

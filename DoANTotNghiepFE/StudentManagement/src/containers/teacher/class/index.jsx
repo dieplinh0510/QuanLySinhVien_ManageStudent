@@ -41,15 +41,15 @@ const TeacherClass = () => {
 
   const handleSearch = () => {
     dispatch(TeacherActions.searchMyClassesRequest({
-      searchPayload
+      searchPayload,
     }));
-  }
+  };
 
   const handleClickItem = (item) => {
     if (item.status === 1 || item.status === 2) {
       navigate(`/teacher/input-mark?classroomCode=${item.classroomCode}`);
     } else {
-      toast.info("Lớp học chưa bắt đầu")
+      toast.info('Lớp học chưa bắt đầu');
     }
   };
 
@@ -82,7 +82,7 @@ const TeacherClass = () => {
                 setSearchPayload(payload);
 
                 dispatch(TeacherActions.searchMyClassesRequest({
-                  searchPayload: payload
+                  searchPayload: payload,
                 }));
               }}
               ignores={[]}
@@ -144,7 +144,10 @@ const TeacherClass = () => {
                       dispatch(TeacherActions.updateClassRequest({
                         ...item,
                         status: value.value,
-                        searchPayload
+                        searchPayload: {
+                          ...searchPayload,
+                          status: null,
+                        },
                       }));
                     }}
                     ignores={[]}
@@ -188,8 +191,8 @@ const TeacherClass = () => {
 
       </div>
 
-            {/* Paging */}
-            <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+      {/* Paging */}
+      <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
         {pagingMyClass && (
           <Pagination
             totalPages={pagingMyClass?.totalPages}

@@ -13,7 +13,7 @@ export const UploadType = {
 }
 
 export const Api = {
-    BASE_URL: "http://localhost:8080/"
+    BASE_URL: "http://192.168.31.232:8080/"
 }
 
 export const Pattern = {

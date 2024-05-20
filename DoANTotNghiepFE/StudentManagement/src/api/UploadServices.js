@@ -17,9 +17,7 @@ export const getPointColumn = async () => {
 
 // API upload file
 export const uploadFile = async (payload) => {
-  console.log(payload.payload.file);
   const formData = new FormData();
-  console.log(payload)
   formData.append('file', payload?.payload?.file);
   formData.append('classroomCode', payload?.payload?.classroomCode);
   let response = await HttpService.post('/file/upload-file', {
@@ -49,11 +47,9 @@ export const postMappingColumn = async (payload) => {
 
 // API get file status list
 export const getFileStatusList = async (payload) => {
-  console.log(payload);
   let response = await HttpService.get('/file/process-file', {
     params: payload,
   });
-  console.log(response?.data?.data);
   return response?.data?.data;
 };
 
@@ -100,6 +96,19 @@ export const uploadDocument = async (payload) => {
 // API download document
 export const downloadDocument = async (payload) => {
   const response = await axios.get(`${Api.BASE_URL}file/download-document?idFile=${payload.idFile}`, {
+    responseType: 'blob',
+  });
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', payload.fileName);
+  document.body.appendChild(link);
+  link.click();
+};
+
+// API export file pdf
+export const exportFilePdf = async (payload) => {
+  const response = await axios.get(`${Api.BASE_URL}file/export/pdf?classroomCode=${payload.classroomCode}`, {
     responseType: 'blob',
   });
   const url = window.URL.createObjectURL(new Blob([response.data]));

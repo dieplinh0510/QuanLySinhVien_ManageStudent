@@ -45,7 +45,6 @@ function* searchMyClassesSaga(action) {
 // API update class
 function* updateClassSaga(action) {
   try {
-    console.log(action.payload);
     const response = yield call(api.updateClass, action.payload);
     yield put(TeacherActions.updateClassSuccess(response));
     yield put(TeacherActions.searchMyClassesRequest(action.payload?.searchPayload));

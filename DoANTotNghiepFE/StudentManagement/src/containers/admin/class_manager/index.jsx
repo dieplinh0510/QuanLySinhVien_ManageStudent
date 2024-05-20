@@ -109,7 +109,6 @@ const ClassManager = () => {
   };
 
   const findTeacher = (id) => {
-    console.log(id);
     return teachers.find(item => item.value === id);
   };
 
@@ -198,7 +197,6 @@ const ClassManager = () => {
   };
 
   useEffect(() => {
-    console.log('show create student', studentDetail);
     if (studentDetail != null) {
       setPayloadCreateStudent({ ...payloadCreateStudent, ...studentDetail });
     }
@@ -294,11 +292,11 @@ const ClassManager = () => {
                             width={'50px'}
                             customStyle={{ padding: '6px 0' }}
                     />
-                    <Button title={'Xoá'}
-                            onClick={() => console.log(item)}
-                            width={'50px'}
-                            customStyle={{ padding: '6px 0' }}
-                    />
+                    {/*<Button title={'Xoá'}*/}
+                    {/*        onClick={() => console.log(item)}*/}
+                    {/*        width={'50px'}*/}
+                    {/*        customStyle={{ padding: '6px 0' }}*/}
+                    {/*/>*/}
                   </div>
                 </td>
               </tr>

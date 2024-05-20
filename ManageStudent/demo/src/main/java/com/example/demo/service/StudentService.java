@@ -18,6 +18,7 @@ public interface StudentService {
   List<StudentSemesterDTO> getAccumulatedPointByStudentCode(Long studentCode);
   User createStudent(StudentDTO studentDTO) throws Exception;
   User changeStudent(StudentDTO studentDTO) throws Exception;
+  User changeStudentByStudent(StudentDTO studentDTO) throws Exception;
   Page<StudentPointInClassroomDTO> viewPointInClassroom(String classroomCode, Integer pageIndex, Integer pageSize);
   StudentPointInClassroomDTO sendRequestChangePointClass(String classroomCode);
   StudentPointInClassroomDTO changePointInClassroom(StudentPointInClassroomDTO studentPointInClassroomDTO) throws Exception;

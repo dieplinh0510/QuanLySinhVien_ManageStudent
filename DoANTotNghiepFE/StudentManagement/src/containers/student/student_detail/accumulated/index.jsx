@@ -11,24 +11,23 @@ import LineChartData from './LineChartData';
 const StudentAccumulated = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { studentDetail = null, accumulatedPoint = [] } = useSelector((state) => state.student);
+  const { accumulatedPoint = [] } = useSelector((state) => state.student);
+  const { myInfo = {} } = useSelector((state) => state.auth);
   const [studentId, setStudentId] = useState(null);
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    setStudentId(queryParams.get('studentId'));
-    dispatch(StudentActions.getStudentDetailByIdRequest({ studentId: queryParams.get('studentId') }));
+    dispatch(StudentActions.getStudentDetailByIdRequest());
   }, []);
 
   useEffect(() => {
-    if (studentDetail !== null) {
-      dispatch(StudentActions.getStudentAccumulatePointRequest({ studentCode: studentDetail.studentCode }));
+    if (myInfo !== null) {
+      dispatch(StudentActions.getStudentAccumulatePointRequest({ studentCode: myInfo.studentCode }));
     }
-  }, [studentDetail]);
+  }, [myInfo]);
 
   return (
     <div className={'student-accumulate-container'}>
-      <StudentDetailInfo studentDetail={studentDetail} />
+      <StudentDetailInfo studentDetail={myInfo} />
 
       <Space height={'20px'} />
 

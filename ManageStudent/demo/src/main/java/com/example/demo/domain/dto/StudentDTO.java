@@ -3,6 +3,7 @@ package com.example.demo.domain.dto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 @Setter
@@ -27,6 +28,8 @@ public class StudentDTO {
   private String username;
   private String password;
   private String email;
+
+  private String image;
   @Override
   public String toString() {
     try {

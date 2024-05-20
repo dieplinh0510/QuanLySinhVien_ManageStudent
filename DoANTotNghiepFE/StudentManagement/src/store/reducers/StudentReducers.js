@@ -136,8 +136,6 @@ const studentsReducer = (state = initialState, action) => {
         loading: true,
       };
     case StudentTypes.GET_STUDENT_MARK_BY_ID_SUCCESS:
-      console.log('action.payload', action.payload);
-
       return {
         ...state,
         loading: false,

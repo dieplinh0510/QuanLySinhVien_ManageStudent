@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.dto.*;
+import com.example.demo.domain.model.User;
 import com.example.demo.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
@@ -75,5 +76,15 @@ public class AuthController extends CommonController {
       return toExceptionResult("OTP không hợp lệ!", RETURN_CODE_ERROR);
     }
     return toSuccessResult(response);
+  }
+
+  @Operation(summary = "API get current user info")
+  @GetMapping("/me")
+  public ResponseEntity<?> getInfo(){
+    StudentDTO userDTO = authService.getUserInfo();
+    if (ObjectUtils.isEmpty(userDTO)) {
+      return toExceptionResult("Authen", "401");
+    }
+    return toSuccessResult(userDTO);
   }
 }
