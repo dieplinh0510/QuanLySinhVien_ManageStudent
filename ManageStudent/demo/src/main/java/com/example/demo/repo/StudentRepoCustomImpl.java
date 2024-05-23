@@ -90,7 +90,7 @@ public class StudentRepoCustomImpl implements StudentRepoCustom{
         student.setStudentName(item[2].toString());
         student.setClassroomName(item[3].toString());
         student.setCourseName(item[4].toString());
-        student.setStudentImage(item[5] != null ? item[5].toString() : null);
+        student.setImage(item[5] != null ? item[5].toString() : null);
         studentPointDTOList.add(student);
       }
     }

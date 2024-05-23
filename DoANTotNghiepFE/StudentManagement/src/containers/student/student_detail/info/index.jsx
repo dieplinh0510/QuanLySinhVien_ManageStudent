@@ -10,8 +10,8 @@ const StudentDetailInfo = ({ studentDetail, handleOpenChangeInfo, role }) => {
       <div className="detail-left">
         <img
           src={
-            studentDetail?.studentImage
-              ? Api.BASE_URL + studentDetail?.studentImage
+            studentDetail?.image
+              ? Api.BASE_URL + studentDetail?.image
               : 'https://icdn.isrgrajan.com/in/2018/03/photo-1496509218134-fad73128e572-696x464.jpg'
           }
         />

@@ -19,6 +19,7 @@ public class StudentPointDTO {
 
   //create student
   private String studentImage;
+  private String image;
   private Long idClass;
   private Long idCourse;
   private String username;
