@@ -43,6 +43,7 @@ const InputMark = () => {
     pageIndex: 1,
     pageSize: 10,
   });
+  const [classStatus, setClassStatus] = useState(null);
 
   const handleImportFile = () => {
     navigate(`/teacher/file-input?uploadType=${UploadType.POINT}&classroomCode=${classroomCode}`);
@@ -51,6 +52,7 @@ const InputMark = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     let classroomCodeParam = queryParams.get('classroomCode');
+    setClassStatus(queryParams.get('status'));
     if (classroomCodeParam || classroomCodeParam !== '') {
       setClassroomCode(classroomCodeParam);
       let search = { ...searchPayload, classroomCode: classroomCodeParam };
@@ -65,14 +67,15 @@ const InputMark = () => {
   };
 
   const handlePageChange = (pageNumber) => {
-    dispatch(PointInputActions.getStudentColumnRequest({
-      ...searchPayload,
-      pageIndex: pageNumber,
-    }));
+    dispatch(
+      PointInputActions.getStudentColumnRequest({
+        ...searchPayload,
+        pageIndex: pageNumber,
+      }),
+    );
 
     setSearchPayload({ ...searchPayload, pageIndex: pageNumber });
   };
-
 
   const handleExportFile = () => {
     dispatch(UploadActions.exportFilePdfRequest({ classroomCode, fileName: `${classroomCode}.pdf` }));
@@ -109,13 +112,11 @@ const InputMark = () => {
 
           <Space width={50} />
 
-          <Button title={'Xem mã lớp'}
-                  onClick={() => handleToggleModelClassroomCode()} />
+          <Button title={'Xem mã lớp'} onClick={() => handleToggleModelClassroomCode()} />
         </div>
 
         <div className={'form-box-right'}>
-          <Button title={'Xuất file PDF'}
-                  onClick={() => handleExportFile()} />
+          <Button title={'Xuất file PDF'} onClick={() => handleExportFile()} />
         </div>
       </div>
 
@@ -123,76 +124,87 @@ const InputMark = () => {
       <MDBTable bordered striped hover>
         <TableHeaderListStudent />
         <MDBTableBody>
-          {students && students.map((item, index) => (
-            <tr key={index}>
-              <td style={{ lineHeight: 0 }}>{index + 1}</td>
-              <td style={{ lineHeight: 0 }}>{item.studentCode}</td>
-              <td style={{ lineHeight: 0 }}>{item.studentName}</td>
-              <td style={{ lineHeight: 0 }}>{item.regularPointOne}</td>
-              <td style={{ lineHeight: 0 }}>{item.regularPointTwo}</td>
-              <td style={{ lineHeight: 0 }}>{item.midtermPointOne}</td>
-              <td
-                style={{ lineHeight: 0 }}>{(item.midtermPointOne === null || item.regularPointOne === null || item.regularPointTwo === null) ? '' : item.mediumPoint}</td>
-              <td style={{ lineHeight: 0 }}>{item.testPointOne}</td>
-              <td style={{ lineHeight: 0 }}>{(item.testPointOne == null) ? '' : item.accumulated_point}</td>
-              <td style={{ lineHeight: 0, padding: '4px' }}>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  padding: '0px',
-                  margin: '0px',
-                  alignItems: 'center',
-                }}>
-                  <Button title={'Sửa'}
-                          onClick={() => {
-                            setOpenModalEditPoint(true);
-                            setPayload(item);
-                          }}
-                          width={'50px'}
-                          customStyle={{ padding: '6px 0' }}
-                  />
-                  <Space width={10} />
-                  <Button title={'Xoá'}
+          {students &&
+            students.map((item, index) => (
+              <tr key={index}>
+                <td style={{ lineHeight: 0 }}>{index + 1}</td>
+                <td style={{ lineHeight: 0 }}>{item.studentCode}</td>
+                <td style={{ lineHeight: 0 }}>{item.studentName}</td>
+                <td style={{ lineHeight: 0 }}>{item.regularPointOne}</td>
+                <td style={{ lineHeight: 0 }}>{item.regularPointTwo}</td>
+                <td style={{ lineHeight: 0 }}>{item.midtermPointOne}</td>
+                <td style={{ lineHeight: 0 }}>
+                  {item.midtermPointOne === null || item.regularPointOne === null || item.regularPointTwo === null
+                    ? ''
+                    : item.mediumPoint}
+                </td>
+                <td style={{ lineHeight: 0 }}>{item.testPointOne}</td>
+                <td style={{ lineHeight: 0 }}>{item.testPointOne == null ? '' : item.accumulated_point}</td>
+                <td style={{ lineHeight: 0, padding: '4px' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      padding: '0px',
+                      margin: '0px',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Button
+                      title={'Sửa'}
+                      onClick={() => {
+                        setOpenModalEditPoint(true);
+                        setPayload(item);
+                      }}
+                      width={'50px'}
+                      customStyle={{ padding: '6px 0' }}
+                      disabled={classStatus!== null && +classStatus === 2}
+                    />
+                    <Space width={10} />
+                    {/* <Button title={'Xoá'}
                           onClick={() => {
                             setOpenModalDeletePoint(true);
                             setPayload(item);
                           }}
                           width={'50px'}
                           customStyle={{ padding: '6px 0' }}
-                  />
-                </div>
-              </td>
-            </tr>
-          ))}
-
+                  /> */}
+                  </div>
+                </td>
+              </tr>
+            ))}
         </MDBTableBody>
       </MDBTable>
 
       <Space height={20} />
-      <Button title={'Thêm dữ liệu từ file'} onClick={handleImportFile} />
+      <Button title={'Thêm dữ liệu từ file'} onClick={handleImportFile} disabled={classStatus!== null && +classStatus === 2}/>
 
       {/* Paging */}
       <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
-        {
-          pagingStudents && (
-            <Pagination
-              totalPages={pagingStudents?.totalPages}
-              currentPage={pagingStudents?.pageIndex + 1}
-              onPageChange={handlePageChange}
-            />
-          )
-        }
+        {pagingStudents && (
+          <Pagination
+            totalPages={pagingStudents?.totalPages}
+            currentPage={pagingStudents?.pageIndex + 1}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
 
       {/* Modal show classroom */}
       <MDBModal
-        open={openModalClassroomCode} tabIndex="-1" autoFocus={false} centered
-        onClose={() => setOpenModalClassroomCode(false)}>
-        <MDBModalDialog scrollable size="fullscreen-xxl-down"
-                        style={{ height: '100vh', right: 0, position: 'fixed', top: '-3%', bottom: 0 }}>
+        open={openModalClassroomCode}
+        tabIndex="-1"
+        autoFocus={false}
+        centered
+        onClose={() => setOpenModalClassroomCode(false)}
+      >
+        <MDBModalDialog
+          scrollable
+          size="fullscreen-xxl-down"
+          style={{ height: '100vh', right: 0, position: 'fixed', top: '-3%', bottom: 0 }}
+        >
           <MDBModalContent>
             <MDBModalBody>
-
               <MDBTable bordered striped hover>
                 <MDBTableHead>
                   <tr>
@@ -202,36 +214,36 @@ const InputMark = () => {
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody style={{ overflowY: 'auto' }}>
-                  {classrooms && classrooms.map((item, index) => (
-                    <tr
-                      key={index}
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => {
-                        setClassroomCode(item.classroomCode);
-                        setSearchPayload({
-                          classroomCode: item.classroomCode,
-                          pageIndex: 1,
-                          pageSize: 10,
-                        });
-                        dispatch(PointInputActions.getStudentColumnRequest({
-                          classroomCode: item.classroomCode,
-                          pageIndex: 1,
-                          pageSize: 10,
-                        }));
-                      }}
-                    >
-                      <td style={{ lineHeight: '0' }}>{item.classroomCode}</td>
-                      <td style={{ lineHeight: '0' }}>{item.subjectName}</td>
-                      <td style={{ lineHeight: '0' }}>{item.teacher}</td>
-                    </tr>
-                  ))}
+                  {classrooms &&
+                    classrooms.map((item, index) => (
+                      <tr
+                        key={index}
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => {
+                          setClassroomCode(item.classroomCode);
+                          setSearchPayload({
+                            classroomCode: item.classroomCode,
+                            pageIndex: 1,
+                            pageSize: 10,
+                          });
+                          dispatch(
+                            PointInputActions.getStudentColumnRequest({
+                              classroomCode: item.classroomCode,
+                              pageIndex: 1,
+                              pageSize: 10,
+                            }),
+                          );
+                        }}
+                      >
+                        <td style={{ lineHeight: '0' }}>{item.classroomCode}</td>
+                        <td style={{ lineHeight: '0' }}>{item.subjectName}</td>
+                        <td style={{ lineHeight: '0' }}>{item.teacher}</td>
+                      </tr>
+                    ))}
                 </MDBTableBody>
-
               </MDBTable>
-
-
             </MDBModalBody>
             <MDBModalFooter>
               <Button title={'Đóng'} onClick={handleToggleModelClassroomCode} />
@@ -242,15 +254,21 @@ const InputMark = () => {
 
       {/* Modal edit point */}
       <MDBModal
-        open={openModalEditPoint} tabIndex="-1" autoFocus={false} centered
-        onClose={() => setOpenModalEditPoint(false)}>
+        open={openModalEditPoint}
+        tabIndex="-1"
+        autoFocus={false}
+        centered
+        onClose={() => setOpenModalEditPoint(false)}
+      >
         <MDBModalDialog scrollable size="fullscreen-xxl-down">
           <MDBModalContent>
             <MDBModalHeader>
               <p>Sửa điểm sinh viên</p>
             </MDBModalHeader>
             <MDBModalBody>
-              <p style={{ textAlign: 'center' }}>{payload?.studentName} - {payload?.studentCode}</p>
+              <p style={{ textAlign: 'center' }}>
+                {payload?.studentName} - {payload?.studentCode}
+              </p>
               <Input
                 value={payload?.regularPointOne}
                 onChange={(value) => setPayload({ ...payload, regularPointOne: value })}
@@ -308,22 +326,28 @@ const InputMark = () => {
               />
               <Space height={16} />
               <div style={{ display: 'flex' }}>
-                <Button title={'Lưu'}
-                        onClick={() => {
-                          dispatch(PointInputActions.editPointRequest({
-                            ...payload,
-                            classroomCode,
-                            searchPayload,
-                          }));
-                          setOpenModalEditPoint(false);
-                          setPayload(null);
-                        }}
+                <Button
+                  title={'Lưu'}
+                  onClick={() => {
+                    dispatch(
+                      PointInputActions.editPointRequest({
+                        ...payload,
+                        classroomCode,
+                        searchPayload,
+                      }),
+                    );
+                    setOpenModalEditPoint(false);
+                    setPayload(null);
+                  }}
                 />
                 <Space width={16} />
-                <Button title={'Đóng'} onClick={() => {
-                  setOpenModalEditPoint(false);
-                  setPayload(null);
-                }} />
+                <Button
+                  title={'Đóng'}
+                  onClick={() => {
+                    setOpenModalEditPoint(false);
+                    setPayload(null);
+                  }}
+                />
               </div>
             </MDBModalBody>
           </MDBModalContent>
@@ -332,71 +356,98 @@ const InputMark = () => {
 
       {/* Modal delete point */}
       <MDBModal
-        open={openModalDeletePoint} tabIndex="-1" autoFocus={false} centered
-        onClose={() => setOpenModalDeletePoint(false)}>
+        open={openModalDeletePoint}
+        tabIndex="-1"
+        autoFocus={false}
+        centered
+        onClose={() => setOpenModalDeletePoint(false)}
+      >
         <MDBModalDialog scrollable size="fullscreen-xxl-down">
           <MDBModalContent>
             <MDBModalHeader>
               <p>Xác nhận xoá sinh viên trong lớp học này</p>
             </MDBModalHeader>
             <MDBModalBody>
-              <p style={{ textAlign: 'center' }}>{payload?.studentName} - {payload?.studentCode}</p>
+              <p style={{ textAlign: 'center' }}>
+                {payload?.studentName} - {payload?.studentCode}
+              </p>
               <p>Bạn có chắc chắn muốn xoá sinh viên trong lớp học này không?</p>
               <div style={{ display: 'flex' }}>
-                <Button title={'Xoá'}
-                        onClick={() => {
-                          dispatch(PointInputActions.deletePointRequest({
-                            studentClassId: payload.id,
-                            classroomCode,
-                          }));
-                          setOpenModalDeletePoint(false);
-                          setPayload(null);
-                        }}
+                <Button
+                  title={'Xoá'}
+                  onClick={() => {
+                    dispatch(
+                      PointInputActions.deletePointRequest({
+                        studentClassId: payload.id,
+                        classroomCode,
+                      }),
+                    );
+                    setOpenModalDeletePoint(false);
+                    setPayload(null);
+                  }}
                 />
                 <Space width={16} />
-                <Button title={'Đóng'} onClick={() => {
-                  setOpenModalDeletePoint(false);
-                  setPayload(null);
-                }} />
+                <Button
+                  title={'Đóng'}
+                  onClick={() => {
+                    setOpenModalDeletePoint(false);
+                    setPayload(null);
+                  }}
+                />
               </div>
             </MDBModalBody>
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
 
-
       <MDBModal open={loading}>
         <MDBModalDialog size="xl" centered={true}>
           <div style={{ width: '100%', height: '100%' }}>
-            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}>
-            </LoadingOverlay>
+            <LoadingOverlay active={loading} spinner={<Oval color={'#4fa94d'} />} text={'Loading...'}></LoadingOverlay>
           </div>
         </MDBModalDialog>
       </MDBModal>
-
     </div>
     // </Loader>
   );
 };
 
 const TableHeaderListStudent = () => {
-  return <MDBTableHead>
-    <tr>
-      <th rowSpan={2} style={{ lineHeight: '26px' }}>STT</th>
-      <th rowSpan={2} style={{ lineHeight: '26px' }}>Mã sinh viên</th>
-      <th rowSpan={2} style={{ lineHeight: '26px' }}>Họ tên</th>
-      <th colSpan={2} style={{ lineHeight: '0px' }}>Điểm thường xuyên</th>
-      <th rowSpan={2} style={{ lineHeight: '26px' }}>Điểm giữa kì</th>
-      <th rowSpan={2} style={{ lineHeight: '26px' }}>TB KTTX</th>
-      <th rowSpan={2} style={{ lineHeight: '26px' }}>Điểm thi</th>
-      <th rowSpan={2} style={{ lineHeight: '26px' }}>Điểm TL</th>
-      <th rowSpan={2} style={{ width: '100px' }}></th>
-    </tr>
-    <tr>
-      <th style={{ lineHeight: '0px' }}>1</th>
-      <th style={{ lineHeight: '0px' }}>2</th>
-    </tr>
-  </MDBTableHead>;
+  return (
+    <MDBTableHead>
+      <tr>
+        <th rowSpan={2} style={{ lineHeight: '26px' }}>
+          STT
+        </th>
+        <th rowSpan={2} style={{ lineHeight: '26px' }}>
+          Mã sinh viên
+        </th>
+        <th rowSpan={2} style={{ lineHeight: '26px' }}>
+          Họ tên
+        </th>
+        <th colSpan={2} style={{ lineHeight: '0px' }}>
+          Điểm thường xuyên
+        </th>
+        <th rowSpan={2} style={{ lineHeight: '26px' }}>
+          Điểm giữa kì
+        </th>
+        <th rowSpan={2} style={{ lineHeight: '26px' }}>
+          TB KTTX
+        </th>
+        <th rowSpan={2} style={{ lineHeight: '26px' }}>
+          Điểm thi
+        </th>
+        <th rowSpan={2} style={{ lineHeight: '26px' }}>
+          Điểm TL
+        </th>
+        <th rowSpan={2} style={{ width: '100px' }}></th>
+      </tr>
+      <tr>
+        <th style={{ lineHeight: '0px' }}>1</th>
+        <th style={{ lineHeight: '0px' }}>2</th>
+      </tr>
+    </MDBTableHead>
+  );
 };
 
 export default InputMark;

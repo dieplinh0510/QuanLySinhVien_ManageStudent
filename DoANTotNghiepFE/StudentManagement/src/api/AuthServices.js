@@ -23,7 +23,7 @@ export const register = async (payload) => {
       'Content-Type': 'multipart/form-data',
     },
   });
-  return HttpService.checkResponseCommon(response, [], 'Đăng ký thành công!');
+  return HttpService.checkResponseCommon(response, null, 'Đăng ký thành công!');
 };
 
 export const isLoggedIn = () => {

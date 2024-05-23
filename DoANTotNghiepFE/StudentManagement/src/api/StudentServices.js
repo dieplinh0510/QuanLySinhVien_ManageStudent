@@ -79,6 +79,7 @@ export const getStudentDetailById = async (payload) => {
 };
 
 export const getStudentMarkById = async (payload) => {
+  console.log(payload)
   let response = await HttpService.get(`/students/detail/subject`, {
     params: payload,
   });

@@ -7,27 +7,55 @@ import StudentDetailInfo from '../info';
 import Space from '../../../../hook/space/space';
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import LineChartData from './LineChartData';
+import StorageService from '../../../../utils/storage.service';
+import { AuthKeys } from '../../../../constant';
+import * as AuthActions from '../../../../store/actions/AuthActions';
 
 const StudentAccumulated = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { accumulatedPoint = [] } = useSelector((state) => state.student);
+  const { accumulatedPoint = [], studentDetail = {} } = useSelector((state) => state.student);
   const { myInfo = {} } = useSelector((state) => state.auth);
   const [studentId, setStudentId] = useState(null);
+  const [role, setRole] = useState(JSON.parse(StorageService.get(AuthKeys.CURRENT_USER)).roleName);
+
+  // useEffect(() => {
+  //   // dispatch(StudentActions.getStudentDetailByIdRequest(payload));
+  //   if (role === AuthKeys.ROLE_STUDENT) {
+  //     dispatch(AuthActions.getUserInfoRequest());
+  //   } else {
+  //     const queryParams = new URLSearchParams(window.location.search);
+  //     setStudentId(studentId);
+  //     dispatch(StudentActions.getStudentAccumulatePointRequest({studentId: queryParams.get("studentId")}));
+  //   }
+  // }, []);
 
   useEffect(() => {
-    dispatch(StudentActions.getStudentDetailByIdRequest());
+    if (role === AuthKeys.ROLE_TEACHER) {
+      const queryParams = new URLSearchParams(window.location.search);
+      dispatch(StudentActions.getStudentDetailByIdRequest({
+        studentId: queryParams.get('studentId'),
+      }));
+    } else {
+      dispatch(AuthActions.getUserInfoRequest());
+    }
   }, []);
 
   useEffect(() => {
-    if (myInfo !== null) {
+    if (myInfo !== null && role === AuthKeys.ROLE_STUDENT) {
       dispatch(StudentActions.getStudentAccumulatePointRequest({ studentCode: myInfo.studentCode }));
     }
   }, [myInfo]);
 
+  useEffect(() => {
+    if (studentDetail !== null && role === AuthKeys.ROLE_TEACHER) {
+      dispatch(StudentActions.getStudentAccumulatePointRequest({ studentCode: studentDetail.studentCode }));
+    }
+  }, [studentDetail]);
+
   return (
     <div className={'student-accumulate-container'}>
-      <StudentDetailInfo studentDetail={myInfo} />
+      <StudentDetailInfo studentDetail={role === AuthKeys.ROLE_STUDENT ? myInfo : studentDetail} />
 
       <Space height={'20px'} />
 

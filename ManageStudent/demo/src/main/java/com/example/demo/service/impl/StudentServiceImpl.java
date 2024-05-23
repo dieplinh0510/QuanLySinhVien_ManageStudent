@@ -177,7 +177,10 @@ public class StudentServiceImpl implements StudentService {
         }
       }
 
-      List<StudentSemesterDTO> studentPointDTOList = getAccumulatedPointByStudentCode(listStudentPoint.get(i).getStudentCode());
+      if ( i>= 0 && listStudentPoint.get(i) != null && listStudentPoint.get(i).getStudentCode() != null){
+        List<StudentSemesterDTO> studentPointDTOList = getAccumulatedPointByStudentCode(listStudentPoint.get(i).getStudentCode());
+      }
+
     }
       Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
       int start = (int) pageRequest.getOffset();
@@ -426,8 +429,8 @@ public class StudentServiceImpl implements StudentService {
           studentDTO.setTestPointOne(studentPointInClassroomDTO.getTestPointOne());
           studentDTO.setMediumPoint(Math.ceil(mediumPoint));
           studentDTO.setAccumulated_point(Math.ceil(point));
-          studentInClassroomSubject.setUpdateDatetime(LocalDateTime.now());
-          studentInClassroomSubject.setUpdateUser(user.getUsername());
+//          studentInClassroomSubject.setUpdateDatetime(LocalDateTime.now());
+//          studentInClassroomSubject.setUpdateUser(user.getUsername());
         }
         return studentDTO;
       }

@@ -91,6 +91,7 @@ const authReducer = (state = initialState, action) => {
     case AuthTypes.REGISTER_REQUEST:
       return { ...state, loading: true };
     case AuthTypes.REGISTER_SUCCESS:
+      console.log(action.payload);
       if (action.payload.data === null) {
         return { ...state, loading: false, error: 'Đăng ký thất bại!' };
       }

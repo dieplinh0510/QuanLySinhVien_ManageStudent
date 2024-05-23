@@ -34,6 +34,9 @@ const SubjectManager = () => {
     subjectCode: '',
     subjectName: '',
     numberOfCredits: '',
+    coefficientRegular : '',
+    coefficientTest : '',
+    coefficientMid : '',
     idSemester: 0,
   });
   const [showEdit, setShowEdit] = React.useState(false);
@@ -63,7 +66,7 @@ const SubjectManager = () => {
       toast.error('Chưa chọn học kì');
       return;
     }
-    dispatch(SubjectActions.createSubjectRequest({ ...payloadCreate, idSemester: payloadCreate.idSemester.value }));
+    dispatch(SubjectActions.createSubjectRequest({ ...payloadCreate, idSemester: payloadCreate.idSemester.value, searchPayload }));
     handleCancelCreate();
   };
 
@@ -98,7 +101,7 @@ const SubjectManager = () => {
       toast.error('Chưa chọn học kì');
       return;
     }
-    dispatch(SubjectActions.editSubjectRequest(payloadEdit));
+    dispatch(SubjectActions.editSubjectRequest({...payloadEdit, searchPayload}));
     handleCancelEdit();
   };
 
@@ -160,7 +163,7 @@ const SubjectManager = () => {
         <Button
           title={'Tìm kiếm'}
           onClick={() => {
-            dispatch(SubjectActions.getSubjectsRequest({ subjectName: searchPayload }));
+            dispatch(SubjectActions.getSubjectsRequest(searchPayload));
           }}
           customStyle={{ width: '120px' }}
         />
@@ -196,15 +199,7 @@ const SubjectManager = () => {
                   <td onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>{item.numberOfCredits}</td>
                   <td onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>{item.idSemester}</td>
                   <td style={{ width: '120px' }}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '5px',
-                        alignItems: 'center',
-                        width: '120px',
-                      }}
-                    >
+                  
                       <Button
                         title={'Sửa'}
                         onClick={() => {
@@ -214,16 +209,6 @@ const SubjectManager = () => {
                         width={'50px'}
                         customStyle={{ padding: '6px 0' }}
                       />
-                      <Button
-                        title={'Xoá'}
-                        onClick={() => {
-                          setPayloadDelete(item);
-                          setShowDelete(true);
-                        }}
-                        width={'50px'}
-                        customStyle={{ padding: '6px 0' }}
-                      />
-                    </div>
                   </td>
                 </tr>
               ))}
@@ -289,6 +274,48 @@ const SubjectManager = () => {
                   isRequired={true}
                   placeHolder="Nhập số tín chỉ"
                   errorMessage="Số tín chỉ không được để trống"
+                  error={false}
+                  isDisable={false}
+                  customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
+                />
+
+                <Space height={20} />
+
+                <Input
+                  value={payloadCreate.coefficientRegular}
+                  onChange={(value) => setPayloadCreate({ ...payloadCreate, coefficientRegular: value })}
+                  label="Hệ số Điểm TX"
+                  isRequired={true}
+                  placeHolder="Nhập hệ số điểm TX"
+                  errorMessage="Hệ số điểm TX không được để trống"
+                  error={false}
+                  isDisable={false}
+                  customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
+                />
+
+                <Space height={20} />
+
+                <Input
+                  value={payloadCreate.coefficientMid}
+                  onChange={(value) => setPayloadCreate({ ...payloadCreate, coefficientMid: value })}
+                  label="Hệ số Điểm GK"
+                  isRequired={true}
+                  placeHolder="Nhập hệ số điểm GK"
+                  errorMessage="Hệ số điểm GK không được để trống"
+                  error={false}
+                  isDisable={false}
+                  customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
+                />
+
+                <Space height={20} />
+
+                <Input
+                  value={payloadCreate.coefficientTest}
+                  onChange={(value) => setPayloadCreate({ ...payloadCreate, coefficientTest: value })}
+                  label="Hệ số Điểm Thi"
+                  isRequired={true}
+                  placeHolder="Nhập hệ số điểm Thi"
+                  errorMessage="Hệ số điểm Thi không được để trống"
                   error={false}
                   isDisable={false}
                   customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
@@ -377,6 +404,48 @@ const SubjectManager = () => {
                   isRequired={true}
                   placeHolder="Nhập số tín chỉ"
                   errorMessage="Số tín chỉ không được để trống"
+                  error={false}
+                  isDisable={false}
+                  customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
+                />
+
+                <Space height={20} />
+
+                <Input
+                  value={payloadEdit?.coefficientRegular}
+                  onChange={(value) => setPayloadEdit({ ...payloadEdit, coefficientRegular: value })}
+                  label="Hệ số Điểm TX"
+                  isRequired={true}
+                  placeHolder="Nhập hệ số điểm TX"
+                  errorMessage="Hệ số điểm TX không được để trống"
+                  error={false}
+                  isDisable={false}
+                  customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
+                />
+
+                <Space height={20} />
+
+                <Input
+                  value={payloadEdit?.coefficientMid}
+                  onChange={(value) => setPayloadEdit({ ...payloadEdit, coefficientMid: value })}
+                  label="Hệ số Điểm GK"
+                  isRequired={true}
+                  placeHolder="Nhập hệ số điểm GK"
+                  errorMessage="Hệ số điểm GK không được để trống"
+                  error={false}
+                  isDisable={false}
+                  customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
+                />
+
+                <Space height={20} />
+
+                <Input
+                  value={payloadEdit?.coefficientTest}
+                  onChange={(value) => setPayloadEdit({ ...payloadEdit, coefficientTest: value })}
+                  label="Hệ số Điểm Thi"
+                  isRequired={true}
+                  placeHolder="Nhập hệ số điểm Thi"
+                  errorMessage="Hệ số điểm Thi không được để trống"
                   error={false}
                   isDisable={false}
                   customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}

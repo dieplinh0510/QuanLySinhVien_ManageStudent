@@ -31,7 +31,7 @@ import { toast } from 'react-toastify';
 const StudentDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { studentMark = [], pagingForDetail = null, loading = false } = useSelector((state) => state.student);
+  const { studentMark = [], pagingForDetail = null, loading = false, studentDetail = {} } = useSelector((state) => state.student);
   const { myInfo = {} } = useSelector((state) => state.auth);
   const [searchPayload, setSearchPayload] = React.useState({
     studentId: '',
@@ -40,16 +40,24 @@ const StudentDetail = () => {
   });
   const [openChangeInfo, setOpenChangeInfo] = useState(false);
   const [payloadEdit, setPayloadEdit] = useState({});
+  const [role, setRole] = useState(JSON.parse(StorageService.get(AuthKeys.CURRENT_USER)).roleName);
 
   useEffect(() => {
     // dispatch(StudentActions.getStudentDetailByIdRequest(payload));
-    dispatch(AuthActions.getUserInfoRequest());
+    if (role === AuthKeys.ROLE_STUDENT) {
+      dispatch(AuthActions.getUserInfoRequest());
+    } else {
+      const queryParams = new URLSearchParams(window.location.search);
+      setSearchPayload({...searchPayload, studentId: queryParams.get("studentId")});
+      dispatch(StudentActions.getStudentDetailByIdRequest({studentId: queryParams.get("studentId")}));
+      dispatch(StudentActions.getStudentMarkByIdRequest({ ...searchPayload, studentId: queryParams.get("studentId") }));
+    }
   }, []);
 
   useEffect(() => {
-    if (myInfo && myInfo.id) {
-      setSearchPayload({ ...searchPayload, studentId: myInfo.id });
-      dispatch(StudentActions.getStudentMarkByIdRequest({ ...searchPayload, studentId: myInfo.id }));
+    if (myInfo && myInfo.studentId && role === AuthKeys.ROLE_STUDENT) {
+      setSearchPayload({ ...searchPayload, studentId: myInfo.studentId });
+      dispatch(StudentActions.getStudentMarkByIdRequest({ ...searchPayload, studentId: myInfo.studentId }));
     }
   }, [myInfo]);
 
@@ -98,9 +106,11 @@ const StudentDetail = () => {
   return (
     <div className="student-detail-container">
       <div className="info-container">
-        <StudentDetailInfo studentDetail={myInfo} handleOpenChangeInfo={handleOpenChangeInfo} />
+        <StudentDetailInfo studentDetail={role === AuthKeys.ROLE_STUDENT ? myInfo : studentDetail} handleOpenChangeInfo={handleOpenChangeInfo} role={role}/>
         <Button title={'Xem tích luỹ theo kì'}
-                onClick={() => navigate(`/students/accumulated`)}
+                onClick={() => navigate(role === AuthKeys.ROLE_STUDENT ?
+                  `/students/accumulated` :
+                  `/students/accumulated?studentId=${role === AuthKeys.ROLE_STUDENT ? myInfo.studentId : studentDetail.studentId}`)}
                 style={{ width: '200px', height: '40px', fontSize: '16px' }}
         />
       </div>

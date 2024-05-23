@@ -32,9 +32,9 @@ import storageService from '../../../utils/storage.service';
 const StudentManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading = false, courses = [], error = null } = useSelector((state) => state.course);
+  const { courses = [], error = null } = useSelector((state) => state.course);
   const { classes = [] } = useSelector((state) => state.class);
-  const { students = [], paging = null } = useSelector((state) => state.student);
+  const { loading = false, students = [], paging = null } = useSelector((state) => state.student);
   const [role, setRole] = React.useState(AuthKeys.ROLE_ADMIN);
   const [lstCourse, setLstCourse] = React.useState([]);
   const [course, setCourse] = React.useState(null);

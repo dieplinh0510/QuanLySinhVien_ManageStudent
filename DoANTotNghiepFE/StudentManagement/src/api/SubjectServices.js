@@ -2,6 +2,7 @@ import HttpService from '../utils/http-service';
 import { toast } from 'react-toastify';
 
 export const getSubjects = async (payload) => {
+  console.log(payload)
   let response = await HttpService.get('/subjects', {
     params: payload,
   });

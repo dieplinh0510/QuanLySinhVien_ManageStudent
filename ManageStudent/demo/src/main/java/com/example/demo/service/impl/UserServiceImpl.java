@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
       return null;
     }
     User user = userRepo.getUserByUsername(dto.getUsername());
-    Assert.notNull(user, "Username đã tồn tại. Vui lòng nhập username khác.");
+    Assert.isNull(user, "Username đã tồn tại. Vui lòng nhập username khác.");
 
     User userNew = User.builder()
         .username(dto.getUsername())
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
         .isActive(true)
         .build();
     userRepo.save(userNew);
-    userNew.setCode(1000000 + user.getId());
+    userNew.setCode(1000000 + userNew.getId());
 
     // send email
     mailService.send(dto.getEmail(), "Thông tin tài khoản", "Tài khoản của bạn đã được tạo thành công!\n" +
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
     Assert.notNull(studentDTO.getIdClass(), "Class is null");
     Assert.notNull(studentDTO.getIdCourse(), "Course is null");
     User user = userRepo.getUserByUsername(studentDTO.getUsername());
-    Assert.notNull(user, "Username đã tồn tại. Vui lòng nhập username khác");
+    Assert.isNull(user, "Username đã tồn tại. Vui lòng nhập username khác");
     User userNew = User.builder()
         .createDatetime(LocalDateTime.now())
         .createUser(studentDTO.getUsername())
@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
         .username(studentDTO.getUsername())
         .idRole(3L)
         .isActive(true)
-        .isFirstLogin(true)
+        .isFirstLogin(false)
         .image(FileUtil.saveImage(studentDTO.getStudentImage()))
         .name(studentDTO.getStudentName())
         .idClass(studentDTO.getIdClass())

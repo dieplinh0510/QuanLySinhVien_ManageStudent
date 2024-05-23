@@ -125,20 +125,29 @@ public class FileController extends CommonController {
   public ResponseEntity<?> downloadDocument(@RequestParam("idFile") Long fileId) {
     try {
       ProcessFileImport processFileImport = processFileImportRepo.getProcessFileById(fileId);
-      Assert.notNull(processFileImport, "File download does not exits");
+      Assert.notNull(processFileImport, "File download does not exist");
+
       File file = new File(processFileImport.getFilePath());
+      if (!file.exists()) {
+        throw new FileNotFoundException("File not found: " + processFileImport.getFilePath());
+      }
+
       HttpHeaders httpHeaders = new HttpHeaders();
       httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-      httpHeaders.set("Content-disposition", "attachment; filename=" + processFileImport.getKeyResponse());
+      httpHeaders.setContentDispositionFormData("attachment", processFileImport.getKeyResponse());
       httpHeaders.setContentLength(file.length());
 
-      InputStreamReader i = new InputStreamReader(new FileInputStream(file));
-      System.out.println("The length of the file is : " + file.length());
+      InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
-      return new ResponseEntity<>(i , httpHeaders, HttpStatus.OK);
+      return ResponseEntity.ok()
+          .headers(httpHeaders)
+          .body(resource);
+    } catch (FileNotFoundException ex) {
+      log.error("File not found: " + ex.getMessage(), ex);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("File not found");
     } catch (Exception ex) {
       log.error(ex.getMessage(), ex);
-      return toExceptionResult(ex.getMessage(), RETURN_CODE_ERROR);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while downloading the file");
     }
   }
 

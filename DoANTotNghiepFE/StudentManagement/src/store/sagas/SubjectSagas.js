@@ -26,7 +26,7 @@ function* createSubjectSaga(payload) {
   try {
     const data = yield call(api.createSubject, payload.payload);
     yield put(SubjectActions.createSubjectSuccess(data));
-    yield put(SubjectActions.getSubjectsRequest());
+    yield put(SubjectActions.getSubjectsRequest(payload.payload.searchPayload));
   } catch (error) {
     yield put(SubjectActions.createSubjectFailure(error.message));
   }
@@ -37,7 +37,7 @@ function* editSubjectSaga(payload) {
   try {
     const data = yield call(api.updateSubject, payload.payload);
     yield put(SubjectActions.editSubjectSuccess(data));
-    yield put(SubjectActions.getSubjectsRequest());
+    yield put(SubjectActions.getSubjectsRequest(payload.payload.searchPayload));
   } catch (error) {
     yield put(SubjectActions.editSubjectFailure(error.message));
   }

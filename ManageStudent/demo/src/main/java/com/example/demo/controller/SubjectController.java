@@ -39,7 +39,7 @@ public class SubjectController extends CommonController{
 
   @Operation(summary = "API lấy tất car môn học - admin")
   @GetMapping()
-  public ResponseEntity<?> getAllSubject(@RequestParam(name = "subjectName") String subjectName,
+  public ResponseEntity<?> getAllSubject(@RequestParam(name = "subjectName" , required = false) String subjectName,
                                          @RequestParam(value = "pageIndex") Integer pageIndex,
                                          @RequestParam(value = "pageSize") Integer pageSize){
     try {

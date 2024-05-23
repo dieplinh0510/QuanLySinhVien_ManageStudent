@@ -19,11 +19,11 @@ const Register = () => {
   const navigate = useNavigate();
   const { loading = false, data = {}, error = null, navigatePathRegister = null } = useSelector((state) => state.auth);
   const [payload, setPayload] = React.useState({
-    username: 'student',
-    studentName: 'student',
-    email: 'student@gmail.com',
-    password: '123',
-    confirmPassword: '123',
+    username: '',
+    studentName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
     idCourse: 0,
     idClass: 0,
     studentImage: '',

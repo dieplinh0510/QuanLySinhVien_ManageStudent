@@ -13,8 +13,8 @@ const Login = () => {
   const navigate = useNavigate();
   const {loading= false, data =  {}, error = null, navigatePath=null} = useSelector((state) => state.auth);
   const [payload, setPayload] = React.useState({
-    username: 'admin',
-    password: '123',
+    username: '',
+    password: '',
   });
 
   const handleLogin = () => {

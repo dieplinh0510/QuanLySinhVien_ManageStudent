@@ -124,18 +124,20 @@ const ClassManager = () => {
       idUser: findTeacher(item.idUser),
       status: item.status,
     });
-    if (item.status === -1) {
-      setStatusListEdit(statusList.filter(item => item.value === -1 || item.value === 0));
-    }
-    if (item.status === 0) {
-      setStatusListEdit(statusList.filter(item => item.value === 0 || item.value === 1));
-    }
-    if (item.status === 1) {
-      setStatusListEdit(statusList.filter(item => item.value === 1 || item.value === 2));
-    }
-    if (item.status === 2) {
-      setStatusListEdit(statusList.filter(item => item.value === 2));
-    }
+
+    setStatusListEdit(statusList);
+    // if (item.status === -1) {
+    //   setStatusListEdit(statusList.filter(item => item.value === -1 || item.value === 0));
+    // }
+    // if (item.status === 0) {
+    //   setStatusListEdit(statusList.filter(item => item.value === 0 || item.value === 1));
+    // }
+    // if (item.status === 1) {
+    //   setStatusListEdit(statusList.filter(item => item.value === 1 || item.value === 2));
+    // }
+    // if (item.status === 2) {
+    //   setStatusListEdit(statusList.filter(item => item.value === 2));
+    // }
   };
 
   //let statusList = [
@@ -266,13 +268,13 @@ const ClassManager = () => {
           </MDBTableHead>
           <MDBTableBody>
             {classes && classes.length > 0 && classes.map((item, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{item.classroomCode}</td>
-                <td>{item.subjectName}</td>
-                <td>{item.quantityStudent}</td>
-                <td>{item.teacher}</td>
-                <td>{item.status === -1 ? 'Chưa mở đăng ký' : item.status === 0 ? 'Chưa bắt đầu' : item.status === 1 ? 'Đã bắt đầu' : 'Đã kết thúc'}</td>
+              <tr key={index} style={{cursor: 'pointer'}}>
+                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{index + 1}</td>
+                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.classroomCode}</td>
+                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.subjectName}</td>
+                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.quantityStudent}</td>
+                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.teacher}</td>
+                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.status === -1 ? 'Chưa mở đăng ký' : item.status === 0 ? 'Chưa bắt đầu' : item.status === 1 ? 'Đã bắt đầu' : 'Đã kết thúc'}</td>
                 <td style={{ width: '280px' }}>
                   <div style={{
                     display: 'flex',
@@ -292,11 +294,6 @@ const ClassManager = () => {
                             width={'50px'}
                             customStyle={{ padding: '6px 0' }}
                     />
-                    {/*<Button title={'Xoá'}*/}
-                    {/*        onClick={() => console.log(item)}*/}
-                    {/*        width={'50px'}*/}
-                    {/*        customStyle={{ padding: '6px 0' }}*/}
-                    {/*/>*/}
                   </div>
                 </td>
               </tr>
@@ -419,7 +416,7 @@ const ClassManager = () => {
                        placeHolder="Nhập tên môn học"
                        errorMessage="Tên môn học không được để trống"
                        error={false}
-                       isDisable={payloadEdit?.status !== -1}
+                       isDisable={true}
                        customStyle={{ width: '100%', backgroundColor: '#f5f5f5' }}
                 />
 

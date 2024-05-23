@@ -57,7 +57,7 @@ const Documents = () => {
     dispatch(
       UploadActions.downloadDocumentRequest({
         idFile: item.id,
-        fileName: item.fileName,
+        fileName: item.filePath.split('/')[1],
       }),
     );
   };

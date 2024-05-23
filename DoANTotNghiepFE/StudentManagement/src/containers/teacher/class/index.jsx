@@ -19,6 +19,7 @@ const statusList = [
   { value: 2, label: 'Đã kết thúc' },
 ];
 const statusListEdit = [
+  { value: -1, label: 'Chưa mở đăng ký' },
   { value: 0, label: 'Chưa bắt đầu' },
   { value: 1, label: 'Đã bắt đầu' },
   { value: 2, label: 'Đã kết thúc' },
@@ -47,7 +48,7 @@ const TeacherClass = () => {
 
   const handleClickItem = (item) => {
     if (item.status === 1 || item.status === 2) {
-      navigate(`/teacher/input-mark?classroomCode=${item.classroomCode}`);
+      navigate(`/teacher/input-mark?classroomCode=${item.classroomCode}&status=${item.status}`);
     } else {
       toast.info('Lớp học chưa bắt đầu');
     }
@@ -152,7 +153,8 @@ const TeacherClass = () => {
                     }}
                     ignores={[]}
                     customStyle={{ width: '160px' }}
-                    isDisable={item.status === 0 || item.status === 2}
+                    isDisable={item.status !== 1}
+                    // isDisable={item.status === 0 || item.status === 2}
                   />
 
                 </td>
