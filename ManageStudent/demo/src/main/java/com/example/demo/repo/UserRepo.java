@@ -12,6 +12,9 @@ public interface UserRepo extends JpaRepository<User, Long> {
   @Query(value = "select * from users u where u.username = :userName", nativeQuery = true)
   User getUserByUsername(String userName);
 
+  @Query(value = "select * from users u where u.id = :userId", nativeQuery = true)
+  User getUserByUserId(Long userId);
+
   @Query(value = "select * from users u where u.name like concat('%'," + ":teacherName," + "'%') and id_role = 2", nativeQuery = true)
   List<User> getUserByName(String teacherName);
 
@@ -23,5 +26,4 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
   @Query(value = "select * from users u where u.otp = ?1 LIMIT 1", nativeQuery = true)
   User findByOtp(String otp);
-
 }

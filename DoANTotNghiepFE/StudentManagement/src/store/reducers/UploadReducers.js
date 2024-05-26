@@ -10,6 +10,8 @@ const initialState = {
   paging: null,
   documents: [],
   pagingDocuments: null,
+  studentDocuments: [],
+  pagingStudentDocuments: null,
 };
 
 const uploadReducer = (state = initialState, action) => {
@@ -221,6 +223,92 @@ const uploadReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+
+    // API get all documents of classroom by documentId
+    case UploadTypes.GET_ALL_DOCUMENTS_BY_DOCUMENT_ID_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UploadTypes.GET_ALL_DOCUMENTS_BY_DOCUMENT_ID_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        studentDocuments: action.payload.content,
+        pagingStudentDocuments: {
+          last: action.payload.last,
+          totalElements: action.payload.totalElements,
+          totalPages: action.payload.totalPages,
+          size: action.payload.size,
+          number: action.payload.number,
+          first: action.payload.first,
+          numberOfElements: action.payload.numberOfElements,
+          pageIndex: action.payload.pageable.pageNumber,
+          pageSize: action.payload.pageable.pageSize,
+          offset: action.payload.pageable.offset,
+        },
+      };
+    case UploadTypes.GET_ALL_DOCUMENTS_BY_DOCUMENT_ID_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // API update document
+    case UploadTypes.UPDATE_DOCUMENT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UploadTypes.UPDATE_DOCUMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case UploadTypes.UPDATE_DOCUMENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // API submit homework
+    case UploadTypes.SUBMIT_HOMEWORK_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UploadTypes.SUBMIT_HOMEWORK_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case UploadTypes.SUBMIT_HOMEWORK_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // API download assignment
+    case UploadTypes.DOWNLOAD_ASSIGNMENT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case UploadTypes.DOWNLOAD_ASSIGNMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+      };
+    case UploadTypes.DOWNLOAD_ASSIGNMENT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
 
     default:
       return state;

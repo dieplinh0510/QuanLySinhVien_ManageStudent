@@ -181,6 +181,11 @@
 				quid       	"664370530326"
 				concurrency 	"Sequential"
 				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Doc bang DOCUMENT"
+				quid       	"6650521F02D4"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
 				uid        	0)))
 		    (object Class "CSDL"
 			quid       	"663B67EF03BD"
@@ -243,6 +248,11 @@
 				uid        	0)
 			    (object Operation "Cap nhat thong tin bang STUDENT_CLASS_SUBJECT"
 				quid       	"6643706D00DE"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Doc bang DOCUMENT"
+				quid       	"6650522D0105"
 				concurrency 	"Sequential"
 				opExportControl 	"Public"
 				uid        	0)))
@@ -560,6 +570,11 @@
 				uid        	0)
 			    (object Operation "getAllProcessFile"
 				quid       	"663B959403C1"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "getFileByClassroomCodeAndType"
+				quid       	"66437B0800B4"
 				concurrency 	"Sequential"
 				opExportControl 	"Public"
 				uid        	0))
@@ -1062,6 +1077,70 @@
 				concurrency 	"Sequential"
 				opExportControl 	"Public"
 				uid        	0)))
+		    (object Class "XemTaiLieuController"
+			quid       	"66437A84031B"
+			stereotype 	"control"
+			operations 	(list Operations
+			    (object Operation "Lay thong tin file"
+				quid       	"66437AE503E5"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Lay tat ca tai lieu trong lop"
+				quid       	"6650520F0087"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)))
+		    (object Class "XemTaiLieuUI"
+			quid       	"66437A900172"
+			stereotype 	"boundary"
+			operations 	(list Operations
+			    (object Operation "Kich nut \"Xem tai lieu\""
+				quid       	"66437AD7033E"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Hien thi ket qua"
+				quid       	"66437B1F000B"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Kich chon mot lop hoc"
+				quid       	"66505201011E"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)
+			    (object Operation "Hien thi danh sach tai lieu"
+				quid       	"6650524E03A6"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0)))
+		    (object Class "DOCUMENT"
+			quid       	"665051850151"
+			stereotype 	"entity"
+			operations 	(list Operations
+			    (object Operation "getDocumentByClassroomId"
+				quid       	"6650523A01B5"
+				concurrency 	"Sequential"
+				opExportControl 	"Public"
+				uid        	0))
+			class_attributes 	(list class_attribute_list
+			    (object ClassAttribute "id"
+				quid       	"6650518C0053")
+			    (object ClassAttribute "expired_date"
+				quid       	"6650519502D8")
+			    (object ClassAttribute "path"
+				quid       	"665051A003CB")
+			    (object ClassAttribute "title"
+				quid       	"665051AD0384")
+			    (object ClassAttribute "filename"
+				quid       	"665051B00216")
+			    (object ClassAttribute "type"
+				quid       	"665051B302FD")
+			    (object ClassAttribute "mail_status"
+				quid       	"665051C10144")
+			    (object ClassAttribute "document_id"
+				quid       	"665051C50323")))
 		    (object UseCase "DangKy"
 			quid       	"663B6789031E"
 			stereotype 	"use-case realization"
@@ -1303,7 +1382,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
@@ -1410,7 +1489,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -2524,7 +2603,7 @@
 					    location   	(320, 400)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"NguoiDung")
 					icon       	"Actor"
@@ -2552,7 +2631,7 @@
 					    location   	(2960, 528)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"CSDL")
 					icon       	"Actor"
@@ -2573,7 +2652,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
@@ -2680,7 +2759,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -2836,23 +2915,6 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6BB40316"
-					compartment 	(object Compartment
-					    Parent_View 	@73
-					    location   	(1311, 1077)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	672
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
@@ -2883,23 +2945,6 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6A8E0397"
-					compartment 	(object Compartment
-					    Parent_View 	@74
-					    location   	(2583, 1189)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	688
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
@@ -4412,7 +4457,7 @@
 					    location   	(128, 272)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"NguoiDung")
 					icon       	"Actor"
@@ -4440,7 +4485,7 @@
 					    location   	(2880, 416)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"CSDL")
 					icon       	"Actor"
@@ -4461,7 +4506,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
@@ -4568,7 +4613,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -5648,7 +5693,7 @@
 					    location   	(176, 288)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"NguoiDung")
 					icon       	"Actor"
@@ -5676,7 +5721,7 @@
 					    location   	(2880, 448)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"CSDL")
 					icon       	"Actor"
@@ -5697,7 +5742,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
@@ -5804,7 +5849,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -5960,23 +6005,6 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6A8E0397"
-					compartment 	(object Compartment
-					    Parent_View 	@229
-					    location   	(695, 1141)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	687
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
@@ -6007,23 +6035,6 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6BB40316"
-					compartment 	(object Compartment
-					    Parent_View 	@230
-					    location   	(1439, 1285)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	672
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
@@ -7545,7 +7556,7 @@
 					    location   	(208, 352)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"NguoiDung")
 					icon       	"Actor"
@@ -7554,7 +7565,52 @@
 					quidu      	"663B6A210260"
 					annotation 	8
 					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::DangNhapUI" @319
+				    (object ClassView "Class" "Use Case View::DoAN::CSDL" @319
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(3104, 320)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@319
+					    location   	(3104, 480)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	362
+					    justify    	0
+					    label      	"CSDL")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					quidu      	"663B67EF03BD"
+					compartment 	(object Compartment
+					    Parent_View 	@319
+					    location   	(3102, 521)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    icon_style 	"Icon"
+					    anchor     	2
+					    nlines     	14
+					    max_width  	2
+					    justify    	0)
+					annotation 	8
+					autoResize 	TRUE)
+				    (object ClassView "Class" "Use Case View::DoAN::DangNhapUI" @320
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -7569,7 +7625,7 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@319
+					    Parent_View 	@320
 					    location   	(719, 556)
 					    anchor_loc 	1
 					    nlines     	2
@@ -7585,37 +7641,37 @@
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
-				    (object AssociationViewNew "" @320
+				    (object AssociationViewNew "" @321
 					location   	(435, 282)
 					stereotype 	TRUE
 					line_color 	3342489
 					quidu      	"663B80B9039D"
 					roleview_list 	(list RoleViews
-					    (object RoleView "" @321
-						Parent_View 	@320
+					    (object RoleView "" @322
+						Parent_View 	@321
 						location   	(227, 90)
 						stereotype 	TRUE
 						line_color 	3342489
 						quidu      	"663B80BA0133"
-						client     	@320
-						supplier   	@319
+						client     	@321
+						supplier   	@320
 						vertices   	(list Points
 						    (435, 282)
 						    (605, 349))
 						line_style 	0)
-					    (object RoleView "" @322
-						Parent_View 	@320
+					    (object RoleView "" @323
+						Parent_View 	@321
 						location   	(227, 90)
 						stereotype 	TRUE
 						line_color 	3342489
 						quidu      	"663B80BA0139"
-						client     	@320
+						client     	@321
 						supplier   	@318
 						vertices   	(list Points
 						    (435, 282)
 						    (265, 212))
 						line_style 	0)))
-				    (object ClassView "Class" "Use Case View::DoAN::USER" @323
+				    (object ClassView "Class" "Use Case View::DoAN::USER" @324
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -7630,7 +7686,7 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@323
+					    Parent_View 	@324
 					    location   	(320, 1068)
 					    anchor_loc 	1
 					    nlines     	2
@@ -7643,51 +7699,6 @@
 					fill_color 	13434879
 					quidu      	"663B67F70246"
 					height     	154
-					annotation 	8
-					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::CSDL" @324
-					ShowCompartmentStereotypes 	TRUE
-					IncludeAttribute 	TRUE
-					IncludeOperation 	TRUE
-					location   	(3104, 320)
-					font       	(object Font
-					    size       	10
-					    face       	"Arial"
-					    bold       	FALSE
-					    italics    	FALSE
-					    underline  	FALSE
-					    strike     	FALSE
-					    color      	0
-					    default_color 	TRUE)
-					label      	(object ItemLabel
-					    Parent_View 	@324
-					    location   	(3104, 480)
-					    anchor_loc 	1
-					    nlines     	2
-					    max_width  	327
-					    justify    	0
-					    label      	"CSDL")
-					icon       	"Actor"
-					icon_style 	"Icon"
-					line_color 	3342489
-					quidu      	"663B67EF03BD"
-					compartment 	(object Compartment
-					    Parent_View 	@324
-					    location   	(3102, 521)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	2
-					    justify    	0)
 					annotation 	8
 					autoResize 	TRUE)
 				    (object ClassView "Class" "Use Case View::DoAN::ICSDL" @325
@@ -7731,7 +7742,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -7825,7 +7836,7 @@
 						line_color 	3342489
 						quidu      	"663B680B0165"
 						client     	@326
-						supplier   	@324
+						supplier   	@319
 						vertices   	(list Points
 						    (2650, 302)
 						    (3044, 315))
@@ -7885,7 +7896,7 @@
 						line_color 	3342489
 						quidu      	"663B80BC018E"
 						client     	@332
-						supplier   	@319
+						supplier   	@320
 						vertices   	(list Points
 						    (1017, 362)
 						    (832, 383))
@@ -7903,7 +7914,7 @@
 						line_color 	3342489
 						quidu      	"663B80BE021C"
 						client     	@335
-						supplier   	@323
+						supplier   	@324
 						vertices   	(list Points
 						    (747, 651)
 						    (394, 864))
@@ -8720,7 +8731,7 @@
 					    location   	(240, 384)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"GiangVien")
 					icon       	"Actor"
@@ -8748,7 +8759,7 @@
 					    location   	(2960, 432)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"CSDL")
 					icon       	"Actor"
@@ -8769,7 +8780,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
@@ -8876,7 +8887,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -10004,7 +10015,7 @@
 					    location   	(144, 336)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"GiangVien")
 					icon       	"Actor"
@@ -10032,7 +10043,7 @@
 					    location   	(2864, 400)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"CSDL")
 					icon       	"Actor"
@@ -10053,7 +10064,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
@@ -10160,7 +10171,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -10316,23 +10327,6 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6A8E0397"
-					compartment 	(object Compartment
-					    Parent_View 	@442
-					    location   	(727, 1109)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	687
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
@@ -10363,23 +10357,6 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6BB40316"
-					compartment 	(object Compartment
-					    Parent_View 	@443
-					    location   	(1423, 1205)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	672
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
@@ -12217,7 +12194,7 @@
 					    location   	(144, 272)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"GiangVien")
 					icon       	"Actor"
@@ -12226,7 +12203,52 @@
 					quidu      	"663B819E017B"
 					annotation 	8
 					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::DownloadFileUI" @552
+				    (object ClassView "Class" "Use Case View::DoAN::CSDL" @552
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(3232, 112)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@552
+					    location   	(3232, 272)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	362
+					    justify    	0
+					    label      	"CSDL")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					quidu      	"663B67EF03BD"
+					compartment 	(object Compartment
+					    Parent_View 	@552
+					    location   	(3230, 313)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    icon_style 	"Icon"
+					    anchor     	2
+					    nlines     	14
+					    max_width  	2
+					    justify    	0)
+					annotation 	8
+					autoResize 	TRUE)
+				    (object ClassView "Class" "Use Case View::DoAN::DownloadFileUI" @553
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -12241,7 +12263,7 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@552
+					    Parent_View 	@553
 					    location   	(751, 348)
 					    anchor_loc 	1
 					    nlines     	1
@@ -12257,37 +12279,37 @@
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
-				    (object AssociationViewNew "" @553
+				    (object AssociationViewNew "" @554
 					location   	(419, 144)
 					stereotype 	TRUE
 					line_color 	3342489
 					quidu      	"663B95050250"
 					roleview_list 	(list RoleViews
-					    (object RoleView "" @554
-						Parent_View 	@553
+					    (object RoleView "" @555
+						Parent_View 	@554
 						location   	(275, 32)
 						stereotype 	TRUE
 						line_color 	3342489
 						quidu      	"663B95050387"
-						client     	@553
-						supplier   	@552
+						client     	@554
+						supplier   	@553
 						vertices   	(list Points
 						    (419, 144)
 						    (638, 172))
 						line_style 	0)
-					    (object RoleView "" @555
-						Parent_View 	@553
+					    (object RoleView "" @556
+						Parent_View 	@554
 						location   	(275, 32)
 						stereotype 	TRUE
 						line_color 	3342489
 						quidu      	"663B9505038D"
-						client     	@553
+						client     	@554
 						supplier   	@551
 						vertices   	(list Points
 						    (419, 144)
 						    (201, 116))
 						line_style 	0)))
-				    (object ClassView "Class" "Use Case View::DoAN::PROCESS_FILE_IMPORT" @556
+				    (object ClassView "Class" "Use Case View::DoAN::PROCESS_FILE_IMPORT" @557
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -12302,7 +12324,7 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@556
+					    Parent_View 	@557
 					    location   	(352, 908)
 					    anchor_loc 	1
 					    nlines     	2
@@ -12315,51 +12337,6 @@
 					fill_color 	13434879
 					quidu      	"663B81C20346"
 					height     	154
-					annotation 	8
-					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::CSDL" @557
-					ShowCompartmentStereotypes 	TRUE
-					IncludeAttribute 	TRUE
-					IncludeOperation 	TRUE
-					location   	(3232, 112)
-					font       	(object Font
-					    size       	10
-					    face       	"Arial"
-					    bold       	FALSE
-					    italics    	FALSE
-					    underline  	FALSE
-					    strike     	FALSE
-					    color      	0
-					    default_color 	TRUE)
-					label      	(object ItemLabel
-					    Parent_View 	@557
-					    location   	(3232, 272)
-					    anchor_loc 	1
-					    nlines     	2
-					    max_width  	327
-					    justify    	0
-					    label      	"CSDL")
-					icon       	"Actor"
-					icon_style 	"Icon"
-					line_color 	3342489
-					quidu      	"663B67EF03BD"
-					compartment 	(object Compartment
-					    Parent_View 	@557
-					    location   	(3230, 313)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	2
-					    justify    	0)
 					annotation 	8
 					autoResize 	TRUE)
 				    (object ClassView "Class" "Use Case View::DoAN::ICSDL" @558
@@ -12403,7 +12380,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -12497,7 +12474,7 @@
 						line_color 	3342489
 						quidu      	"663B680B0165"
 						client     	@559
-						supplier   	@557
+						supplier   	@552
 						vertices   	(list Points
 						    (2842, 131)
 						    (3173, 113))
@@ -12557,7 +12534,7 @@
 						line_color 	3342489
 						quidu      	"663B950801CC"
 						client     	@565
-						supplier   	@552
+						supplier   	@553
 						vertices   	(list Points
 						    (1049, 274)
 						    (864, 220))
@@ -12575,7 +12552,7 @@
 						line_color 	3342489
 						quidu      	"663B950C0296"
 						client     	@568
-						supplier   	@556
+						supplier   	@557
 						vertices   	(list Points
 						    (830, 548)
 						    (426, 717))
@@ -13722,7 +13699,7 @@
 					    location   	(3248, 256)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"CSDL")
 					icon       	"Actor"
@@ -13743,40 +13720,12 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
 					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::Admin" @625
-					ShowCompartmentStereotypes 	TRUE
-					IncludeAttribute 	TRUE
-					IncludeOperation 	TRUE
-					location   	(144, 352)
-					font       	(object Font
-					    size       	10
-					    face       	"Arial"
-					    bold       	FALSE
-					    italics    	FALSE
-					    underline  	FALSE
-					    strike     	FALSE
-					    color      	0
-					    default_color 	TRUE)
-					label      	(object ItemLabel
-					    Parent_View 	@625
-					    location   	(144, 512)
-					    anchor_loc 	1
-					    nlines     	2
-					    max_width  	327
-					    justify    	0
-					    label      	"Admin")
-					icon       	"Actor"
-					icon_style 	"Icon"
-					line_color 	3342489
-					quidu      	"663B96EB027C"
-					annotation 	8
-					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::USER" @626
+				    (object ClassView "Class" "Use Case View::DoAN::USER" @625
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -13791,7 +13740,7 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@626
+					    Parent_View 	@625
 					    location   	(384, 940)
 					    anchor_loc 	1
 					    nlines     	2
@@ -13806,7 +13755,7 @@
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::STUDENT_CLASS_SUBJECT" @627
+				    (object ClassView "Class" "Use Case View::DoAN::STUDENT_CLASS_SUBJECT" @626
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -13821,7 +13770,7 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@627
+					    Parent_View 	@626
 					    location   	(1408, 1084)
 					    anchor_loc 	1
 					    nlines     	2
@@ -13833,27 +13782,10 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6A8E0397"
-					compartment 	(object Compartment
-					    Parent_View 	@627
-					    location   	(1063, 1125)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	688
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::ICSDL" @628
+				    (object ClassView "Class" "Use Case View::DoAN::ICSDL" @627
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -13868,7 +13800,7 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@628
+					    Parent_View 	@627
 					    location   	(2303, 540)
 					    anchor_loc 	1
 					    nlines     	2
@@ -13881,7 +13813,7 @@
 					fill_color 	13434879
 					quidu      	"663B67E80319"
 					compartment 	(object Compartment
-					    Parent_View 	@628
+					    Parent_View 	@627
 					    location   	(1877, 581)
 					    font       	(object Font
 						size       	10
@@ -13894,21 +13826,21 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
-				    (object AssociationViewNew "" @629
+				    (object AssociationViewNew "" @628
 					location   	(2802, 228)
 					stereotype 	TRUE
 					line_color 	3342489
 					quidu      	"663B680A0272"
 					roleview_list 	(list RoleViews
-					    (object RoleView "" @630
-						Parent_View 	@629
+					    (object RoleView "" @629
+						Parent_View 	@628
 						location   	(-446, 132)
 						font       	(object Font
 						    size       	10
@@ -13919,8 +13851,8 @@
 						    strike     	FALSE
 						    color      	0
 						    default_color 	TRUE)
-						label      	(object SegLabel @631
-						    Parent_View 	@630
+						label      	(object SegLabel @630
+						    Parent_View 	@629
 						    location   	(2483, 284)
 						    font       	(object Font
 							size       	10
@@ -13944,14 +13876,14 @@
 						stereotype 	TRUE
 						line_color 	3342489
 						quidu      	"663B680B016A"
-						client     	@629
-						supplier   	@628
+						client     	@628
+						supplier   	@627
 						vertices   	(list Points
 						    (2802, 228)
 						    (2416, 346))
 						line_style 	0)
-					    (object RoleView "" @632
-						Parent_View 	@629
+					    (object RoleView "" @631
+						Parent_View 	@628
 						location   	(-446, 132)
 						font       	(object Font
 						    size       	10
@@ -13962,8 +13894,8 @@
 						    strike     	FALSE
 						    color      	0
 						    default_color 	TRUE)
-						label      	(object SegLabel @633
-						    Parent_View 	@632
+						label      	(object SegLabel @632
+						    Parent_View 	@631
 						    location   	(3101, 95)
 						    font       	(object Font
 							size       	10
@@ -13987,12 +13919,40 @@
 						stereotype 	TRUE
 						line_color 	3342489
 						quidu      	"663B680B0165"
-						client     	@629
+						client     	@628
 						supplier   	@624
 						vertices   	(list Points
 						    (2802, 228)
 						    (3189, 110))
 						line_style 	0)))
+				    (object ClassView "Class" "Use Case View::DoAN::Admin" @633
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(144, 352)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@633
+					    location   	(144, 512)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	362
+					    justify    	0
+					    label      	"Admin")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					quidu      	"663B96EB027C"
+					annotation 	8
+					autoResize 	TRUE)
 				    (object ClassView "Class" "Use Case View::DoAN::QuanLySVTrongLopHocController" @634
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
@@ -14036,7 +13996,7 @@
 						line_color 	3342489
 						quidu      	"663B975F006D"
 						client     	@635
-						supplier   	@626
+						supplier   	@625
 						vertices   	(list Points
 						    (678, 637)
 						    (458, 743))
@@ -14066,7 +14026,7 @@
 						line_color 	3342489
 						quidu      	"663B976302B4"
 						client     	@638
-						supplier   	@627
+						supplier   	@626
 						vertices   	(list Points
 						    (1353, 793)
 						    (1376, 852))
@@ -14096,7 +14056,7 @@
 						line_color 	3342489
 						quidu      	"663B976601CC"
 						client     	@641
-						supplier   	@628
+						supplier   	@627
 						vertices   	(list Points
 						    (1733, 384)
 						    (2188, 384))
@@ -14169,7 +14129,7 @@
 						line_color 	3342489
 						quidu      	"663B97690023"
 						client     	@645
-						supplier   	@625
+						supplier   	@633
 						vertices   	(list Points
 						    (379, 284)
 						    (201, 332))
@@ -15529,7 +15489,7 @@
 					    location   	(144, 272)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"Admin")
 					icon       	"Actor"
@@ -15557,7 +15517,7 @@
 					    location   	(3168, 288)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"CSDL")
 					icon       	"Actor"
@@ -15578,7 +15538,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
@@ -15685,7 +15645,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -17545,7 +17505,7 @@
 					    location   	(208, 320)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"Admin")
 					icon       	"Actor"
@@ -17573,7 +17533,7 @@
 					    location   	(3280, 288)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"CSDL")
 					icon       	"Actor"
@@ -17594,7 +17554,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
@@ -17701,7 +17661,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -19835,7 +19795,7 @@
 					    location   	(240, 336)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"Admin")
 					icon       	"Actor"
@@ -19863,7 +19823,7 @@
 					    location   	(3088, 304)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	327
+					    max_width  	362
 					    justify    	0
 					    label      	"CSDL")
 					icon       	"Actor"
@@ -19884,7 +19844,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	2
 					    justify    	0)
 					annotation 	8
@@ -19991,7 +19951,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -21847,80 +21807,7 @@
 				origin_x   	0
 				origin_y   	0
 				items      	(list diagram_item_list
-				    (object ClassView "Class" "Use Case View::DoAN::Admin" @1050
-					ShowCompartmentStereotypes 	TRUE
-					IncludeAttribute 	TRUE
-					IncludeOperation 	TRUE
-					location   	(128, 160)
-					font       	(object Font
-					    size       	10
-					    face       	"Arial"
-					    bold       	FALSE
-					    italics    	FALSE
-					    underline  	FALSE
-					    strike     	FALSE
-					    color      	0
-					    default_color 	TRUE)
-					label      	(object ItemLabel
-					    Parent_View 	@1050
-					    location   	(128, 320)
-					    anchor_loc 	1
-					    nlines     	2
-					    max_width  	327
-					    justify    	0
-					    label      	"Admin")
-					icon       	"Actor"
-					icon_style 	"Icon"
-					line_color 	3342489
-					quidu      	"663B96EB027C"
-					annotation 	8
-					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::CSDL" @1051
-					ShowCompartmentStereotypes 	TRUE
-					IncludeAttribute 	TRUE
-					IncludeOperation 	TRUE
-					location   	(3056, 160)
-					font       	(object Font
-					    size       	10
-					    face       	"Arial"
-					    bold       	FALSE
-					    italics    	FALSE
-					    underline  	FALSE
-					    strike     	FALSE
-					    color      	0
-					    default_color 	TRUE)
-					label      	(object ItemLabel
-					    Parent_View 	@1051
-					    location   	(3056, 320)
-					    anchor_loc 	1
-					    nlines     	2
-					    max_width  	327
-					    justify    	0
-					    label      	"CSDL")
-					icon       	"Actor"
-					icon_style 	"Icon"
-					line_color 	3342489
-					quidu      	"663B67EF03BD"
-					compartment 	(object Compartment
-					    Parent_View 	@1051
-					    location   	(3054, 361)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	2
-					    justify    	0)
-					annotation 	8
-					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::SUBJECT" @1052
+				    (object ClassView "Class" "Use Case View::DoAN::SUBJECT" @1050
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -21935,7 +21822,7 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@1052
+					    Parent_View 	@1050
 					    location   	(336, 940)
 					    anchor_loc 	1
 					    nlines     	2
@@ -21948,6 +21835,79 @@
 					fill_color 	13434879
 					quidu      	"663B6B2F0070"
 					height     	154
+					annotation 	8
+					autoResize 	TRUE)
+				    (object ClassView "Class" "Use Case View::DoAN::Admin" @1051
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(128, 160)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1051
+					    location   	(128, 320)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	362
+					    justify    	0
+					    label      	"Admin")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					quidu      	"663B96EB027C"
+					annotation 	8
+					autoResize 	TRUE)
+				    (object ClassView "Class" "Use Case View::DoAN::CSDL" @1052
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(3056, 160)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1052
+					    location   	(3056, 320)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	362
+					    justify    	0
+					    label      	"CSDL")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					quidu      	"663B67EF03BD"
+					compartment 	(object Compartment
+					    Parent_View 	@1052
+					    location   	(3054, 361)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    icon_style 	"Icon"
+					    anchor     	2
+					    nlines     	14
+					    max_width  	2
+					    justify    	0)
 					annotation 	8
 					autoResize 	TRUE)
 				    (object ClassView "Class" "Use Case View::DoAN::QuanLyLopHocUI" @1053
@@ -22006,7 +21966,7 @@
 						line_color 	3342489
 						quidu      	"663BAEB501E4"
 						client     	@1054
-						supplier   	@1050
+						supplier   	@1051
 						vertices   	(list Points
 						    (299, 220)
 						    (185, 178))
@@ -22052,7 +22012,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	850
 					    justify    	0)
 					width      	230
@@ -22146,7 +22106,7 @@
 						line_color 	3342489
 						quidu      	"663B680B0165"
 						client     	@1058
-						supplier   	@1051
+						supplier   	@1052
 						vertices   	(list Points
 						    (2561, 194)
 						    (2995, 162))
@@ -22178,23 +22138,6 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6BB40316"
-					compartment 	(object Compartment
-					    Parent_View 	@1063
-					    location   	(831, 1253)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	672
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
@@ -23758,52 +23701,7 @@
 				origin_x   	0
 				origin_y   	0
 				items      	(list diagram_item_list
-				    (object ClassView "Class" "Use Case View::DoAN::CSDL" @1146
-					ShowCompartmentStereotypes 	TRUE
-					IncludeAttribute 	TRUE
-					IncludeOperation 	TRUE
-					location   	(3200, 160)
-					font       	(object Font
-					    size       	10
-					    face       	"Arial"
-					    bold       	FALSE
-					    italics    	FALSE
-					    underline  	FALSE
-					    strike     	FALSE
-					    color      	0
-					    default_color 	TRUE)
-					label      	(object ItemLabel
-					    Parent_View 	@1146
-					    location   	(3200, 320)
-					    anchor_loc 	1
-					    nlines     	2
-					    max_width  	327
-					    justify    	0
-					    label      	"CSDL")
-					icon       	"Actor"
-					icon_style 	"Icon"
-					line_color 	3342489
-					quidu      	"663B67EF03BD"
-					compartment 	(object Compartment
-					    Parent_View 	@1146
-					    location   	(2680, 361)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	1037
-					    justify    	0)
-					annotation 	8
-					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::SinhVien" @1147
+				    (object ClassView "Class" "Use Case View::DoAN::SinhVien" @1146
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -23818,17 +23716,62 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@1147
+					    Parent_View 	@1146
 					    location   	(176, 320)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	857
+					    max_width  	362
 					    justify    	0
 					    label      	"SinhVien")
 					icon       	"Actor"
 					icon_style 	"Icon"
 					line_color 	3342489
 					quidu      	"663B67C2010B"
+					annotation 	8
+					autoResize 	TRUE)
+				    (object ClassView "Class" "Use Case View::DoAN::CSDL" @1147
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(3200, 160)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1147
+					    location   	(3200, 320)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	362
+					    justify    	0
+					    label      	"CSDL")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					quidu      	"663B67EF03BD"
+					compartment 	(object Compartment
+					    Parent_View 	@1147
+					    location   	(3198, 361)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    icon_style 	"Icon"
+					    anchor     	2
+					    nlines     	14
+					    max_width  	2
+					    justify    	0)
 					annotation 	8
 					autoResize 	TRUE)
 				    (object ClassView "Class" "Use Case View::DoAN::DangKyHocPhanUI" @1148
@@ -23858,23 +23801,6 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"6643683A02B8"
-					compartment 	(object Compartment
-					    Parent_View 	@1148
-					    location   	(319, 501)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	7
-					    max_width  	606
-					    justify    	0)
 					width      	230
 					height     	154
 					annotation 	8
@@ -23895,7 +23821,7 @@
 						supplier   	@1148
 						vertices   	(list Points
 						    (371, 220)
-						    (509, 265))
+						    (509, 263))
 						line_style 	0)
 					    (object RoleView "" @1151
 						Parent_View 	@1149
@@ -23904,10 +23830,10 @@
 						line_color 	3342489
 						quidu      	"664368470204"
 						client     	@1149
-						supplier   	@1147
+						supplier   	@1146
 						vertices   	(list Points
 						    (371, 220)
-						    (233, 176))
+						    (233, 175))
 						line_style 	0)))
 				    (object ClassView "Class" "Use Case View::DoAN::ICSDL" @1152
 					ShowCompartmentStereotypes 	TRUE
@@ -23950,7 +23876,7 @@
 						default_color 	TRUE)
 					    icon_style 	"Icon"
 					    anchor     	2
-					    nlines     	13
+					    nlines     	14
 					    max_width  	1038
 					    justify    	0)
 					width      	230
@@ -24004,7 +23930,7 @@
 						supplier   	@1152
 						vertices   	(list Points
 						    (2545, 577)
-						    (2413, 660))
+						    (2413, 659))
 						line_style 	0)
 					    (object RoleView "" @1156
 						Parent_View 	@1153
@@ -24044,10 +23970,10 @@
 						line_color 	3342489
 						quidu      	"663B680B0165"
 						client     	@1153
-						supplier   	@1146
+						supplier   	@1147
 						vertices   	(list Points
 						    (2545, 577)
-						    (2678, 494))
+						    (3139, 194))
 						line_style 	0)))
 				    (object ClassView "Class" "Use Case View::DoAN::STUDENT_CLASS_SUBJECT" @1158
 					ShowCompartmentStereotypes 	TRUE
@@ -24076,164 +24002,10 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6A8E0397"
-					compartment 	(object Compartment
-					    Parent_View 	@1158
-					    location   	(903, 1374)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	688
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
-				    (object ClassView "Class" "Use Case View::DoAN::DangKyHocPhanController" @1159
-					ShowCompartmentStereotypes 	TRUE
-					IncludeAttribute 	TRUE
-					IncludeOperation 	TRUE
-					location   	(1232, 624)
-					font       	(object Font
-					    size       	10
-					    face       	"Arial"
-					    bold       	FALSE
-					    italics    	FALSE
-					    underline  	FALSE
-					    strike     	FALSE
-					    color      	0
-					    default_color 	TRUE)
-					label      	(object ItemLabel
-					    Parent_View 	@1159
-					    location   	(1231, 785)
-					    anchor_loc 	1
-					    nlines     	1
-					    max_width  	480
-					    justify    	0
-					    label      	"DangKyHocPhanController")
-					icon       	"control"
-					icon_style 	"Icon"
-					line_color 	3342489
-					fill_color 	13434879
-					quidu      	"6643682E0151"
-					compartment 	(object Compartment
-					    Parent_View 	@1159
-					    location   	(917, 826)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	5
-					    max_width  	625
-					    justify    	0)
-					width      	158
-					annotation 	8
-					autoResize 	TRUE)
-				    (object AssociationViewNew "" @1160
-					location   	(974, 487)
-					stereotype 	TRUE
-					line_color 	3342489
-					quidu      	"66436849022F"
-					roleview_list 	(list RoleViews
-					    (object RoleView "" @1161
-						Parent_View 	@1160
-						location   	(350, 183)
-						stereotype 	TRUE
-						line_color 	3342489
-						quidu      	"6643684A00E1"
-						client     	@1160
-						supplier   	@1159
-						vertices   	(list Points
-						    (974, 487)
-						    (1152, 581))
-						line_style 	0)
-					    (object RoleView "" @1162
-						Parent_View 	@1160
-						location   	(350, 183)
-						stereotype 	TRUE
-						line_color 	3342489
-						quidu      	"6643684A00E6"
-						client     	@1160
-						supplier   	@1148
-						vertices   	(list Points
-						    (974, 487)
-						    (797, 393))
-						line_style 	0)))
-				    (object AssociationViewNew "" @1163
-					location   	(1748, 674)
-					stereotype 	TRUE
-					line_color 	3342489
-					quidu      	"6643684C0092"
-					roleview_list 	(list RoleViews
-					    (object RoleView "" @1164
-						Parent_View 	@1163
-						location   	(516, 50)
-						stereotype 	TRUE
-						line_color 	3342489
-						quidu      	"6643684C0341"
-						client     	@1163
-						supplier   	@1152
-						vertices   	(list Points
-						    (1748, 674)
-						    (2189, 719))
-						line_style 	0)
-					    (object RoleView "" @1165
-						Parent_View 	@1163
-						location   	(516, 50)
-						stereotype 	TRUE
-						line_color 	3342489
-						quidu      	"6643684C035C"
-						client     	@1163
-						supplier   	@1159
-						vertices   	(list Points
-						    (1748, 674)
-						    (1308, 629))
-						line_style 	0)))
-				    (object AssociationViewNew "" @1166
-					location   	(1240, 888)
-					stereotype 	TRUE
-					line_color 	3342489
-					quidu      	"66436857033C"
-					roleview_list 	(list RoleViews
-					    (object RoleView "" @1167
-						Parent_View 	@1166
-						location   	(8, 264)
-						stereotype 	TRUE
-						line_color 	3342489
-						quidu      	"664368580190"
-						client     	@1166
-						supplier   	@1158
-						vertices   	(list Points
-						    (1240, 888)
-						    (1248, 1152))
-						line_style 	0)
-					    (object RoleView "" @1168
-						Parent_View 	@1166
-						location   	(8, 264)
-						stereotype 	TRUE
-						line_color 	3342489
-						quidu      	"6643685801A6"
-						client     	@1166
-						supplier   	@1159
-						vertices   	(list Points
-						    (1240, 888)
-						    (1232, 624))
-						line_style 	0)))
-				    (object ClassView "Class" "Use Case View::DoAN::CLASS_SUBJECT" @1169
+				    (object ClassView "Class" "Use Case View::DoAN::CLASS_SUBJECT" @1159
 					ShowCompartmentStereotypes 	TRUE
 					IncludeAttribute 	TRUE
 					IncludeOperation 	TRUE
@@ -24248,7 +24020,7 @@
 					    color      	0
 					    default_color 	TRUE)
 					label      	(object ItemLabel
-					    Parent_View 	@1169
+					    Parent_View 	@1159
 					    location   	(416, 1100)
 					    anchor_loc 	1
 					    nlines     	2
@@ -24260,26 +24032,129 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"663B6BB40316"
-					compartment 	(object Compartment
-					    Parent_View 	@1169
-					    location   	(79, 1141)
-					    font       	(object Font
-						size       	10
-						face       	"Arial"
-						bold       	FALSE
-						italics    	FALSE
-						underline  	FALSE
-						strike     	FALSE
-						color      	0
-						default_color 	TRUE)
-					    icon_style 	"Icon"
-					    anchor     	2
-					    nlines     	13
-					    max_width  	672
-					    justify    	0)
 					height     	154
 					annotation 	8
 					autoResize 	TRUE)
+				    (object ClassView "Class" "Use Case View::DoAN::DangKyHocPhanController" @1160
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(1232, 624)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1160
+					    location   	(1231, 785)
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	480
+					    justify    	0
+					    label      	"DangKyHocPhanController")
+					icon       	"control"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"6643682E0151"
+					width      	158
+					annotation 	8
+					autoResize 	TRUE)
+				    (object AssociationViewNew "" @1161
+					location   	(974, 487)
+					stereotype 	TRUE
+					line_color 	3342489
+					quidu      	"66436849022F"
+					roleview_list 	(list RoleViews
+					    (object RoleView "" @1162
+						Parent_View 	@1161
+						location   	(350, 183)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"6643684A00E1"
+						client     	@1161
+						supplier   	@1160
+						vertices   	(list Points
+						    (974, 487)
+						    (1154, 582))
+						line_style 	0)
+					    (object RoleView "" @1163
+						Parent_View 	@1161
+						location   	(350, 183)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"6643684A00E6"
+						client     	@1161
+						supplier   	@1148
+						vertices   	(list Points
+						    (974, 487)
+						    (736, 361))
+						line_style 	0)))
+				    (object AssociationViewNew "" @1164
+					location   	(1748, 674)
+					stereotype 	TRUE
+					line_color 	3342489
+					quidu      	"6643684C0092"
+					roleview_list 	(list RoleViews
+					    (object RoleView "" @1165
+						Parent_View 	@1164
+						location   	(516, 50)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"6643684C0341"
+						client     	@1164
+						supplier   	@1152
+						vertices   	(list Points
+						    (1748, 674)
+						    (2190, 719))
+						line_style 	0)
+					    (object RoleView "" @1166
+						Parent_View 	@1164
+						location   	(516, 50)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"6643684C035C"
+						client     	@1164
+						supplier   	@1160
+						vertices   	(list Points
+						    (1748, 674)
+						    (1308, 629))
+						line_style 	0)))
+				    (object AssociationViewNew "" @1167
+					location   	(1240, 888)
+					stereotype 	TRUE
+					line_color 	3342489
+					quidu      	"66436857033C"
+					roleview_list 	(list RoleViews
+					    (object RoleView "" @1168
+						Parent_View 	@1167
+						location   	(8, 264)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"664368580190"
+						client     	@1167
+						supplier   	@1158
+						vertices   	(list Points
+						    (1240, 888)
+						    (1244, 1076))
+						line_style 	0)
+					    (object RoleView "" @1169
+						Parent_View 	@1167
+						location   	(8, 264)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"6643685801A6"
+						client     	@1167
+						supplier   	@1160
+						vertices   	(list Points
+						    (1240, 888)
+						    (1236, 810))
+						line_style 	0)))
 				    (object AssociationViewNew "" @1170
 					location   	(741, 814)
 					stereotype 	TRUE
@@ -24293,7 +24168,7 @@
 						line_color 	3342489
 						quidu      	"6643698D0071"
 						client     	@1170
-						supplier   	@1169
+						supplier   	@1159
 						vertices   	(list Points
 						    (741, 814)
 						    (490, 911))
@@ -24305,10 +24180,10 @@
 						line_color 	3342489
 						quidu      	"6643698D007F"
 						client     	@1170
-						supplier   	@1159
+						supplier   	@1160
 						vertices   	(list Points
 						    (741, 814)
-						    (992, 718))
+						    (1154, 651))
 						line_style 	0)))))
 			    (object InteractionDiagram "BasicFlow"
 				mechanism_ref 	@1145
@@ -24336,7 +24211,7 @@
 					    location   	(208, 249)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	324
+					    max_width  	360
 					    justify    	0
 					    label      	"")
 					icon       	"Actor"
@@ -24344,10 +24219,10 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"6643699602F5"
-					width      	300
+					width      	120
 					height     	2548
-					icon_height 	150
-					icon_width 	108
+					icon_height 	162
+					icon_width 	120
 					icon_y_offset 	0
 					annotation 	1
 					Focus_Of_Control 	(object Focus_Of_Control "" @1174
@@ -24387,7 +24262,7 @@
 					    location   	(576, 250)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	651
+					    max_width  	687
 					    justify    	0
 					    label      	"")
 					icon       	"boundary"
@@ -24395,10 +24270,10 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"6643699B0395"
-					width      	300
+					width      	229
 					height     	2548
-					icon_height 	141
-					icon_width 	217
+					icon_height 	153
+					icon_width 	229
 					icon_y_offset 	0
 					annotation 	1
 					Focus_Of_Control 	(object Focus_Of_Control "" @1178
@@ -24494,7 +24369,7 @@
 					    location   	(1072, 249)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	489
+					    max_width  	488
 					    justify    	0
 					    label      	"")
 					icon       	"control"
@@ -24502,10 +24377,10 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"6643699E0345"
-					width      	300
+					width      	157
 					height     	2548
-					icon_height 	152
-					icon_width 	145
+					icon_height 	164
+					icon_width 	157
 					icon_y_offset 	0
 					annotation 	1
 					Focus_Of_Control 	(object Focus_Of_Control "" @1190
@@ -24587,7 +24462,7 @@
 					    location   	(1568, 250)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	426
+					    max_width  	462
 					    justify    	0
 					    label      	"")
 					icon       	"entity"
@@ -24595,10 +24470,10 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"664369A102F7"
-					width      	300
+					width      	154
 					height     	2548
-					icon_height 	141
-					icon_width 	142
+					icon_height 	153
+					icon_width 	154
 					icon_y_offset 	0
 					annotation 	1
 					Focus_Of_Control 	(object Focus_Of_Control "" @1200
@@ -24624,7 +24499,7 @@
 					    location   	(2096, 250)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	559
+					    max_width  	556
 					    justify    	0
 					    label      	"")
 					icon       	"entity"
@@ -24632,10 +24507,10 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"664369A503AE"
-					width      	300
+					width      	154
 					height     	2548
-					icon_height 	141
-					icon_width 	142
+					icon_height 	153
+					icon_width 	154
 					icon_y_offset 	0
 					annotation 	1
 					Focus_Of_Control 	(object Focus_Of_Control "" @1202
@@ -24668,7 +24543,7 @@
 					    location   	(2608, 250)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	651
+					    max_width  	687
 					    justify    	0
 					    label      	"")
 					icon       	"boundary"
@@ -24676,10 +24551,10 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"664369A90225"
-					width      	300
+					width      	229
 					height     	2548
-					icon_height 	141
-					icon_width 	217
+					icon_height 	153
+					icon_width 	229
 					icon_y_offset 	0
 					annotation 	1
 					Focus_Of_Control 	(object Focus_Of_Control "" @1205
@@ -24719,7 +24594,7 @@
 					    location   	(2976, 249)
 					    anchor_loc 	1
 					    nlines     	2
-					    max_width  	324
+					    max_width  	360
 					    justify    	0
 					    label      	"")
 					icon       	"Actor"
@@ -24727,10 +24602,10 @@
 					line_color 	3342489
 					fill_color 	13434879
 					quidu      	"664369AC015A"
-					width      	300
+					width      	120
 					height     	2548
-					icon_height 	150
-					icon_width 	108
+					icon_height 	162
+					icon_width 	120
 					icon_y_offset 	0
 					annotation 	1
 					Focus_Of_Control 	(object Focus_Of_Control "" @1209
@@ -25600,941 +25475,2169 @@
 					origin     	(592, 2571)
 					terminus   	(742, 2571)
 					ordinal    	20)))))
-		    (object Association "$UNNAMED$94"
+		    (object UseCase "XemTaiLieu"
+			quid       	"66437A520084"
+			stereotype 	"use-case realization"
+			logical_models 	(list unit_reference_list
+			    (object Mechanism @1254
+				logical_models 	(list unit_reference_list
+				    (object Object "$UNNAMED$94"
+					quid       	"665051E30313"
+					collaborators 	(list link_list
+					    (object Link
+						quid       	"665051FF01A1"
+						supplier   	"$UNNAMED$95"
+						quidu      	"665051EB03E2"
+						messages   	(list Messages
+						    (object Message "Kich chon mot lop hoc( )"
+							quid       	"665051FF01A2"
+							frequency  	"Aperiodic"
+							synchronization 	"Simple"
+							dir        	"FromClientToSupplier"
+							sequence   	"1"
+							ordinal    	0
+							quidu      	"66505201011E"
+							creation   	FALSE))))
+					class      	"Use Case View::DoAN::NguoiDung"
+					quidu      	"663B6A210260"
+					persistence 	"Transient"
+					creationObj 	FALSE
+					multi      	FALSE)
+				    (object Object "$UNNAMED$95"
+					quid       	"665051EB03E2"
+					collaborators 	(list link_list
+					    (object Link
+						quid       	"6650520D0220"
+						supplier   	"$UNNAMED$96"
+						quidu      	"665051EE01C7"
+						messages   	(list Messages
+						    (object Message "Lay tat ca tai lieu trong lop( )"
+							quid       	"6650520D0221"
+							frequency  	"Aperiodic"
+							synchronization 	"Simple"
+							dir        	"FromClientToSupplier"
+							sequence   	"1.1"
+							ordinal    	1
+							quidu      	"6650520F0087"
+							creation   	FALSE)
+						    (object Message "return ket qua"
+							quid       	"665052470208"
+							frequency  	"Aperiodic"
+							synchronization 	"Return"
+							dir        	"ToClientFromSupplier"
+							sequence   	"3"
+							ordinal    	5
+							quidu      	"000000000000"
+							creation   	FALSE)))
+					    (object Link
+						quid       	"6650524D024F"
+						supplier   	"$UNNAMED$95"
+						quidu      	"665051EB03E2"
+						messages   	(list Messages
+						    (object Message "Hien thi danh sach tai lieu( )"
+							quid       	"6650524D0250"
+							frequency  	"Aperiodic"
+							synchronization 	"Simple"
+							dir        	"FromClientToSupplier"
+							sequence   	"3.1"
+							ordinal    	6
+							quidu      	"6650524E03A6"
+							creation   	FALSE))))
+					class      	"Use Case View::DoAN::XemTaiLieuUI"
+					quidu      	"66437A900172"
+					persistence 	"Transient"
+					creationObj 	FALSE
+					multi      	FALSE)
+				    (object Object "$UNNAMED$96"
+					quid       	"665051EE01C7"
+					collaborators 	(list link_list
+					    (object Link
+						quid       	"6650521D0390"
+						supplier   	"$UNNAMED$97"
+						quidu      	"665051F7027F"
+						messages   	(list Messages
+						    (object Message "Doc bang DOCUMENT( )"
+							quid       	"6650521D0391"
+							frequency  	"Aperiodic"
+							synchronization 	"Simple"
+							dir        	"FromClientToSupplier"
+							sequence   	"1.1.1"
+							ordinal    	2
+							quidu      	"6650521F02D4"
+							creation   	FALSE)))
+					    (object Link
+						quid       	"66505239006F"
+						supplier   	"$UNNAMED$98"
+						quidu      	"665051F3034A"
+						messages   	(list Messages
+						    (object Message "getDocumentByClassroomId( )"
+							quid       	"665052390070"
+							frequency  	"Aperiodic"
+							synchronization 	"Simple"
+							dir        	"FromClientToSupplier"
+							sequence   	"2"
+							ordinal    	4
+							quidu      	"6650523A01B5"
+							creation   	FALSE))))
+					class      	"Use Case View::DoAN::XemTaiLieuController"
+					quidu      	"66437A84031B"
+					persistence 	"Transient"
+					creationObj 	FALSE
+					multi      	FALSE)
+				    (object Object "$UNNAMED$98"
+					quid       	"665051F3034A"
+					class      	"Use Case View::DoAN::DOCUMENT"
+					quidu      	"665051850151"
+					persistence 	"Transient"
+					creationObj 	FALSE
+					multi      	FALSE)
+				    (object Object "$UNNAMED$97"
+					quid       	"665051F7027F"
+					collaborators 	(list link_list
+					    (object Link
+						quid       	"6650522B01D0"
+						supplier   	"$UNNAMED$99"
+						quidu      	"665051FA006E"
+						messages   	(list Messages
+						    (object Message "Doc bang DOCUMENT( )"
+							quid       	"6650522B01D1"
+							frequency  	"Aperiodic"
+							synchronization 	"Simple"
+							dir        	"FromClientToSupplier"
+							sequence   	"1.1.1.1"
+							ordinal    	3
+							quidu      	"6650522D0105"
+							creation   	FALSE))))
+					class      	"Use Case View::DoAN::ICSDL"
+					quidu      	"663B67E80319"
+					persistence 	"Transient"
+					creationObj 	FALSE
+					multi      	FALSE)
+				    (object Object "$UNNAMED$99"
+					quid       	"665051FA006E"
+					class      	"Use Case View::DoAN::CSDL"
+					quidu      	"663B67EF03BD"
+					persistence 	"Transient"
+					creationObj 	FALSE
+					multi      	FALSE))))
+			logical_presentations 	(list unit_reference_list
+			    (object ClassDiagram "VOPC"
+				quid       	"66437A6B01D4"
+				title      	"VOPC"
+				zoom       	100
+				max_height 	28350
+				max_width  	21600
+				origin_x   	0
+				origin_y   	0
+				items      	(list diagram_item_list
+				    (object ClassView "Class" "Use Case View::DoAN::NguoiDung" @1255
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(112, 128)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1255
+					    location   	(112, 288)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	327
+					    justify    	0
+					    label      	"NguoiDung")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					quidu      	"663B6A210260"
+					annotation 	8
+					autoResize 	TRUE)
+				    (object ClassView "Class" "Use Case View::DoAN::XemTaiLieuUI" @1256
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(336, 416)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1256
+					    location   	(335, 572)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	1044
+					    justify    	0
+					    label      	"XemTaiLieuUI")
+					icon       	"boundary"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"66437A900172"
+					compartment 	(object Compartment
+					    Parent_View 	@1256
+					    location   	(71, 613)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    icon_style 	"Icon"
+					    anchor     	2
+					    nlines     	5
+					    max_width  	525
+					    justify    	0)
+					width      	230
+					height     	154
+					annotation 	8
+					autoResize 	TRUE)
+				    (object AssociationViewNew "" @1257
+					location   	(244, 298)
+					stereotype 	TRUE
+					line_color 	3342489
+					quidu      	"66437AA403B5"
+					roleview_list 	(list RoleViews
+					    (object RoleView "" @1258
+						Parent_View 	@1257
+						location   	(132, 170)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"66437AA50250"
+						client     	@1257
+						supplier   	@1256
+						vertices   	(list Points
+						    (244, 298)
+						    (276, 340))
+						line_style 	0)
+					    (object RoleView "" @1259
+						Parent_View 	@1257
+						location   	(132, 170)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"66437AA50257"
+						client     	@1257
+						supplier   	@1255
+						vertices   	(list Points
+						    (244, 298)
+						    (212, 257))
+						line_style 	0)))
+				    (object ClassView "Class" "Use Case View::DoAN::CSDL" @1260
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(3200, 208)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1260
+					    location   	(3200, 368)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	327
+					    justify    	0
+					    label      	"CSDL")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					quidu      	"663B67EF03BD"
+					compartment 	(object Compartment
+					    Parent_View 	@1260
+					    location   	(2680, 409)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    icon_style 	"Icon"
+					    anchor     	2
+					    nlines     	14
+					    max_width  	1037
+					    justify    	0)
+					annotation 	8
+					autoResize 	TRUE)
+				    (object ClassView "Class" "Use Case View::DoAN::ICSDL" @1261
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(2224, 176)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1261
+					    location   	(2223, 332)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	861
+					    justify    	0
+					    label      	"ICSDL")
+					icon       	"boundary"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"663B67E80319"
+					compartment 	(object Compartment
+					    Parent_View 	@1261
+					    location   	(1703, 373)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    icon_style 	"Icon"
+					    anchor     	2
+					    nlines     	14
+					    max_width  	1038
+					    justify    	0)
+					width      	230
+					height     	154
+					annotation 	8
+					autoResize 	TRUE)
+				    (object AssociationViewNew "" @1262
+					location   	(2738, 190)
+					stereotype 	TRUE
+					line_color 	3342489
+					quidu      	"663B680A0272"
+					roleview_list 	(list RoleViews
+					    (object RoleView "" @1263
+						Parent_View 	@1262
+						location   	(-462, -18)
+						font       	(object Font
+						    size       	10
+						    face       	"Arial"
+						    bold       	FALSE
+						    italics    	FALSE
+						    underline  	FALSE
+						    strike     	FALSE
+						    color      	0
+						    default_color 	TRUE)
+						label      	(object SegLabel @1264
+						    Parent_View 	@1263
+						    location   	(2417, 139)
+						    font       	(object Font
+							size       	10
+							face       	"Arial"
+							bold       	FALSE
+							italics    	FALSE
+							underline  	FALSE
+							strike     	FALSE
+							color      	0
+							default_color 	TRUE)
+						    hidden     	TRUE
+						    anchor     	1
+						    anchor_loc 	1
+						    nlines     	1
+						    max_width  	450
+						    justify    	0
+						    label      	""
+						    pctDist    	0.800000
+						    height     	42
+						    orientation 	1)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"663B680B016A"
+						client     	@1262
+						supplier   	@1261
+						vertices   	(list Points
+						    (2738, 190)
+						    (2336, 177))
+						line_style 	0)
+					    (object RoleView "" @1265
+						Parent_View 	@1262
+						location   	(-462, -18)
+						font       	(object Font
+						    size       	10
+						    face       	"Arial"
+						    bold       	FALSE
+						    italics    	FALSE
+						    underline  	FALSE
+						    strike     	FALSE
+						    color      	0
+						    default_color 	TRUE)
+						label      	(object SegLabel @1266
+						    Parent_View 	@1265
+						    location   	(3060, 159)
+						    font       	(object Font
+							size       	10
+							face       	"Arial"
+							bold       	FALSE
+							italics    	FALSE
+							underline  	FALSE
+							strike     	FALSE
+							color      	0
+							default_color 	TRUE)
+						    hidden     	TRUE
+						    anchor     	1
+						    anchor_loc 	1
+						    nlines     	1
+						    max_width  	450
+						    justify    	0
+						    label      	""
+						    pctDist    	0.800000
+						    height     	42
+						    orientation 	0)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"663B680B0165"
+						client     	@1262
+						supplier   	@1260
+						vertices   	(list Points
+						    (2738, 190)
+						    (3141, 203))
+						line_style 	0)))
+				    (object ClassView "Class" "Use Case View::DoAN::XemTaiLieuController" @1267
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(960, 496)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1267
+					    location   	(959, 657)
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	632
+					    justify    	0
+					    label      	"XemTaiLieuController")
+					icon       	"control"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"66437A84031B"
+					compartment 	(object Compartment
+					    Parent_View 	@1267
+					    location   	(689, 698)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    icon_style 	"Icon"
+					    anchor     	2
+					    nlines     	3
+					    max_width  	534
+					    justify    	0)
+					width      	158
+					annotation 	8
+					autoResize 	TRUE)
+				    (object AssociationViewNew "" @1268
+					location   	(664, 455)
+					stereotype 	TRUE
+					line_color 	3342489
+					quidu      	"66437AA7012C"
+					roleview_list 	(list RoleViews
+					    (object RoleView "" @1269
+						Parent_View 	@1268
+						location   	(328, 39)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"66437AA703C0"
+						client     	@1268
+						supplier   	@1267
+						vertices   	(list Points
+						    (664, 455)
+						    (881, 483))
+						line_style 	0)
+					    (object RoleView "" @1270
+						Parent_View 	@1268
+						location   	(328, 39)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"66437AA703C6"
+						client     	@1268
+						supplier   	@1256
+						vertices   	(list Points
+						    (664, 455)
+						    (448, 428))
+						line_style 	0)))
+				    (object AssociationViewNew "" @1271
+					location   	(1573, 337)
+					stereotype 	TRUE
+					line_color 	3342489
+					quidu      	"66437AAC0103"
+					roleview_list 	(list RoleViews
+					    (object RoleView "" @1272
+						Parent_View 	@1271
+						location   	(613, -159)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"66437AAC03BA"
+						client     	@1271
+						supplier   	@1261
+						vertices   	(list Points
+						    (1573, 337)
+						    (2110, 201))
+						line_style 	0)
+					    (object RoleView "" @1273
+						Parent_View 	@1271
+						location   	(613, -159)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"66437AAC03E2"
+						client     	@1271
+						supplier   	@1267
+						vertices   	(list Points
+						    (1573, 337)
+						    (1036, 473))
+						line_style 	0)))
+				    (object ClassView "Class" "Use Case View::DoAN::DOCUMENT" @1274
+					ShowCompartmentStereotypes 	TRUE
+					IncludeAttribute 	TRUE
+					IncludeOperation 	TRUE
+					location   	(416, 1136)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1274
+					    location   	(416, 1292)
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	488
+					    justify    	0
+					    label      	"DOCUMENT")
+					icon       	"entity"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"665051850151"
+					compartment 	(object Compartment
+					    Parent_View 	@1274
+					    location   	(127, 1333)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    icon_style 	"Icon"
+					    anchor     	2
+					    nlines     	10
+					    max_width  	575
+					    justify    	0)
+					height     	154
+					annotation 	8
+					autoResize 	TRUE)
+				    (object AssociationViewNew "" @1275
+					location   	(580, 939)
+					stereotype 	TRUE
+					line_color 	3342489
+					quidu      	"665051D0021F"
+					roleview_list 	(list RoleViews
+					    (object RoleView "" @1276
+						Parent_View 	@1275
+						location   	(-380, 443)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"665051D102A9"
+						client     	@1275
+						supplier   	@1274
+						vertices   	(list Points
+						    (580, 939)
+						    (474, 1059))
+						line_style 	0)
+					    (object RoleView "" @1277
+						Parent_View 	@1275
+						location   	(-380, 443)
+						stereotype 	TRUE
+						line_color 	3342489
+						quidu      	"665051D102AF"
+						client     	@1275
+						supplier   	@1267
+						vertices   	(list Points
+						    (580, 939)
+						    (686, 819))
+						line_style 	0)))))
+			    (object InteractionDiagram "BasicFlow"
+				mechanism_ref 	@1254
+				quid       	"66437A61039D"
+				title      	"BasicFlow"
+				zoom       	100
+				max_height 	28350
+				max_width  	21600
+				origin_x   	0
+				origin_y   	0
+				items      	(list diagram_item_list
+				    (object InterObjView "$UNNAMED$94" @1278
+					location   	(176, 224)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	TRUE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1278
+					    location   	(176, 249)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	324
+					    justify    	0
+					    label      	"")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"665051E30313"
+					width      	300
+					height     	948
+					icon_height 	150
+					icon_width 	108
+					icon_y_offset 	0
+					annotation 	1
+					Focus_Of_Control 	(object Focus_Of_Control "" @1279
+					    location   	(176, 336)
+					    line_color 	3342489
+					    InterObjView 	@1278
+					    height     	90
+					    y_coord    	0
+					    Nested     	FALSE))
+				    (object InterObjView "$UNNAMED$95" @1280
+					location   	(544, 224)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	TRUE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1280
+					    location   	(544, 250)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	651
+					    justify    	0
+					    label      	"")
+					icon       	"boundary"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"665051EB03E2"
+					width      	300
+					height     	948
+					icon_height 	141
+					icon_width 	217
+					icon_y_offset 	0
+					annotation 	1
+					Focus_Of_Control 	(object Focus_Of_Control "" @1281
+					    location   	(544, 336)
+					    line_color 	3342489
+					    InterObjView 	@1280
+					    height     	195
+					    y_coord    	105
+					    Nested     	FALSE)
+					Focus_Of_Control 	(object Focus_Of_Control "" @1282
+					    location   	(544, 864)
+					    line_color 	3342489
+					    InterObjView 	@1280
+					    height     	192
+					    y_coord    	102
+					    Nested     	FALSE)
+					Focus_Of_Control 	(object Focus_Of_Control "" @1283
+					    location   	(544, 992)
+					    line_color 	3342489
+					    InterObjView 	@1280
+					    height     	90
+					    y_coord    	0
+					    Nested     	TRUE))
+				    (object InterObjView "$UNNAMED$96" @1284
+					location   	(912, 224)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	TRUE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1284
+					    location   	(912, 249)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	435
+					    justify    	0
+					    label      	"")
+					icon       	"control"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"665051EE01C7"
+					width      	300
+					height     	948
+					icon_height 	152
+					icon_width 	145
+					icon_y_offset 	0
+					annotation 	1
+					Focus_Of_Control 	(object Focus_Of_Control "" @1285
+					    location   	(912, 448)
+					    line_color 	3342489
+					    InterObjView 	@1284
+					    height     	188
+					    y_coord    	98
+					    Nested     	FALSE)
+					Focus_Of_Control 	(object Focus_Of_Control "" @1286
+					    location   	(912, 752)
+					    line_color 	3342489
+					    InterObjView 	@1284
+					    height     	109
+					    y_coord    	19
+					    Nested     	FALSE))
+				    (object InterObjView "$UNNAMED$98" @1287
+					location   	(1280, 224)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	TRUE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1287
+					    location   	(1280, 250)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	426
+					    justify    	0
+					    label      	"")
+					icon       	"entity"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"665051F3034A"
+					width      	300
+					height     	948
+					icon_height 	141
+					icon_width 	142
+					icon_y_offset 	0
+					annotation 	1
+					Focus_Of_Control 	(object Focus_Of_Control "" @1288
+					    location   	(1280, 752)
+					    line_color 	3342489
+					    InterObjView 	@1287
+					    height     	90
+					    y_coord    	0
+					    Nested     	FALSE))
+				    (object InterObjView "$UNNAMED$97" @1289
+					location   	(1648, 224)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	TRUE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1289
+					    location   	(1648, 250)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	651
+					    justify    	0
+					    label      	"")
+					icon       	"boundary"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"665051F7027F"
+					width      	300
+					height     	948
+					icon_height 	141
+					icon_width 	217
+					icon_y_offset 	0
+					annotation 	1
+					Focus_Of_Control 	(object Focus_Of_Control "" @1290
+					    location   	(1648, 544)
+					    line_color 	3342489
+					    InterObjView 	@1289
+					    height     	197
+					    y_coord    	107
+					    Nested     	FALSE))
+				    (object InterObjView "$UNNAMED$99" @1291
+					location   	(2048, 224)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	TRUE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object ItemLabel
+					    Parent_View 	@1291
+					    location   	(2048, 249)
+					    anchor_loc 	1
+					    nlines     	2
+					    max_width  	324
+					    justify    	0
+					    label      	"")
+					icon       	"Actor"
+					icon_style 	"Icon"
+					line_color 	3342489
+					fill_color 	13434879
+					quidu      	"665051FA006E"
+					width      	300
+					height     	948
+					icon_height 	150
+					icon_width 	108
+					icon_y_offset 	0
+					annotation 	1
+					Focus_Of_Control 	(object Focus_Of_Control "" @1292
+					    location   	(2048, 656)
+					    line_color 	3342489
+					    InterObjView 	@1291
+					    height     	90
+					    y_coord    	0
+					    Nested     	FALSE))
+				    (object InterMessView "Kich chon mot lop hoc( )" @1293
+					location   	(16, 336)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object SegLabel @1294
+					    Parent_View 	@1293
+					    location   	(359, 292)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    quidu      	"665051FF01A2"
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	438
+					    justify    	0
+					    label      	"Kich chon mot lop hoc( )"
+					    pctDist    	0.500000
+					    height     	45
+					    orientation 	0)
+					line_color 	3342489
+					client     	@1278
+					supplier   	@1280
+					Focus_Src  	@1279
+					Focus_Entry 	@1281
+					origin     	(191, 336)
+					terminus   	(528, 336)
+					ordinal    	0)
+				    (object InterMessView "Lay tat ca tai lieu trong lop( )" @1295
+					location   	(16, 441)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object SegLabel @1296
+					    Parent_View 	@1295
+					    location   	(727, 397)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    quidu      	"6650520D0221"
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	507
+					    justify    	0
+					    label      	"Lay tat ca tai lieu trong lop( )"
+					    pctDist    	0.500000
+					    height     	45
+					    orientation 	0)
+					line_color 	3342489
+					client     	@1280
+					supplier   	@1284
+					Focus_Src  	@1281
+					Focus_Entry 	@1285
+					origin     	(559, 441)
+					terminus   	(896, 441)
+					ordinal    	1)
+				    (object InterMessView "Doc bang DOCUMENT( )" @1297
+					location   	(16, 546)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object SegLabel @1298
+					    Parent_View 	@1297
+					    location   	(1279, 502)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    quidu      	"6650521D0391"
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	451
+					    justify    	0
+					    label      	"Doc bang DOCUMENT( )"
+					    pctDist    	0.500000
+					    height     	45
+					    orientation 	0)
+					line_color 	3342489
+					client     	@1284
+					supplier   	@1289
+					Focus_Src  	@1285
+					Focus_Entry 	@1290
+					origin     	(927, 546)
+					terminus   	(1632, 546)
+					ordinal    	2)
+				    (object InterMessView "Doc bang DOCUMENT( )" @1299
+					location   	(16, 651)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object SegLabel @1300
+					    Parent_View 	@1299
+					    location   	(1847, 607)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    quidu      	"6650522B01D1"
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	451
+					    justify    	0
+					    label      	"Doc bang DOCUMENT( )"
+					    pctDist    	0.500000
+					    height     	45
+					    orientation 	0)
+					line_color 	3342489
+					client     	@1289
+					supplier   	@1291
+					Focus_Src  	@1290
+					Focus_Entry 	@1292
+					origin     	(1663, 651)
+					terminus   	(2032, 651)
+					ordinal    	3)
+				    (object InterMessView "getDocumentByClassroomId( )" @1301
+					location   	(16, 756)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object SegLabel @1302
+					    Parent_View 	@1301
+					    location   	(1095, 712)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    quidu      	"665052390070"
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	545
+					    justify    	0
+					    label      	"getDocumentByClassroomId( )"
+					    pctDist    	0.500000
+					    height     	45
+					    orientation 	0)
+					line_color 	3342489
+					client     	@1284
+					supplier   	@1287
+					Focus_Src  	@1286
+					Focus_Entry 	@1288
+					origin     	(927, 756)
+					terminus   	(1264, 756)
+					ordinal    	4)
+				    (object InterMessView "return ket qua" @1303
+					location   	(16, 861)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object SegLabel @1304
+					    Parent_View 	@1303
+					    location   	(728, 817)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    quidu      	"665052470208"
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	251
+					    justify    	0
+					    label      	"return ket qua"
+					    pctDist    	0.500000
+					    height     	45
+					    orientation 	1)
+					line_color 	3342489
+					client     	@1284
+					supplier   	@1280
+					Focus_Src  	@1286
+					Focus_Entry 	@1282
+					origin     	(896, 861)
+					terminus   	(560, 861)
+					ordinal    	5)
+				    (object SelfMessView "Hien thi danh sach tai lieu( )" @1305
+					location   	(16, 966)
+					font       	(object Font
+					    size       	10
+					    face       	"Arial"
+					    bold       	FALSE
+					    italics    	FALSE
+					    underline  	FALSE
+					    strike     	FALSE
+					    color      	0
+					    default_color 	TRUE)
+					label      	(object SegLabel @1306
+					    Parent_View 	@1305
+					    location   	(635, 922)
+					    font       	(object Font
+						size       	10
+						face       	"Arial"
+						bold       	FALSE
+						italics    	FALSE
+						underline  	FALSE
+						strike     	FALSE
+						color      	0
+						default_color 	TRUE)
+					    quidu      	"6650524D0250"
+					    anchor_loc 	1
+					    nlines     	1
+					    max_width  	498
+					    justify    	0
+					    label      	"Hien thi danh sach tai lieu( )"
+					    pctDist    	0.500000
+					    height     	45
+					    orientation 	0)
+					line_color 	3342489
+					client     	@1280
+					supplier   	@1280
+					Focus_Src  	@1282
+					Focus_Entry 	@1283
+					origin     	(560, 966)
+					terminus   	(710, 966)
+					ordinal    	6)))))
+		    (object Association "$UNNAMED$100"
 			quid       	"663B68030242"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$95"
+			    (object Role "$UNNAMED$101"
 				quid       	"663B68040055"
 				supplier   	"Use Case View::DoAN::DangKyUI"
 				quidu      	"663B67CA03AC"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$96"
+			    (object Role "$UNNAMED$102"
 				quid       	"663B6804005B"
 				supplier   	"Use Case View::DoAN::SinhVien"
 				quidu      	"663B67C2010B"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$97"
+		    (object Association "$UNNAMED$103"
 			quid       	"663B68050287"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$98"
+			    (object Role "$UNNAMED$104"
 				quid       	"663B6806007C"
 				supplier   	"Use Case View::DoAN::DangKyController"
 				quidu      	"663B67DE004E"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$99"
+			    (object Role "$UNNAMED$105"
 				quid       	"663B68060083"
 				supplier   	"Use Case View::DoAN::DangKyUI"
 				quidu      	"663B67CA03AC"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$100"
+		    (object Association "$UNNAMED$106"
 			quid       	"663B680703DB"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$101"
+			    (object Role "$UNNAMED$107"
 				quid       	"663B6808031F"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$102"
+			    (object Role "$UNNAMED$108"
 				quid       	"663B68080324"
 				supplier   	"Use Case View::DoAN::DangKyController"
 				quidu      	"663B67DE004E"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$103"
+		    (object Association "$UNNAMED$109"
 			quid       	"663B680A0272"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$104"
+			    (object Role "$UNNAMED$110"
 				quid       	"663B680B0165"
 				supplier   	"Use Case View::DoAN::CSDL"
 				quidu      	"663B67EF03BD"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$105"
+			    (object Role "$UNNAMED$111"
 				quid       	"663B680B016A"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$106"
+		    (object Association "$UNNAMED$112"
 			quid       	"663B680E001B"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$107"
+			    (object Role "$UNNAMED$113"
 				quid       	"663B680E02AC"
 				supplier   	"Use Case View::DoAN::USER"
 				quidu      	"663B67F70246"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$108"
+			    (object Role "$UNNAMED$114"
 				quid       	"663B680E02B2"
 				supplier   	"Use Case View::DoAN::DangKyController"
 				quidu      	"663B67DE004E"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$109"
+		    (object Association "$UNNAMED$115"
 			quid       	"663B6BE80041"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$110"
+			    (object Role "$UNNAMED$116"
 				quid       	"663B6BE90103"
 				supplier   	"Use Case View::DoAN::XemThongTinSVUI"
 				quidu      	"663B6A2E0161"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$111"
+			    (object Role "$UNNAMED$117"
 				quid       	"663B6BE9010D"
 				supplier   	"Use Case View::DoAN::NguoiDung"
 				quidu      	"663B6A210260"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$112"
+		    (object Association "$UNNAMED$118"
 			quid       	"663B6BEB019F"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$113"
+			    (object Role "$UNNAMED$119"
 				quid       	"663B6BEC0065"
 				supplier   	"Use Case View::DoAN::XemThongTinController"
 				quidu      	"663B6A3D01A5"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$114"
+			    (object Role "$UNNAMED$120"
 				quid       	"663B6BEC006A"
 				supplier   	"Use Case View::DoAN::XemThongTinSVUI"
 				quidu      	"663B6A2E0161"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$115"
+		    (object Association "$UNNAMED$121"
 			quid       	"663B6BEE0386"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$116"
+			    (object Role "$UNNAMED$122"
 				quid       	"663B6BEF03A6"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$117"
+			    (object Role "$UNNAMED$123"
 				quid       	"663B6BEF03B2"
 				supplier   	"Use Case View::DoAN::XemThongTinController"
 				quidu      	"663B6A3D01A5"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$118"
+		    (object Association "$UNNAMED$124"
 			quid       	"663B6BF201D1"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$119"
+			    (object Role "$UNNAMED$125"
 				quid       	"663B6BF300F5"
 				supplier   	"Use Case View::DoAN::USER"
 				quidu      	"663B67F70246"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$120"
+			    (object Role "$UNNAMED$126"
 				quid       	"663B6BF30100"
 				supplier   	"Use Case View::DoAN::XemThongTinController"
 				quidu      	"663B6A3D01A5"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$121"
+		    (object Association "$UNNAMED$127"
 			quid       	"663B6BFA0306"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$122"
+			    (object Role "$UNNAMED$128"
 				quid       	"663B6BFB00ED"
 				supplier   	"Use Case View::DoAN::CLASS_SUBJECT"
 				quidu      	"663B6BB40316"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$123"
+			    (object Role "$UNNAMED$129"
 				quid       	"663B6BFB00F1"
 				supplier   	"Use Case View::DoAN::XemThongTinController"
 				quidu      	"663B6A3D01A5"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$124"
+		    (object Association "$UNNAMED$130"
 			quid       	"663B6BFD017A"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$125"
+			    (object Role "$UNNAMED$131"
 				quid       	"663B6BFE0096"
 				supplier   	"Use Case View::DoAN::STUDENT_CLASS_SUBJECT"
 				quidu      	"663B6A8E0397"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$126"
+			    (object Role "$UNNAMED$132"
 				quid       	"663B6BFE009C"
 				supplier   	"Use Case View::DoAN::XemThongTinController"
 				quidu      	"663B6A3D01A5"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$127"
+		    (object Association "$UNNAMED$133"
 			quid       	"663B7BF00181"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$128"
+			    (object Role "$UNNAMED$134"
 				quid       	"663B7BF00302"
 				supplier   	"Use Case View::DoAN::XemDienTichLuyUI"
 				quidu      	"663B7BC502EB"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$129"
+			    (object Role "$UNNAMED$135"
 				quid       	"663B7BF00308"
 				supplier   	"Use Case View::DoAN::NguoiDung"
 				quidu      	"663B6A210260"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$130"
+		    (object Association "$UNNAMED$136"
 			quid       	"663B7BF201F1"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$131"
+			    (object Role "$UNNAMED$137"
 				quid       	"663B7BF2038A"
 				supplier   	"Use Case View::DoAN::XemDiemTichLuyController"
 				quidu      	"663B7BD0004A"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$132"
+			    (object Role "$UNNAMED$138"
 				quid       	"663B7BF20390"
 				supplier   	"Use Case View::DoAN::XemDienTichLuyUI"
 				quidu      	"663B7BC502EB"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$133"
+		    (object Association "$UNNAMED$139"
 			quid       	"663B7BF4033D"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$134"
+			    (object Role "$UNNAMED$140"
 				quid       	"663B7BF500FA"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$135"
+			    (object Role "$UNNAMED$141"
 				quid       	"663B7BF5010A"
 				supplier   	"Use Case View::DoAN::XemDiemTichLuyController"
 				quidu      	"663B7BD0004A"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$136"
+		    (object Association "$UNNAMED$142"
 			quid       	"663B7C4C00B7"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$137"
+			    (object Role "$UNNAMED$143"
 				quid       	"663B7C4C0392"
 				supplier   	"Use Case View::DoAN::USER"
 				quidu      	"663B67F70246"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$138"
+			    (object Role "$UNNAMED$144"
 				quid       	"663B7C4C039E"
 				supplier   	"Use Case View::DoAN::XemDiemTichLuyController"
 				quidu      	"663B7BD0004A"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$139"
+		    (object Association "$UNNAMED$145"
 			quid       	"663B7C4E01AC"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$140"
+			    (object Role "$UNNAMED$146"
 				quid       	"663B7C4E033B"
 				supplier   	"Use Case View::DoAN::STUDENT_SEMESTER"
 				quidu      	"663B7C020012"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$141"
+			    (object Role "$UNNAMED$147"
 				quid       	"663B7C4E033F"
 				supplier   	"Use Case View::DoAN::XemDiemTichLuyController"
 				quidu      	"663B7BD0004A"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$142"
+		    (object Association "$UNNAMED$148"
 			quid       	"663B7C5100DB"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$143"
+			    (object Role "$UNNAMED$149"
 				quid       	"663B7C52013B"
 				supplier   	"Use Case View::DoAN::SEMESTER"
 				quidu      	"663B7C3902DB"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$144"
+			    (object Role "$UNNAMED$150"
 				quid       	"663B7C520143"
 				supplier   	"Use Case View::DoAN::XemDiemTichLuyController"
 				quidu      	"663B7BD0004A"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$145"
+		    (object Association "$UNNAMED$151"
 			quid       	"663B7DFF0261"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$146"
+			    (object Role "$UNNAMED$152"
 				quid       	"663B7E000284"
 				supplier   	"Use Case View::DoAN::XemThongTinLopHocUI"
 				quidu      	"663B7DC7030B"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$147"
+			    (object Role "$UNNAMED$153"
 				quid       	"663B7E000287"
 				supplier   	"Use Case View::DoAN::NguoiDung"
 				quidu      	"663B6A210260"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$148"
+		    (object Association "$UNNAMED$154"
 			quid       	"663B7E0B01E5"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$149"
+			    (object Role "$UNNAMED$155"
 				quid       	"663B7E0C007A"
 				supplier   	"Use Case View::DoAN::XemThongTinLopHocUI"
 				quidu      	"663B7DC7030B"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$150"
+			    (object Role "$UNNAMED$156"
 				quid       	"663B7E0C0082"
 				supplier   	"Use Case View::DoAN::NguoiDung"
 				quidu      	"663B6A210260"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$151"
+		    (object Association "$UNNAMED$157"
 			quid       	"663B7E0E0012"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$152"
+			    (object Role "$UNNAMED$158"
 				quid       	"663B7E0E027A"
 				supplier   	"Use Case View::DoAN::XemThongTinLopHocController"
 				quidu      	"663B7DD400FB"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$153"
+			    (object Role "$UNNAMED$159"
 				quid       	"663B7E0E027E"
 				supplier   	"Use Case View::DoAN::XemThongTinLopHocUI"
 				quidu      	"663B7DC7030B"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$154"
+		    (object Association "$UNNAMED$160"
 			quid       	"663B7E100241"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$155"
+			    (object Role "$UNNAMED$161"
 				quid       	"663B7E110011"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$156"
+			    (object Role "$UNNAMED$162"
 				quid       	"663B7E110020"
 				supplier   	"Use Case View::DoAN::XemThongTinLopHocController"
 				quidu      	"663B7DD400FB"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$157"
+		    (object Association "$UNNAMED$163"
 			quid       	"663B7E380071"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$158"
+			    (object Role "$UNNAMED$164"
 				quid       	"663B7E3802B4"
 				supplier   	"Use Case View::DoAN::USER"
 				quidu      	"663B67F70246"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$159"
+			    (object Role "$UNNAMED$165"
 				quid       	"663B7E3802C5"
 				supplier   	"Use Case View::DoAN::XemThongTinLopHocController"
 				quidu      	"663B7DD400FB"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$160"
+		    (object Association "$UNNAMED$166"
 			quid       	"663B7E3A0188"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$161"
+			    (object Role "$UNNAMED$167"
 				quid       	"663B7E3A0363"
 				supplier   	"Use Case View::DoAN::STUDENT_CLASS_SUBJECT"
 				quidu      	"663B6A8E0397"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$162"
+			    (object Role "$UNNAMED$168"
 				quid       	"663B7E3A0369"
 				supplier   	"Use Case View::DoAN::XemThongTinLopHocController"
 				quidu      	"663B7DD400FB"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$163"
+		    (object Association "$UNNAMED$169"
 			quid       	"663B7E3C02B2"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$164"
+			    (object Role "$UNNAMED$170"
 				quid       	"663B7E3D010B"
 				supplier   	"Use Case View::DoAN::CLASS_SUBJECT"
 				quidu      	"663B6BB40316"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$165"
+			    (object Role "$UNNAMED$171"
 				quid       	"663B7E3D0112"
 				supplier   	"Use Case View::DoAN::XemThongTinLopHocController"
 				quidu      	"663B7DD400FB"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$166"
+		    (object Association "$UNNAMED$172"
 			quid       	"663B80B9039D"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$167"
+			    (object Role "$UNNAMED$173"
 				quid       	"663B80BA0133"
 				supplier   	"Use Case View::DoAN::DangNhapUI"
 				quidu      	"663B809B0327"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$168"
+			    (object Role "$UNNAMED$174"
 				quid       	"663B80BA0139"
 				supplier   	"Use Case View::DoAN::NguoiDung"
 				quidu      	"663B6A210260"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$169"
+		    (object Association "$UNNAMED$175"
 			quid       	"663B80BC0003"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$170"
+			    (object Role "$UNNAMED$176"
 				quid       	"663B80BC018A"
 				supplier   	"Use Case View::DoAN::DangNhapController"
 				quidu      	"663B80A800ED"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$171"
+			    (object Role "$UNNAMED$177"
 				quid       	"663B80BC018E"
 				supplier   	"Use Case View::DoAN::DangNhapUI"
 				quidu      	"663B809B0327"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$172"
+		    (object Association "$UNNAMED$178"
 			quid       	"663B80BD036F"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$173"
+			    (object Role "$UNNAMED$179"
 				quid       	"663B80BE021C"
 				supplier   	"Use Case View::DoAN::USER"
 				quidu      	"663B67F70246"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$174"
+			    (object Role "$UNNAMED$180"
 				quid       	"663B80BE0231"
 				supplier   	"Use Case View::DoAN::DangNhapController"
 				quidu      	"663B80A800ED"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$175"
+		    (object Association "$UNNAMED$181"
 			quid       	"663B80C0001D"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$176"
+			    (object Role "$UNNAMED$182"
 				quid       	"663B80C001C4"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$177"
+			    (object Role "$UNNAMED$183"
 				quid       	"663B80C001E0"
 				supplier   	"Use Case View::DoAN::DangNhapController"
 				quidu      	"663B80A800ED"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$178"
+		    (object Association "$UNNAMED$184"
 			quid       	"663B820000B2"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$179"
+			    (object Role "$UNNAMED$185"
 				quid       	"663B82000324"
 				supplier   	"Use Case View::DoAN::UploadFileUI"
 				quidu      	"663B81AA02C5"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$180"
+			    (object Role "$UNNAMED$186"
 				quid       	"663B8200032A"
 				supplier   	"Use Case View::DoAN::GiangVien"
 				quidu      	"663B819E017B"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$181"
+		    (object Association "$UNNAMED$187"
 			quid       	"663B820202AA"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$182"
+			    (object Role "$UNNAMED$188"
 				quid       	"663B8203005C"
 				supplier   	"Use Case View::DoAN::UploadFileController"
 				quidu      	"663B81B401A0"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$183"
+			    (object Role "$UNNAMED$189"
 				quid       	"663B82030060"
 				supplier   	"Use Case View::DoAN::UploadFileUI"
 				quidu      	"663B81AA02C5"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$184"
+		    (object Association "$UNNAMED$190"
 			quid       	"663B8204032E"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$185"
+			    (object Role "$UNNAMED$191"
 				quid       	"663B8205010C"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$186"
+			    (object Role "$UNNAMED$192"
 				quid       	"663B8205012A"
 				supplier   	"Use Case View::DoAN::UploadFileController"
 				quidu      	"663B81B401A0"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$187"
+		    (object Association "$UNNAMED$193"
 			quid       	"663B8207028C"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$188"
+			    (object Role "$UNNAMED$194"
 				quid       	"663B820800F4"
 				supplier   	"Use Case View::DoAN::PROCESS_FILE_IMPORT"
 				quidu      	"663B81C20346"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$189"
+			    (object Role "$UNNAMED$195"
 				quid       	"663B820800FA"
 				supplier   	"Use Case View::DoAN::UploadFileController"
 				quidu      	"663B81B401A0"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$190"
+		    (object Association "$UNNAMED$196"
 			quid       	"663B92C40120"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$191"
+			    (object Role "$UNNAMED$197"
 				quid       	"663B92C501A7"
 				supplier   	"Use Case View::DoAN::NhapDiemUI"
 				quidu      	"663B9280001A"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$192"
+			    (object Role "$UNNAMED$198"
 				quid       	"663B92C501B6"
 				supplier   	"Use Case View::DoAN::GiangVien"
 				quidu      	"663B819E017B"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$193"
+		    (object Association "$UNNAMED$199"
 			quid       	"663B92C70296"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$194"
+			    (object Role "$UNNAMED$200"
 				quid       	"663B92C80108"
 				supplier   	"Use Case View::DoAN::NhapDiemController"
 				quidu      	"663B92890181"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$195"
+			    (object Role "$UNNAMED$201"
 				quid       	"663B92C8010F"
 				supplier   	"Use Case View::DoAN::NhapDiemUI"
 				quidu      	"663B9280001A"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$196"
+		    (object Association "$UNNAMED$202"
 			quid       	"663B92CA0158"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$197"
+			    (object Role "$UNNAMED$203"
 				quid       	"663B92CB000F"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$198"
+			    (object Role "$UNNAMED$204"
 				quid       	"663B92CB0025"
 				supplier   	"Use Case View::DoAN::NhapDiemController"
 				quidu      	"663B92890181"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$199"
+		    (object Association "$UNNAMED$205"
 			quid       	"663B92CD023B"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$200"
+			    (object Role "$UNNAMED$206"
 				quid       	"663B92CE0180"
 				supplier   	"Use Case View::DoAN::USER"
 				quidu      	"663B67F70246"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$201"
+			    (object Role "$UNNAMED$207"
 				quid       	"663B92CE0193"
 				supplier   	"Use Case View::DoAN::NhapDiemController"
 				quidu      	"663B92890181"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$202"
+		    (object Association "$UNNAMED$208"
 			quid       	"663B92D002F2"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$203"
+			    (object Role "$UNNAMED$209"
 				quid       	"663B92D100C9"
 				supplier   	"Use Case View::DoAN::STUDENT_CLASS_SUBJECT"
 				quidu      	"663B6A8E0397"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$204"
+			    (object Role "$UNNAMED$210"
 				quid       	"663B92D100DC"
 				supplier   	"Use Case View::DoAN::NhapDiemController"
 				quidu      	"663B92890181"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$205"
+		    (object Association "$UNNAMED$211"
 			quid       	"663B92D30187"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$206"
+			    (object Role "$UNNAMED$212"
 				quid       	"663B92D401A8"
 				supplier   	"Use Case View::DoAN::CLASS_SUBJECT"
 				quidu      	"663B6BB40316"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$207"
+			    (object Role "$UNNAMED$213"
 				quid       	"663B92D401BA"
 				supplier   	"Use Case View::DoAN::NhapDiemController"
 				quidu      	"663B92890181"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$208"
+		    (object Association "$UNNAMED$214"
 			quid       	"663B95050250"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$209"
+			    (object Role "$UNNAMED$215"
 				quid       	"663B95050387"
 				supplier   	"Use Case View::DoAN::DownloadFileUI"
 				quidu      	"663B94D9012D"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$210"
+			    (object Role "$UNNAMED$216"
 				quid       	"663B9505038D"
 				supplier   	"Use Case View::DoAN::GiangVien"
 				quidu      	"663B819E017B"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$211"
+		    (object Association "$UNNAMED$217"
 			quid       	"663B950703A2"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$212"
+			    (object Role "$UNNAMED$218"
 				quid       	"663B950801C6"
 				supplier   	"Use Case View::DoAN::DownloadFileController"
 				quidu      	"663B94F10130"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$213"
+			    (object Role "$UNNAMED$219"
 				quid       	"663B950801CC"
 				supplier   	"Use Case View::DoAN::DownloadFileUI"
 				quidu      	"663B94D9012D"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$214"
+		    (object Association "$UNNAMED$220"
 			quid       	"663B950C0030"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$215"
+			    (object Role "$UNNAMED$221"
 				quid       	"663B950C0296"
 				supplier   	"Use Case View::DoAN::PROCESS_FILE_IMPORT"
 				quidu      	"663B81C20346"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$216"
+			    (object Role "$UNNAMED$222"
 				quid       	"663B950C02A2"
 				supplier   	"Use Case View::DoAN::DownloadFileController"
 				quidu      	"663B94F10130"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$217"
+		    (object Association "$UNNAMED$223"
 			quid       	"663B950E016B"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$218"
+			    (object Role "$UNNAMED$224"
 				quid       	"663B950E03D0"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$219"
+			    (object Role "$UNNAMED$225"
 				quid       	"663B950F000D"
 				supplier   	"Use Case View::DoAN::DownloadFileController"
 				quidu      	"663B94F10130"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$220"
+		    (object Association "$UNNAMED$226"
 			quid       	"663B975E026F"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$221"
+			    (object Role "$UNNAMED$227"
 				quid       	"663B975F006D"
 				supplier   	"Use Case View::DoAN::USER"
 				quidu      	"663B67F70246"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$222"
+			    (object Role "$UNNAMED$228"
 				quid       	"663B975F008B"
 				supplier   	"Use Case View::DoAN::QuanLySVTrongLopHocController"
 				quidu      	"663B97170098"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$223"
+		    (object Association "$UNNAMED$229"
 			quid       	"663B97600245"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$224"
+			    (object Role "$UNNAMED$230"
 				quid       	"663B9761006E"
 				supplier   	"Use Case View::DoAN::CLASS_SUBJECT"
 				quidu      	"663B6BB40316"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$225"
+			    (object Role "$UNNAMED$231"
 				quid       	"663B97610080"
 				supplier   	"Use Case View::DoAN::QuanLySVTrongLopHocController"
 				quidu      	"663B97170098"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$226"
+		    (object Association "$UNNAMED$232"
 			quid       	"663B97630035"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$227"
+			    (object Role "$UNNAMED$233"
 				quid       	"663B976302B4"
 				supplier   	"Use Case View::DoAN::STUDENT_CLASS_SUBJECT"
 				quidu      	"663B6A8E0397"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$228"
+			    (object Role "$UNNAMED$234"
 				quid       	"663B976302C0"
 				supplier   	"Use Case View::DoAN::QuanLySVTrongLopHocController"
 				quidu      	"663B97170098"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$229"
+		    (object Association "$UNNAMED$235"
 			quid       	"663B97650338"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$230"
+			    (object Role "$UNNAMED$236"
 				quid       	"663B976601CC"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$231"
+			    (object Role "$UNNAMED$237"
 				quid       	"663B976601EC"
 				supplier   	"Use Case View::DoAN::QuanLySVTrongLopHocController"
 				quidu      	"663B97170098"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$232"
+		    (object Association "$UNNAMED$238"
 			quid       	"663B97680278"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$233"
+			    (object Role "$UNNAMED$239"
 				quid       	"663B9769001D"
 				supplier   	"Use Case View::DoAN::QuanLySVTrongLopHocUI"
 				quidu      	"663B96FC03CB"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$234"
+			    (object Role "$UNNAMED$240"
 				quid       	"663B97690023"
 				supplier   	"Use Case View::DoAN::Admin"
 				quidu      	"663B96EB027C"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$235"
+		    (object Association "$UNNAMED$241"
 			quid       	"663B976A0300"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$236"
+			    (object Role "$UNNAMED$242"
 				quid       	"663B976B0144"
 				supplier   	"Use Case View::DoAN::QuanLySVTrongLopHocController"
 				quidu      	"663B97170098"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$237"
+			    (object Role "$UNNAMED$243"
 				quid       	"663B976B014B"
 				supplier   	"Use Case View::DoAN::QuanLySVTrongLopHocUI"
 				quidu      	"663B96FC03CB"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$238"
+		    (object Association "$UNNAMED$244"
 			quid       	"663B9B6402C0"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$239"
+			    (object Role "$UNNAMED$245"
 				quid       	"663B9B650080"
 				supplier   	"Use Case View::DoAN::QuanLySinhVienUI"
 				quidu      	"663B9B48012E"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$240"
+			    (object Role "$UNNAMED$246"
 				quid       	"663B9B650086"
 				supplier   	"Use Case View::DoAN::Admin"
 				quidu      	"663B96EB027C"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$241"
+		    (object Association "$UNNAMED$247"
 			quid       	"663B9B670103"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$242"
+			    (object Role "$UNNAMED$248"
 				quid       	"663B9B6702F0"
 				supplier   	"Use Case View::DoAN::QuanLySinhVienController"
 				quidu      	"663B9B3C0012"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$243"
+			    (object Role "$UNNAMED$249"
 				quid       	"663B9B6702F5"
 				supplier   	"Use Case View::DoAN::QuanLySinhVienUI"
 				quidu      	"663B9B48012E"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$244"
+		    (object Association "$UNNAMED$250"
 			quid       	"663B9B69028C"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$245"
+			    (object Role "$UNNAMED$251"
 				quid       	"663B9B6A0220"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$246"
+			    (object Role "$UNNAMED$252"
 				quid       	"663B9B6A0254"
 				supplier   	"Use Case View::DoAN::QuanLySinhVienController"
 				quidu      	"663B9B3C0012"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$247"
+		    (object Association "$UNNAMED$253"
 			quid       	"663B9B6D01F7"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$248"
+			    (object Role "$UNNAMED$254"
 				quid       	"663B9B6E00A0"
 				supplier   	"Use Case View::DoAN::USER"
 				quidu      	"663B67F70246"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$249"
+			    (object Role "$UNNAMED$255"
 				quid       	"663B9B6E00BB"
 				supplier   	"Use Case View::DoAN::QuanLySinhVienController"
 				quidu      	"663B9B3C0012"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$250"
+		    (object Association "$UNNAMED$256"
 			quid       	"663BA37C00A1"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$251"
+			    (object Role "$UNNAMED$257"
 				quid       	"663BA37D00CC"
 				supplier   	"Use Case View::DoAN::QuanLyMonHocUI"
 				quidu      	"663BA3650160"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$252"
+			    (object Role "$UNNAMED$258"
 				quid       	"663BA37D00D4"
 				supplier   	"Use Case View::DoAN::Admin"
 				quidu      	"663B96EB027C"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$253"
+		    (object Association "$UNNAMED$259"
 			quid       	"663BA37F00C0"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$254"
+			    (object Role "$UNNAMED$260"
 				quid       	"663BA37F02F1"
 				supplier   	"Use Case View::DoAN::QuanLyMonHocController"
 				quidu      	"663BA3720391"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$255"
+			    (object Role "$UNNAMED$261"
 				quid       	"663BA37F02F7"
 				supplier   	"Use Case View::DoAN::QuanLyMonHocUI"
 				quidu      	"663BA3650160"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$256"
+		    (object Association "$UNNAMED$262"
 			quid       	"663BA384012D"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$257"
+			    (object Role "$UNNAMED$263"
 				quid       	"663BA385001A"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$258"
+			    (object Role "$UNNAMED$264"
 				quid       	"663BA3850046"
 				supplier   	"Use Case View::DoAN::QuanLyMonHocController"
 				quidu      	"663BA3720391"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$259"
+		    (object Association "$UNNAMED$265"
 			quid       	"663BAC3802FC"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$260"
+			    (object Role "$UNNAMED$266"
 				quid       	"663BAC390172"
 				supplier   	"Use Case View::DoAN::QuanLyGiangVienUI"
 				quidu      	"663BAC1C00BA"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$261"
+			    (object Role "$UNNAMED$267"
 				quid       	"663BAC390178"
 				supplier   	"Use Case View::DoAN::Admin"
 				quidu      	"663B96EB027C"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$262"
+		    (object Association "$UNNAMED$268"
 			quid       	"663BAC3B01F7"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$263"
+			    (object Role "$UNNAMED$269"
 				quid       	"663BAC3B03AB"
 				supplier   	"Use Case View::DoAN::QuanLyGiangVienController"
 				quidu      	"663BAC2701FD"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$264"
+			    (object Role "$UNNAMED$270"
 				quid       	"663BAC3B03AE"
 				supplier   	"Use Case View::DoAN::QuanLyGiangVienUI"
 				quidu      	"663BAC1C00BA"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$265"
+		    (object Association "$UNNAMED$271"
 			quid       	"663BAC3D02E2"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$266"
+			    (object Role "$UNNAMED$272"
 				quid       	"663BAC3E0112"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$267"
+			    (object Role "$UNNAMED$273"
 				quid       	"663BAC3E0137"
 				supplier   	"Use Case View::DoAN::QuanLyGiangVienController"
 				quidu      	"663BAC2701FD"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$268"
+		    (object Association "$UNNAMED$274"
 			quid       	"663BAC4000E5"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$269"
+			    (object Role "$UNNAMED$275"
 				quid       	"663BAC410012"
 				supplier   	"Use Case View::DoAN::USER"
 				quidu      	"663B67F70246"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$270"
+			    (object Role "$UNNAMED$276"
 				quid       	"663BAC410036"
 				supplier   	"Use Case View::DoAN::QuanLyGiangVienController"
 				quidu      	"663BAC2701FD"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$271"
+		    (object Association "$UNNAMED$277"
 			quid       	"663BAEB403C5"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$272"
+			    (object Role "$UNNAMED$278"
 				quid       	"663BAEB501DE"
 				supplier   	"Use Case View::DoAN::QuanLyLopHocUI"
 				quidu      	"663BAE560129"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$273"
+			    (object Role "$UNNAMED$279"
 				quid       	"663BAEB501E4"
 				supplier   	"Use Case View::DoAN::Admin"
 				quidu      	"663B96EB027C"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$274"
+		    (object Association "$UNNAMED$280"
 			quid       	"663BAEB7024B"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$275"
+			    (object Role "$UNNAMED$281"
 				quid       	"663BAEB801B6"
 				supplier   	"Use Case View::DoAN::QuanLyLopHocController"
 				quidu      	"663BAE4101A5"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$276"
+			    (object Role "$UNNAMED$282"
 				quid       	"663BAEB801BC"
 				supplier   	"Use Case View::DoAN::QuanLyLopHocUI"
 				quidu      	"663BAE560129"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$277"
+		    (object Association "$UNNAMED$283"
 			quid       	"663BAEBA0195"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$278"
+			    (object Role "$UNNAMED$284"
 				quid       	"663BAEBB00F5"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$279"
+			    (object Role "$UNNAMED$285"
 				quid       	"663BAEBB0125"
 				supplier   	"Use Case View::DoAN::QuanLyLopHocController"
 				quidu      	"663BAE4101A5"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$280"
+		    (object Association "$UNNAMED$286"
 			quid       	"663BAEC00087"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$281"
+			    (object Role "$UNNAMED$287"
 				quid       	"663BAEC003C6"
 				supplier   	"Use Case View::DoAN::CLASS_SUBJECT"
 				quidu      	"663B6BB40316"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$282"
+			    (object Role "$UNNAMED$288"
 				quid       	"663BAEC003D8"
 				supplier   	"Use Case View::DoAN::QuanLyLopHocController"
 				quidu      	"663BAE4101A5"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$283"
+		    (object Association "$UNNAMED$289"
 			quid       	"663B7E3F0119"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$284"
+			    (object Role "$UNNAMED$290"
 				quid       	"663B7E4000B4"
 				supplier   	"Use Case View::DoAN::SUBJECT"
 				quidu      	"663B6B2F0070"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$285"
+			    (object Role "$UNNAMED$291"
 				quid       	"663B7E4000C0"
 				supplier   	"Use Case View::DoAN::XemThongTinLopHocController"
 				quidu      	"663B7DD400FB"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$286"
+		    (object Association "$UNNAMED$292"
 			quid       	"663B6BF703BB"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$287"
+			    (object Role "$UNNAMED$293"
 				quid       	"663B6BF80220"
 				supplier   	"Use Case View::DoAN::SUBJECT"
 				quidu      	"663B6B2F0070"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$288"
+			    (object Role "$UNNAMED$294"
 				quid       	"663B6BF80224"
 				supplier   	"Use Case View::DoAN::XemThongTinController"
 				quidu      	"663B6A3D01A5"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$289"
+		    (object Association "$UNNAMED$295"
 			quid       	"663BA38101DC"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$290"
+			    (object Role "$UNNAMED$296"
 				quid       	"663BA3820090"
 				supplier   	"Use Case View::DoAN::SUBJECT"
 				quidu      	"663B6B2F0070"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$291"
+			    (object Role "$UNNAMED$297"
 				quid       	"663BA3820099"
 				supplier   	"Use Case View::DoAN::QuanLyMonHocController"
 				quidu      	"663BA3720391"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$292"
+		    (object Association "$UNNAMED$298"
 			quid       	"663BAEBD0324"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$293"
+			    (object Role "$UNNAMED$299"
 				quid       	"663BAEBE0155"
 				supplier   	"Use Case View::DoAN::SUBJECT"
 				quidu      	"663B6B2F0070"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$294"
+			    (object Role "$UNNAMED$300"
 				quid       	"663BAEBE0161"
 				supplier   	"Use Case View::DoAN::QuanLyLopHocController"
 				quidu      	"663BAE4101A5"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$295"
+		    (object Association "$UNNAMED$301"
 			quid       	"664368460267"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$296"
+			    (object Role "$UNNAMED$302"
 				quid       	"664368470200"
 				supplier   	"Use Case View::DoAN::DangKyHocPhanUI"
 				quidu      	"6643683A02B8"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$297"
+			    (object Role "$UNNAMED$303"
 				quid       	"664368470204"
 				supplier   	"Use Case View::DoAN::SinhVien"
 				quidu      	"663B67C2010B"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$298"
+		    (object Association "$UNNAMED$304"
 			quid       	"66436849022F"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$299"
+			    (object Role "$UNNAMED$305"
 				quid       	"6643684A00E1"
 				supplier   	"Use Case View::DoAN::DangKyHocPhanController"
 				quidu      	"6643682E0151"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$300"
+			    (object Role "$UNNAMED$306"
 				quid       	"6643684A00E6"
 				supplier   	"Use Case View::DoAN::DangKyHocPhanUI"
 				quidu      	"6643683A02B8"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$301"
+		    (object Association "$UNNAMED$307"
 			quid       	"6643684C0092"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$302"
+			    (object Role "$UNNAMED$308"
 				quid       	"6643684C0341"
 				supplier   	"Use Case View::DoAN::ICSDL"
 				quidu      	"663B67E80319"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$303"
+			    (object Role "$UNNAMED$309"
 				quid       	"6643684C035C"
 				supplier   	"Use Case View::DoAN::DangKyHocPhanController"
 				quidu      	"6643682E0151"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$304"
+		    (object Association "$UNNAMED$310"
 			quid       	"66436857033C"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$305"
+			    (object Role "$UNNAMED$311"
 				quid       	"664368580190"
 				supplier   	"Use Case View::DoAN::STUDENT_CLASS_SUBJECT"
 				quidu      	"663B6A8E0397"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$306"
+			    (object Role "$UNNAMED$312"
 				quid       	"6643685801A6"
 				supplier   	"Use Case View::DoAN::DangKyHocPhanController"
 				quidu      	"6643682E0151"
 				is_navigable 	TRUE)))
-		    (object Association "$UNNAMED$307"
+		    (object Association "$UNNAMED$313"
 			quid       	"6643698C01AA"
 			roles      	(list role_list
-			    (object Role "$UNNAMED$308"
+			    (object Role "$UNNAMED$314"
 				quid       	"6643698D0071"
 				supplier   	"Use Case View::DoAN::CLASS_SUBJECT"
 				quidu      	"663B6BB40316"
 				is_navigable 	TRUE)
-			    (object Role "$UNNAMED$309"
+			    (object Role "$UNNAMED$315"
 				quid       	"6643698D007F"
 				supplier   	"Use Case View::DoAN::DangKyHocPhanController"
 				quidu      	"6643682E0151"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$316"
+			quid       	"66437AA403B5"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$317"
+				quid       	"66437AA50250"
+				supplier   	"Use Case View::DoAN::XemTaiLieuUI"
+				quidu      	"66437A900172"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$318"
+				quid       	"66437AA50257"
+				supplier   	"Use Case View::DoAN::NguoiDung"
+				quidu      	"663B6A210260"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$319"
+			quid       	"66437AA7012C"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$320"
+				quid       	"66437AA703C0"
+				supplier   	"Use Case View::DoAN::XemTaiLieuController"
+				quidu      	"66437A84031B"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$321"
+				quid       	"66437AA703C6"
+				supplier   	"Use Case View::DoAN::XemTaiLieuUI"
+				quidu      	"66437A900172"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$322"
+			quid       	"66437AA90392"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$323"
+				quid       	"66437AAA01B0"
+				supplier   	"Use Case View::DoAN::PROCESS_FILE_IMPORT"
+				quidu      	"663B81C20346"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$324"
+				quid       	"66437AAA01BF"
+				supplier   	"Use Case View::DoAN::XemTaiLieuController"
+				quidu      	"66437A84031B"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$325"
+			quid       	"66437AAC0103"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$326"
+				quid       	"66437AAC03BA"
+				supplier   	"Use Case View::DoAN::ICSDL"
+				quidu      	"663B67E80319"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$327"
+				quid       	"66437AAC03E2"
+				supplier   	"Use Case View::DoAN::XemTaiLieuController"
+				quidu      	"66437A84031B"
+				is_navigable 	TRUE)))
+		    (object Association "$UNNAMED$328"
+			quid       	"665051D0021F"
+			roles      	(list role_list
+			    (object Role "$UNNAMED$329"
+				quid       	"665051D102A9"
+				supplier   	"Use Case View::DoAN::DOCUMENT"
+				quidu      	"665051850151"
+				is_navigable 	TRUE)
+			    (object Role "$UNNAMED$330"
+				quid       	"665051D102AF"
+				supplier   	"Use Case View::DoAN::XemTaiLieuController"
+				quidu      	"66437A84031B"
 				is_navigable 	TRUE))))
 		logical_presentations 	(list unit_reference_list)))
 	logical_presentations 	(list unit_reference_list
@@ -26579,7 +27682,7 @@
 		origin_x   	0
 		origin_y   	0
 		items      	(list diagram_item_list
-		    (object CategoryView "Logical View::java" @1254
+		    (object CategoryView "Logical View::java" @1307
 			location   	(208, 272)
 			font       	(object Font
 			    size       	10
@@ -26591,7 +27694,7 @@
 			    color      	0
 			    default_color 	TRUE)
 			label      	(object ItemLabel
-			    Parent_View 	@1254
+			    Parent_View 	@1307
 			    location   	(64, 188)
 			    nlines     	2
 			    max_width  	288
@@ -26603,7 +27706,7 @@
 			quidu      	"39C92661003B"
 			width      	300
 			height     	180)
-		    (object CategoryView "Logical View::javax" @1255
+		    (object CategoryView "Logical View::javax" @1308
 			location   	(656, 272)
 			font       	(object Font
 			    size       	10
@@ -26615,7 +27718,7 @@
 			    color      	0
 			    default_color 	TRUE)
 			label      	(object ItemLabel
-			    Parent_View 	@1255
+			    Parent_View 	@1308
 			    location   	(512, 188)
 			    nlines     	2
 			    max_width  	288
@@ -26627,7 +27730,7 @@
 			quidu      	"39C926610018"
 			width      	300
 			height     	180)
-		    (object CategoryView "Logical View::org" @1256
+		    (object CategoryView "Logical View::org" @1309
 			location   	(1104, 272)
 			font       	(object Font
 			    size       	10
@@ -26639,7 +27742,7 @@
 			    color      	0
 			    default_color 	TRUE)
 			label      	(object ItemLabel
-			    Parent_View 	@1256
+			    Parent_View 	@1309
 			    location   	(960, 188)
 			    nlines     	2
 			    max_width  	288
@@ -26660,7 +27763,7 @@
 		origin_x   	0
 		origin_y   	0
 		items      	(list diagram_item_list
-		    (object NoteView @1257
+		    (object NoteView @1310
 			location   	(224, 624)
 			font       	(object Font
 			    size       	10
@@ -26675,7 +27778,7 @@
 			fill_color 	12632256
 			width      	300
 			height     	132)
-		    (object NoteView @1258
+		    (object NoteView @1311
 			location   	(704, 624)
 			font       	(object Font
 			    size       	10
@@ -26690,7 +27793,7 @@
 			fill_color 	8421631
 			width      	300
 			height     	132)
-		    (object NoteView @1259
+		    (object NoteView @1312
 			location   	(1200, 624)
 			font       	(object Font
 			    size       	10
@@ -26705,7 +27808,7 @@
 			fill_color 	12615680
 			width      	300
 			height     	132)
-		    (object NoteView @1260
+		    (object NoteView @1313
 			location   	(1664, 624)
 			font       	(object Font
 			    size       	10
@@ -26720,7 +27823,7 @@
 			fill_color 	16777215
 			width      	300
 			height     	132)
-		    (object Label @1261
+		    (object Label @1314
 			location   	(81, 369)
 			font       	(object Font
 			    size       	12
@@ -26735,7 +27838,7 @@
 			max_width  	1163
 			justify    	1
 			label      	"J2EE: Java 2 Platform, Enterprise Edition - v 1.2.1")
-		    (object Label @1262
+		    (object Label @1315
 			location   	(96, 608)
 			font       	(object Font
 			    size       	10
@@ -26750,7 +27853,7 @@
 			max_width  	268
 			justify    	1
 			label      	"Abstract Class")
-		    (object Label @1263
+		    (object Label @1316
 			location   	(592, 608)
 			font       	(object Font
 			    size       	10
@@ -26765,7 +27868,7 @@
 			max_width  	225
 			justify    	1
 			label      	"Final Class")
-		    (object Label @1264
+		    (object Label @1317
 			location   	(1104, 608)
 			font       	(object Font
 			    size       	10
@@ -26780,7 +27883,7 @@
 			max_width  	206
 			justify    	1
 			label      	"Interface")
-		    (object Label @1265
+		    (object Label @1318
 			location   	(1552, 608)
 			font       	(object Font
 			    size       	10

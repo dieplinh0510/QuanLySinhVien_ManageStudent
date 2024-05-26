@@ -95,7 +95,7 @@ public class UserPDFExporter {
       table.addCell(student.getMidtermPointOne() != null ? String.valueOf(student.getMidtermPointOne()) : "");
       table.addCell(student.getMediumPoint() != 0.0 ? String.valueOf(student.getMediumPoint()) : "");
       table.addCell(student.getTestPointOne() != null ? String.valueOf(student.getTestPointOne()) : "");
-      table.addCell(student.getMediumPoint() != 0.0 ? String.valueOf(student.getMediumPoint()) : "");
+      table.addCell(student.getAccumulated_point() != 0.0 ? String.valueOf(student.getAccumulated_point()) : "");
       table.addCell(student.getPoint() != 0.0 ? String.valueOf(student.getPoint()) : "");
     }
   }

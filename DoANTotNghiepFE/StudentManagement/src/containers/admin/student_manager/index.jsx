@@ -328,16 +328,8 @@ const StudentManager = () => {
                     {item.accumulatedPoints === 'NaN' ? '' : item.accumulatedPoints}
                   </td>
                   {role === AuthKeys.ROLE_ADMIN && (
-                    <td style={{ width: '120px' }}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          padding: '5px',
-                          alignItems: 'center',
-                          width: '120px',
-                        }}
-                      >
+                    <td style={{ width: '80px' }}>
+                      <div>
                         <Button
                           title={'Sửa'}
                           onClick={() => {
@@ -351,15 +343,15 @@ const StudentManager = () => {
                           width={'50px'}
                           customStyle={{ padding: '6px 0' }}
                         />
-                        <Button
-                          title={'Xoá'}
-                          onClick={() => {
-                            setShowDelete(true);
-                            setPayloadDelete(item);
-                          }}
-                          width={'50px'}
-                          customStyle={{ padding: '6px 0' }}
-                        />
+                        {/*<Button*/}
+                        {/*  title={'Xoá'}*/}
+                        {/*  onClick={() => {*/}
+                        {/*    setShowDelete(true);*/}
+                        {/*    setPayloadDelete(item);*/}
+                        {/*  }}*/}
+                        {/*  width={'50px'}*/}
+                        {/*  customStyle={{ padding: '6px 0' }}*/}
+                        {/*/>*/}
                       </div>
                     </td>
                   )}
@@ -498,13 +490,13 @@ const StudentManager = () => {
 
                 <Space height={20} />
 
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Button
-                    title={'Thêm dữ liệu từ file'}
-                    onClick={() => navigate(`/teacher/file-input?uploadType=${UploadType.STUDENT}`)}
-                    width={'200px'}
-                    customStyle={{ padding: '6px 0' }}
-                  />
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  {/*<Button*/}
+                  {/*  title={'Thêm dữ liệu từ file'}*/}
+                  {/*  onClick={() => navigate(`/teacher/file-input?uploadType=${UploadType.STUDENT}`)}*/}
+                  {/*  width={'200px'}*/}
+                  {/*  customStyle={{ padding: '6px 0' }}*/}
+                  {/*/>*/}
                   <Button
                     title={'Lưu'}
                     onClick={() => handleCreateStudent()}

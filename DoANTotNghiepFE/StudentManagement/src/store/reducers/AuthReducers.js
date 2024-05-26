@@ -69,6 +69,7 @@ const authReducer = (state = initialState, action) => {
       return { ...state, loading: true };
     case AuthTypes.CHANGE_PASSWORD_SUCCESS:
       let userUpdate = action.payload.data;
+
       if (userUpdate === null) {
         return {
           ...state,
@@ -80,10 +81,9 @@ const authReducer = (state = initialState, action) => {
       }
 
       storageService.set(AuthKeys.ACCESS_TOKEN, userUpdate?.jwt);
-      storageService.setObject(AuthKeys.CURRENT_USER, { ...user?.information, roleName: user?.roleName });
+      storageService.setObject(AuthKeys.CURRENT_USER, { ...userUpdate?.information, roleName: userUpdate?.roleName });
       storageService.set(AuthKeys.LOGGED_IN, true);
-
-      return { ...state, loading: false, data: userUpdate, navigatePath: '/students' };
+      return { ...state, loading: false, data: userUpdate, navigatePath: (userUpdate?.roleName === AuthKeys.ROLE_STUDENT) ? '/students/detail' : '/teacher/students' };
     case AuthTypes.CHANGE_PASSWORD_FAILURE:
       return { ...state, loading: false, error: action.payload };
 

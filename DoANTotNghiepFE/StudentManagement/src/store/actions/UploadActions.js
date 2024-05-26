@@ -220,3 +220,91 @@ export const exportFilePdfFailure = (error) => {
     payload: error,
   };
 };
+
+// API get all documents of classroom by documentId
+export const getAllDocumentsByDocumentIdRequest = (payload) => {
+  return {
+    type: UploadTypes.GET_ALL_DOCUMENTS_BY_DOCUMENT_ID_REQUEST,
+    payload: payload,
+  };
+};
+
+export const getAllDocumentsByDocumentIdSuccess = (payload) => {
+  return {
+    type: UploadTypes.GET_ALL_DOCUMENTS_BY_DOCUMENT_ID_SUCCESS,
+    payload: payload,
+  };
+};
+
+export const getAllDocumentsByDocumentIdFailure = (error) => {
+  return {
+    type: UploadTypes.GET_ALL_DOCUMENTS_BY_DOCUMENT_ID_FAILURE,
+    payload: error,
+  };
+};
+
+// API update document
+export const updateDocumentRequest = (payload) => {
+  return {
+    type: UploadTypes.UPDATE_DOCUMENT_REQUEST,
+    payload: payload,
+  };
+};
+
+export const updateDocumentSuccess = (payload) => {
+  return {
+    type: UploadTypes.UPDATE_DOCUMENT_SUCCESS,
+    payload: payload,
+  };
+};
+
+export const updateDocumentFailure = (error) => {
+  return {
+    type: UploadTypes.UPDATE_DOCUMENT_FAILURE,
+    payload: error,
+  };
+};
+
+// API submit homework
+export const submitHomeworkRequest = (payload) => {
+  return {
+    type: UploadTypes.SUBMIT_HOMEWORK_REQUEST,
+    payload: payload,
+  };
+};
+
+export const submitHomeworkSuccess = (payload) => {
+  return {
+    type: UploadTypes.SUBMIT_HOMEWORK_SUCCESS,
+    payload: payload,
+  };
+};
+
+export const submitHomeworkFailure = (error) => {
+  return {
+    type: UploadTypes.SUBMIT_HOMEWORK_FAILURE,
+    payload: error,
+  };
+};
+
+// API download assignment
+export const downloadAssignmentRequest = (payload) => {
+  return {
+    type: UploadTypes.DOWNLOAD_ASSIGNMENT_REQUEST,
+    payload: payload,
+  };
+};
+
+export const downloadAssignmentSuccess = (payload) => {
+  return {
+    type: UploadTypes.DOWNLOAD_ASSIGNMENT_SUCCESS,
+    payload: payload,
+  };
+};
+
+export const downloadAssignmentFailure = (error) => {
+  return {
+    type: UploadTypes.DOWNLOAD_ASSIGNMENT_FAILURE,
+    payload: error,
+  };
+};

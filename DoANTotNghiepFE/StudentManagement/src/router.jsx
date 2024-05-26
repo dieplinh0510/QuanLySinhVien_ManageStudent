@@ -25,6 +25,7 @@ import ForgotPassword from './containers/auth/forgot_password';
 import Register from './containers/auth/register';
 import OTP from './containers/auth/otp';
 import ChangePassword from './containers/auth/change_password';
+import ClassDocument from './containers/teacher/class_document';
 
 export const adminRole = [
   AuthKeys.ROLE_ADMIN,
@@ -201,6 +202,16 @@ function getRoutes() {
         {
           path: 'student/documents',
           element: <Documents />,
+          allowedRoles: studentRole,
+        },
+        {
+          path: 'teacher/class-document',
+          element: <ClassDocument />,
+          allowedRoles: teacherRole,
+        },
+        {
+          path: 'student/class-document',
+          element: <ClassDocument />,
           allowedRoles: studentRole,
         },
       ],

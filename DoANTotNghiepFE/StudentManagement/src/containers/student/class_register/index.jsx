@@ -7,8 +7,6 @@ import { MDBModal, MDBModalDialog, MDBTable, MDBTableBody, MDBTableHead } from '
 import Pagination from '../../../components/paging';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { cancelRegisterSubjectClassRequest } from '../../../store/actions/StudentActions';
 import LoadingOverlay from 'react-loading-overlay';
 import { Oval } from 'react-loader-spinner';
 
@@ -45,16 +43,16 @@ const StudentClassRegister = () => {
       dispatch(StudentActions.cancelRegisterSubjectClassRequest({
         classroomCode: item.classroomCode,
         subjectId: item.subjectId,
-        searchPayload
+        searchPayload,
       }));
     } else {
       dispatch(StudentActions.registerSubjectClassRequest({
         classroomCode: item.classroomCode,
         subjectId: item.subjectId,
-        searchPayload
+        searchPayload,
       }));
     }
-  }
+  };
 
   return (
     <div className={'subject-manager-page'}>
@@ -92,7 +90,7 @@ const StudentClassRegister = () => {
                   <Button title={item.checkStudent === 1 ? 'Hủy đăng ký' : 'Đăng ký'} onClick={() => {
                     handleToggleRegister(item);
                   }} customStyle={{
-                    width: item.checkStudent === 1 ? '120px' : "100px",
+                    width: item.checkStudent === 1 ? '120px' : '100px',
                     color: 'white',
                     fontSize: '14px',
                     padding: '5px',

@@ -27,7 +27,7 @@ import { Oval } from 'react-loader-spinner';
 
 let statusList = [
   { value: -1, label: 'Chưa mở đăng ký' },
-  { value: 0, label: 'Chưa bắt đầu' },
+  { value: 0, label: 'Đã mở đăng ký' },
   { value: 1, label: 'Đã bắt đầu' },
   { value: 2, label: 'Đã kết thúc' },
 ];
@@ -268,13 +268,25 @@ const ClassManager = () => {
           </MDBTableHead>
           <MDBTableBody>
             {classes && classes.length > 0 && classes.map((item, index) => (
-              <tr key={index} style={{cursor: 'pointer'}}>
-                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{index + 1}</td>
-                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.classroomCode}</td>
-                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.subjectName}</td>
-                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.quantityStudent}</td>
-                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.teacher}</td>
-                <td onClick={() => {navigate("/students/class?classroomCode=" + item.classroomCode)}}>{item.status === -1 ? 'Chưa mở đăng ký' : item.status === 0 ? 'Chưa bắt đầu' : item.status === 1 ? 'Đã bắt đầu' : 'Đã kết thúc'}</td>
+              <tr key={index} style={{ cursor: 'pointer' }}>
+                <td onClick={() => {
+                  navigate('/students/class?classroomCode=' + item.classroomCode);
+                }}>{index + 1}</td>
+                <td onClick={() => {
+                  navigate('/students/class?classroomCode=' + item.classroomCode);
+                }}>{item.classroomCode}</td>
+                <td onClick={() => {
+                  navigate('/students/class?classroomCode=' + item.classroomCode);
+                }}>{item.subjectName}</td>
+                <td onClick={() => {
+                  navigate('/students/class?classroomCode=' + item.classroomCode);
+                }}>{(item.status === 0 ? item.quantityStudentNow + '/' + item.quantityStudent : (item.status === 1 || item.status === 2) ? item.quantityStudentNow : item.quantityStudent)}</td>
+                <td onClick={() => {
+                  navigate('/students/class?classroomCode=' + item.classroomCode);
+                }}>{item.teacher}</td>
+                <td onClick={() => {
+                  navigate('/students/class?classroomCode=' + item.classroomCode);
+                }}>{item.status === -1 ? 'Chưa mở đăng ký' : item.status === 0 ? 'Đã mở đăng ký' : item.status === 1 ? 'Đã bắt đầu' : 'Đã kết thúc'}</td>
                 <td style={{ width: '280px' }}>
                   <div style={{
                     display: 'flex',

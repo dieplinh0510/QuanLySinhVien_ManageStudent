@@ -102,6 +102,49 @@ function* exportFilePdfSaga(payload) {
   }
 }
 
+// API get all documents of classroom by documentId
+function* getAllDocumentsByDocumentIdSaga(payload) {
+  try {
+    const data = yield call(api.getAllDocumentsByDocumentId, payload.payload);
+    yield put(UploadActions.getAllDocumentsByDocumentIdSuccess(data));
+  } catch (error) {
+    yield put(UploadActions.getAllDocumentsByDocumentIdFailure(error.message));
+  }
+}
+
+// API update document
+function* updateDocumentSaga(payload) {
+  try {
+    const data = yield call(api.updateDocument, payload.payload);
+    yield put(UploadActions.updateDocumentSuccess(data));
+    yield put(UploadActions.getAllDocumentsRequest(payload.payload.searchPayload));
+  } catch (error) {
+    yield put(UploadActions.updateDocumentFailure(error.message));
+  }
+}
+
+// API submit homework
+function* submitHomeworkSaga(payload) {
+  try {
+    const data = yield call(api.submitHomework, payload.payload);
+    yield put(UploadActions.submitHomeworkSuccess(data));
+    yield put(UploadActions.getAllDocumentsRequest(payload.payload.searchPayload));
+  } catch (error) {
+    yield put(UploadActions.submitHomeworkFailure(error.message));
+  }
+}
+
+// API download assignment
+function* downloadAssignmentSaga(payload) {
+  try {
+    const data = yield call(api.downloadAssignment, payload.payload);
+    yield put(UploadActions.downloadAssignmentSuccess(data));
+  } catch (error) {
+    yield put(UploadActions.downloadAssignmentFailure(error.message));
+  }
+}
+
+
 export default function* uploadWatcherSaga() {
   yield takeLatest(UploadTypes.GET_STUDENT_COLUMN_REQUEST, getStudentColumnSaga);
   yield takeLatest(UploadTypes.GET_POINT_COLUMN_REQUEST, getPointColumnSaga);
@@ -113,4 +156,8 @@ export default function* uploadWatcherSaga() {
   yield takeLatest(UploadTypes.UPLOAD_DOCUMENT_REQUEST, uploadDocumentSaga);
   yield takeLatest(UploadTypes.DOWNLOAD_DOCUMENT_REQUEST, downloadDocument);
   yield takeLatest(UploadTypes.EXPORT_FILE_PDF_REQUEST, exportFilePdfSaga);
+  yield takeLatest(UploadTypes.GET_ALL_DOCUMENTS_BY_DOCUMENT_ID_REQUEST, getAllDocumentsByDocumentIdSaga);
+  yield takeLatest(UploadTypes.UPDATE_DOCUMENT_REQUEST, updateDocumentSaga);
+  yield takeLatest(UploadTypes.SUBMIT_HOMEWORK_REQUEST, submitHomeworkSaga);
+  yield takeLatest(UploadTypes.DOWNLOAD_ASSIGNMENT_REQUEST, downloadAssignmentSaga);
 }

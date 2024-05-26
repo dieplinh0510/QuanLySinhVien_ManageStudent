@@ -76,6 +76,9 @@ const SubjectManager = () => {
       subjectName: '',
       numberOfCredits: '',
       idSemester: 0,
+      coefficientTest: '',
+      coefficientMid: '',
+      coefficientRegular: '',
     });
     setShowCreate(false);
   };
@@ -199,7 +202,7 @@ const SubjectManager = () => {
                   <td onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>{item.numberOfCredits}</td>
                   <td onClick={() => navigate(`/admin/class-manager?subjectId=${item.id}`)}>{item.idSemester}</td>
                   <td style={{ width: '120px' }}>
-                  
+
                       <Button
                         title={'Sửa'}
                         onClick={() => {

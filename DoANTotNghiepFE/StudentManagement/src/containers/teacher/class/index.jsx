@@ -14,13 +14,13 @@ import { Oval } from 'react-loader-spinner';
 import Pagination from '../../../components/paging';
 
 const statusList = [
-  { value: 0, label: 'Chưa bắt đầu' },
+  { value: 0, label: 'Đã mở đăng ký' },
   { value: 1, label: 'Đã bắt đầu' },
   { value: 2, label: 'Đã kết thúc' },
 ];
 const statusListEdit = [
   { value: -1, label: 'Chưa mở đăng ký' },
-  { value: 0, label: 'Chưa bắt đầu' },
+  { value: 0, label: 'Đã mở đăng ký' },
   { value: 1, label: 'Đã bắt đầu' },
   { value: 2, label: 'Đã kết thúc' },
 ];

@@ -68,6 +68,10 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
       throw new Exception(HttpStatus.UNAUTHORIZED.toString());
     }
     List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getClassroomSubjectBySubjectNameAndStatus(subjectName, status, user.getId());
+    for (ClassroomSubjectDTO item: list) {
+      Long quantityStudentNow = studentInClassroomSubjectRepo.getQuantityStudent(item.getIdClassroom());
+      item.setQuantityStudentNow(quantityStudentNow);
+    }
     Pageable pageRequest = PageRequest.of(pageIndex - 1, pageSize);
     int start = (int) pageRequest.getOffset();
     int end = Math.min(start + pageRequest.getPageSize(), list.size());
@@ -79,12 +83,20 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
   @Override
   public List<ClassroomSubjectDTO> getAllClassroomSubject(Long subjectId) {
     List<ClassroomSubjectDTO> list = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, null, null);
+    for (ClassroomSubjectDTO item: list) {
+      Long quantityStudentNow = studentInClassroomSubjectRepo.getQuantityStudent(item.getIdClassroom());
+      item.setQuantityStudentNow(quantityStudentNow);
+    }
     return list;
   }
 
   @Override
   public ClassroomSubjectDTO getClassroomByClassroomCode(Long subjectId, String classroomCode) throws Exception {
     List<ClassroomSubjectDTO> listClassroom = classroomSubjectRepoCustom.getAllClassroomSubjectDetail(subjectId, classroomCode, null);
+    for (ClassroomSubjectDTO item: listClassroom) {
+      Long quantityStudentNow = studentInClassroomSubjectRepo.getQuantityStudent(item.getIdClassroom());
+      item.setQuantityStudentNow(quantityStudentNow);
+    }
     if (listClassroom.size() != 0){
       ClassroomSubjectDTO classroom = listClassroom.get(0);
       if (classroom == null){
@@ -174,7 +186,7 @@ public class ClassroomSubjectServiceImpl implements ClassroomSubjectService {
     Long result = studentInClassroomSubjectRepo.getStudentInStudentClass(userId, subjectId);
     if (result == null){
         Long quantityStudentInClass = studentInClassroomSubjectRepo.getQuantityStudent(classroomId);
-      if (quantityStudentInClass <= classroomSubject.getQuantityStudent()){
+      if (quantityStudentInClass < classroomSubject.getQuantityStudent()){
         StudentInClassroomSubject studentInClassroomSubject = StudentInClassroomSubject.builder()
                                                               .idClassroomInSubject(classroomId)
                                                               .idUser(userId)

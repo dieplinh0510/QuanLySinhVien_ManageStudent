@@ -31,7 +31,7 @@ const StudentAccumulated = () => {
   // }, []);
 
   useEffect(() => {
-    if (role === AuthKeys.ROLE_TEACHER) {
+    if (role === AuthKeys.ROLE_TEACHER || role === AuthKeys.ROLE_ADMIN) {
       const queryParams = new URLSearchParams(window.location.search);
       dispatch(StudentActions.getStudentDetailByIdRequest({
         studentId: queryParams.get('studentId'),
@@ -48,7 +48,7 @@ const StudentAccumulated = () => {
   }, [myInfo]);
 
   useEffect(() => {
-    if (studentDetail !== null && role === AuthKeys.ROLE_TEACHER) {
+    if (studentDetail !== null && (role === AuthKeys.ROLE_TEACHER || role === AuthKeys.ROLE_ADMIN)) {
       dispatch(StudentActions.getStudentAccumulatePointRequest({ studentCode: studentDetail.studentCode }));
     }
   }, [studentDetail]);

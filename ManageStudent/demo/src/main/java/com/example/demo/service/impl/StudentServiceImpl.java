@@ -285,6 +285,8 @@ public class StudentServiceImpl implements StudentService {
       Assert.notNull(studentDTO.getEmail(), "Student email is null");
       Assert.notNull(studentDTO.getIdClass(), "Class is null");
       Assert.notNull(studentDTO.getIdCourse(), "Course is null");
+      User user1 = userRepo.getUserByUsername(studentDTO.getUsername());
+      if (user1 != null) throw new Exception("Đã tồn tại username này, vui lòng đổi user name khác");
       User userNew = User.builder()
           .createDatetime(LocalDateTime.now())
           .createUser(user.getUsername())
@@ -542,7 +544,7 @@ public class StudentServiceImpl implements StudentService {
     if (result == null){
       ClassroomSubject classroomSubject = classroomSubjectRepo.getClassroomSubjectByClassroomCode(classroomCode);
       Long quantityStudentInClass = studentInClassroomSubjectRepo.getQuantityStudent(classroomSubject.getId());
-      if (quantityStudentInClass <= classroomSubject.getQuantityStudent()){
+      if (quantityStudentInClass < classroomSubject.getQuantityStudent()){
         StudentInClassroomSubject studentInClassroomSubject = StudentInClassroomSubject.builder()
             .idClassroomInSubject(classroomSubject.getId())
             .idUser(user.getId())
