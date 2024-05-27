@@ -136,7 +136,7 @@ const TeacherClass = () => {
                   style={{ lineHeight: 0 }}
                   onClick={() => {
                     handleClickItem(item);
-                  }}>{item.quantityStudent}</td>
+                  }}>{item.quantityStudentNow}</td>
                 <td style={{ lineHeight: 0, padding: '4px 0', margin: '4px 0' }}>
                   <Pulldown
                     items={[{ value: 2, label: 'Đã kết thúc' }]}

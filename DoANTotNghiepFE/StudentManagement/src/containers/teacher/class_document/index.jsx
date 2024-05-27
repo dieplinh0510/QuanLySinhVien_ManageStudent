@@ -150,7 +150,7 @@ const ClassDocument = () => {
                     {item.submitDate}
                   </td>
                   <td style={{ width: '15%', margin: '4px 0' }}>
-                    {item.status === false ? <span>Nộp muộn</span> : <span> </span>}
+                    {item.status === false ? <span>Nộp muộn</span> : <span>Nộp sớm</span>}
                   </td>
                   <td
                     style={{
